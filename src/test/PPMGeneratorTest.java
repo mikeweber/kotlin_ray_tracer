@@ -1,5 +1,6 @@
-package com.weberapps.rayTracer;
-
+import com.weberapps.rayTracer.Canvas;
+import com.weberapps.rayTracer.Color;
+import com.weberapps.rayTracer.PPMGenerator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -7,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PPMGeneratorTest {
     @Test
     public void testHeader() {
-        String expected = "P3\n5 3\n255";
         Canvas c = new Canvas(5, 3);
         String[] result = new PPMGenerator(c).generate().split("\n");
         assertEquals("P3", result[0]);

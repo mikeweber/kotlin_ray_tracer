@@ -1,5 +1,7 @@
-package com.weberapps.rayTracer;
-
+import com.weberapps.rayTracer.Color;
+import com.weberapps.rayTracer.Point;
+import com.weberapps.rayTracer.Tuple;
+import com.weberapps.rayTracer.Vector;
 import org.junit.jupiter.api.Test;
 
 import static java.lang.Math.sqrt;

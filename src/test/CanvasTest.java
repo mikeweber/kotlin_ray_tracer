@@ -1,5 +1,5 @@
-package com.weberapps.rayTracer;
-
+import com.weberapps.rayTracer.Canvas;
+import com.weberapps.rayTracer.Color;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

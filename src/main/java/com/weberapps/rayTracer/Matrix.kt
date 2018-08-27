@@ -9,6 +9,16 @@ class Matrix (val rows: Int, val cols: Int) {
         rowsAndColumns = matrix
     }
 
+    companion object {
+        fun eye(size: Int): Matrix {
+            val result = Matrix(size, size)
+            for (loc in 0..(size - 1)) {
+                result.setElement(loc, loc, 1f)
+            }
+            return result
+        }
+    }
+
     fun getElement(row: Int, col: Int): Float {
         return rowsAndColumns[row][col]
     }
@@ -40,7 +50,7 @@ class Matrix (val rows: Int, val cols: Int) {
     }
 
     operator fun times(tuple: Tuple): Tuple {
-        var result = FloatArray(4)
+        val result = FloatArray(4)
         for (row in 0..3) {
             for (col in 0..(cols - 1)) {
                 result[row] =
@@ -65,5 +75,16 @@ class Matrix (val rows: Int, val cols: Int) {
             }
         }
         return true
+    }
+
+    fun transpose(): Matrix {
+        val result = Matrix(cols, rows)
+        for (row in 0..(rows - 1)) {
+            for (col in 0..(cols - 1)) {
+                result.setElement(col, row, getElement(row, col));
+            }
+        }
+
+        return result
     }
 }

@@ -84,4 +84,41 @@ public class MatrixTest {
         Tuple expected = new Tuple(18f, 24f, 33f, 1f);
         assertEquals(expected, result);
     }
+
+    @Test
+    public void testIdentityMatrixMultiplication() {
+        float[][] matrixArrays = new float[][] {
+                new float[] { 0f, 1f, 2f, 4f },
+                new float[] { 1f, 2f, 4f, 8f },
+                new float[] { 2f, 4f, 8f, 16f },
+                new float[] { 4f, 8f, 16f, 32f }
+        };
+        Matrix m = new Matrix(4, 4, matrixArrays);
+        Matrix eye = Matrix.Companion.eye(4);
+        assertEquals(m, m.times(eye));
+    }
+
+    @Test
+    public void testTupleIdentityMultiplication() {
+        Tuple a = new Tuple(1f, 2f, 3f, 4f);
+        Matrix eye = Matrix.Companion.eye(4);
+        assertEquals(a, eye.times(a));
+    }
+
+    @Test
+    public void testMatrixTranspose() {
+        Matrix m = new Matrix(4, 4, new float[][] {
+                new float[] { 0f, 9f, 3f, 0f },
+                new float[] { 9f, 8f, 0f, 8f },
+                new float[] { 1f, 8f, 5f, 3f },
+                new float[] { 0f, 0f, 5f, 8f }
+        });
+        Matrix expected = new Matrix(4, 4, new float[][] {
+                new float[] { 0f, 9f, 1f, 0f },
+                new float[] { 9f, 8f, 8f, 0f },
+                new float[] { 3f, 0f, 5f, 5f },
+                new float[] { 0f, 8f, 3f, 8f }
+        });
+        assertEquals(expected, m.transpose());
+    }
 }
