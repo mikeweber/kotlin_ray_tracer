@@ -242,7 +242,8 @@ public class MatrixTest {
         assert(!m.isInvertable());
     }
 
-    @Test void testInverse() {
+    @Test
+    public void testInverse() {
         Matrix a = new Matrix(4, 4, new float[][] {
                 new float[] { -5f, 2f, 6f, -8f },
                 new float[] { 1f, -5f, 1f, 8f },
@@ -270,5 +271,36 @@ public class MatrixTest {
         assertEquals(105, a.cofactor(3, 2));
         assertEquals(105f / 532f, b.getElement(2, 3));
         assertEquals(expected, b);
+    }
+
+    @Test
+    public void testInverseMultiplication() {
+        Matrix a = new Matrix(4, 4, new float[][] {
+                new float[] {  3f, -9f,  7f,  3f },
+                new float[] {  3f, -8f,  2f, -9f },
+                new float[] { -4f,  4f,  4f,  1f },
+                new float[] { -6f,  5f, -1f,  1f }
+        });
+        Matrix b = new Matrix(4, 4, new float[][] {
+                new float[] { 8f,  2f,  2f,  2f },
+                new float[] { 3f, -1f,  7f,  0f },
+                new float[] { 7f,  0f,  5f,  4f },
+                new float[] { 6f, -2f,  0f,  5f }
+        });
+        Matrix c = a.times(b);
+        assertEquals(a, c.times(b.inverse()));
+    }
+
+    @Test
+    public void testMultiplicationByIdentityMatrix() {
+        Matrix a = new Matrix(4, 4, new float[][] {
+                new float[] {  3f, -9f,  7f,  3f },
+                new float[] {  3f, -8f,  2f, -9f },
+                new float[] { -4f,  4f,  4f,  1f },
+                new float[] { -6f,  5f, -1f,  1f }
+        });
+        Matrix i = Matrix.Companion.eye(4);
+        Matrix c = a.times(i);
+        assertEquals(a, c);
     }
 }
