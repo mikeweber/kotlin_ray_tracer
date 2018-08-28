@@ -121,4 +121,154 @@ public class MatrixTest {
         });
         assertEquals(expected, m.transpose());
     }
+
+    @Test
+    public void testMatrixDeterminantIsZeroWhenMatrixIsTooSmall() {
+        Matrix m1 = new Matrix(1, 4, new float[][] {
+                new float[] { 1f, 5f, 4f, 3f },
+        });
+        Matrix m2 = new Matrix(4, 1, new float[][] {
+                new float[] {  1f },
+                new float[] { -3f },
+                new float[] { -3f },
+                new float[] {  4f }
+        });
+
+        assertEquals(0f, m1.determinant());
+        assertEquals(0f, m2.determinant());
+    }
+
+    @Test
+    public void testMatrixDeterminant() {
+        Matrix m = new Matrix(2, 2, new float[][] {
+                new float[] { 1f, 5f },
+                new float[] { -3f, 2f }
+        });
+        assertEquals(17f, m.determinant());
+    }
+
+    @Test
+    public void testSubmatrix() {
+        Matrix m = new Matrix(3, 3, new float[][] {
+                new float[] { 1f, 5f, 0f },
+                new float[] { -3f, 2f, 7f },
+                new float[] { 0f, 6f, -3f }
+        });
+        Matrix expected = new Matrix(2, 2, new float[][] {
+                new float[] { -3f, 2f },
+                new float[] { 0f, 6f }
+        });
+        Matrix result = m.submatrix(0, 2);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testMinor() {
+        Matrix m = new Matrix(3, 3, new float[][] {
+                new float[] { 3f, 5f, 0f },
+                new float[] { 2f, -1f, -7f },
+                new float[] { 6f, -1f, 5f }
+        });
+        Matrix submatrix = new Matrix(2, 2, new float[][] {
+                new float[] { 5f, 0f },
+                new float[] { -1f, 5f }
+        });
+        assertEquals(25, submatrix.determinant());
+        assertEquals(25, m.minor(1, 0));
+    }
+
+    @Test
+    public void testCofactor() {
+        Matrix m = new Matrix(3, 3, new float[][] {
+                new float[] { 3f, 5f, 0f },
+                new float[] { 2f, -1f, -7f },
+                new float[] { 6f, -1f, 5f }
+        });
+        assertEquals(-12, m.minor(0, 0));
+        assertEquals(-12, m.cofactor(0, 0));
+        assertEquals(25, m.minor(1, 0));
+        assertEquals(-25, m.cofactor(1, 0));
+    }
+
+    @Test
+    public void testDeterminantOfThreeByThreeMatrix() {
+        Matrix m = new Matrix(3, 3, new float[][] {
+                new float[] { 1f, 2f, 6f },
+                new float[] { -5f, 8f, -4f },
+                new float[] { 2f, 6f, 4f }
+        });
+        assertEquals(56, m.cofactor(0, 0));
+        assertEquals(12, m.cofactor(0, 1));
+        assertEquals(-46, m.cofactor(0, 2));
+        assertEquals(-196, m.determinant());
+    }
+
+    @Test
+    public void testDeterminantOfFourByFourMatrix() {
+        Matrix m = new Matrix(4, 4, new float[][] {
+                new float[] { -2f, -8f, 3f, 5f },
+                new float[] { -3f, 1f, 7f, 3f },
+                new float[] { 1f, 2f, -9f, 6f },
+                new float[] { -6f, 7f, 7f, -9f }
+        });
+        assertEquals(690, m.cofactor(0, 0));
+        assertEquals(447, m.cofactor(0, 1));
+        assertEquals(210, m.cofactor(0, 2));
+        assertEquals( 51, m.cofactor(0, 3));
+        assertEquals(-4071, m.determinant());
+    }
+
+    @Test
+    public void testIsInvertable() {
+        Matrix m = new Matrix(4, 4, new float[][] {
+                new float[] { 6f, 4f, 4f, 4f },
+                new float[] { 5f, 5f, 7f, 6f },
+                new float[] { 4f, -9f, 3f, -7f },
+                new float[] { 9f, 1f, 7f, -6f }
+        });
+        assertEquals(-2120, m.determinant());
+        assert(m.isInvertable());
+    }
+
+    @Test void testIsNotInvertable() {
+        Matrix m = new Matrix(4, 4, new float[][] {
+                new float[] { -4f, 2f, -2f, -3f },
+                new float[] { 9f, 6f, 2f, 6f },
+                new float[] { 0f, -5f, 1f, -5f },
+                new float[] { 0f, 0f, 0f, 0f }
+        });
+        assertEquals(0, m.determinant());
+        assert(!m.isInvertable());
+    }
+
+    @Test void testInverse() {
+        Matrix a = new Matrix(4, 4, new float[][] {
+                new float[] { -5f, 2f, 6f, -8f },
+                new float[] { 1f, -5f, 1f, 8f },
+                new float[] { 7f, 7f, -6f, -7f },
+                new float[] { 1f, -3f, 7f, 4f }
+        });
+        Matrix b = a.inverse();
+        Matrix expected = new Matrix(4, 4, new float[][] {
+                new float[] { 0.21805f,  0.45113f,  0.24060f, -0.04511f },
+                new float[] {-0.80827f, -1.45677f, -0.44361f,  0.52068f },
+                new float[] {-0.07895f, -0.22368f, -0.05263f,  0.19737f },
+                new float[] {-0.52256f, -0.81391f, -0.30075f,  0.30639f }
+        });
+        Matrix cofactors = a.cofactors();
+        Matrix expectedCofactors = new Matrix(4, 4, new float[][] {
+                new float[] {  116f, -430f,  -42f, -278f },
+                new float[] {  240f, -775f, -119f, -433f },
+                new float[] {  128f, -236f,  -28f, -160f },
+                new float[] {  -24f,  277f,  105f,  163f }
+        });
+        assertEquals(expectedCofactors, cofactors);
+        assertEquals(532, a.determinant());
+        assertEquals(-160, a.cofactor(2, 3));
+        assertEquals(-160f / 532f, b.getElement(3, 2));
+        assertEquals(105, a.cofactor(3, 2));
+        assertEquals(105f / 532f, b.getElement(2, 3));
+        assertEquals(expected, b);
+    }
 }

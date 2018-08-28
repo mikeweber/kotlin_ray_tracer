@@ -64,6 +64,16 @@ class Matrix (val rows: Int, val cols: Int) {
         return Tuple(result[0], result[1], result[2], result[3])
     }
 
+    operator fun div(scalar: Float): Matrix {
+        val result = Matrix(rows, cols)
+        for (i in 0..(rows - 1)) {
+            for (j in 0..(cols - 1)) {
+                result.setElement(i, j, getElement(i, j) / scalar)
+            }
+        }
+        return result
+    }
+
     override operator fun equals(other: Any?): Boolean {
         if (other !is Matrix) return false
 
@@ -82,6 +92,63 @@ class Matrix (val rows: Int, val cols: Int) {
         for (row in 0..(rows - 1)) {
             for (col in 0..(cols - 1)) {
                 result.setElement(col, row, getElement(row, col));
+            }
+        }
+
+        return result
+    }
+
+    private fun recursiveDeterminant(row: Int = 0, col: Int = 0, sum: Float = 0f): Float {
+        if (col >= cols) return sum
+
+        val det = getElement(row, col) * cofactor(row, col)
+        return recursiveDeterminant(row, col + 1, sum + det)
+    }
+
+    fun cofactor(row: Int, col: Int): Float {
+        return if ((row + col) % 2 == 0) minor(row, col) else -minor(row, col)
+    }
+
+    fun minor(row: Int, col: Int): Float {
+        return submatrix(row, col).determinant()
+    }
+
+    fun inverse(): Matrix {
+        return cofactors().transpose() / determinant()
+    }
+
+    fun cofactors(): Matrix {
+        val result = Matrix(rows, cols)
+        for (i in 0..(rows - 1)) {
+            for (j in 0..(cols - 1)) {
+                result.setElement(i, j, cofactor(i, j))
+            }
+        }
+        return result
+    }
+
+    fun isInvertable(): Boolean {
+        return determinant() != 0f
+    }
+
+    fun determinant(): Float {
+        if (rows < 2 || cols < 2) return 0f
+        if (rows > 2 && cols > 2) return recursiveDeterminant()
+
+        return getElement(0, 0) * getElement(1, 1) - getElement(0, 1) * getElement(1, 0)
+    }
+
+    fun submatrix(rowToRemove: Int, colToRemove: Int): Matrix {
+        val result = Matrix(rows - 1, cols - 1)
+        for (row in 0..(rows - 1)) {
+            if (row == rowToRemove) continue
+
+            val i = if (row > rowToRemove) row - 1 else row
+            for (col in 0..(cols - 1)) {
+                if (col == colToRemove) continue
+                val j = if (col > colToRemove) col - 1 else col
+
+                result.setElement(i, j, getElement(row, col))
             }
         }
 
