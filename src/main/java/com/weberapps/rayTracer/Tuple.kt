@@ -1,9 +1,11 @@
 package com.weberapps.rayTracer
 
+import java.lang.Math.PI
 import java.lang.Math.abs
 import kotlin.math.sqrt
 
 const val EPSILON: Float = 0.00001f
+const val TAU: Float = (PI * 2).toFloat()
 open class Tuple(val x: Float, val y: Float, val z: Float, val w: Float) {
     operator fun plus(other: Tuple): Tuple {
         return Tuple(x + other.x, y + other.y, z + other.z, w + other.w)
