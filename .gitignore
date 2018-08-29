@@ -1,3 +1,5 @@
 .idea
 .gradle
+gradle
+gradlew*
 out
