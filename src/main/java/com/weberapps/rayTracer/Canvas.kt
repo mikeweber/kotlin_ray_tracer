@@ -1,7 +1,7 @@
 package com.weberapps.rayTracer
 
-class Canvas (val width: Int, val height: Int) {
-    private var pixels = Array<Color>(width * height) { Color(0.0f, 0.0f, 0.0f) }
+class Canvas (val width: Int, val height: Int, val defaultColor: Color = Color(0.0f, 0.0f, 0.0f)) {
+    private var pixels = Array<Color>(width * height) { defaultColor }
 
     fun getPixel(x: Int, y: Int): Color {
         return pixels[x + y * width]
