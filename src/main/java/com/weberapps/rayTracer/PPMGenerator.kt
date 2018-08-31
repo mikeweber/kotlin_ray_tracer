@@ -1,6 +1,6 @@
 package com.weberapps.rayTracer
 
-import java.io.File
+import java.io.*
 
 class PPMGenerator(private val canvas: Canvas) {
     companion object {
@@ -9,32 +9,28 @@ class PPMGenerator(private val canvas: Canvas) {
     }
 
     fun save(filename: String) {
-        val content = generate()
         val file = File(filename)
-        return file.printWriter().use { out -> out.write(content) }
+        return file.printWriter().use { out -> generate(out) }
     }
 
-    fun generate(): String {
-        var output = """
-            P3
-            ${canvas.width} ${canvas.height}
-            ${MAX_INTENSITY}
-
-        """.trimIndent()
+    fun generate(output: Writer = StringWriter()): Writer {
+        output.write("P3\n")
+        output.write("${canvas.width} ${canvas.height}\n")
+        output.write("$MAX_INTENSITY\n")
 
         for (y in 0..(canvas.height - 1)) {
-            var lineLength = 0
+            var line = ""
             for (x in 0..(canvas.width - 1)) {
                 val pixel = canvas.getPixel(x, y)
                 val pixelOutput = "${floatToInt(pixel.red)} ${floatToInt(pixel.green)} ${floatToInt(pixel.blue)} "
-                if ((lineLength + pixelOutput.length) > MAX_LENGTH) {
-                    output = output.trimEnd() + "\n"
-                    lineLength = 0
+
+                if ((line.length + pixelOutput.length) > MAX_LENGTH) {
+                    output.write(line.trimEnd() + "\n")
+                    line = ""
                 }
-                output += pixelOutput
-                lineLength += pixelOutput.length
+                line += pixelOutput
             }
-            output = output.trimEnd() + "\n"
+            output.write("${line.trimEnd()}\n")
         }
 
         return output

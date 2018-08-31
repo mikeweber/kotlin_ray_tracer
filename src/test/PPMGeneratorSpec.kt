@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 object PPMGeneratorSpec : Spek({
     it("should generate a header") {
         val c = Canvas(5, 3)
-        val result = PPMGenerator(c).generate().split("\n")
+        val result = PPMGenerator(c).generate().toString().split("\n")
         assertEquals("P3", result[0])
         assertEquals("5 3", result[1])
         assertEquals("255", result[2])
@@ -25,6 +25,6 @@ object PPMGeneratorSpec : Spek({
         c.setPixel(2, 1, green)
         c.setPixel(4, 2, blue)
 
-        assertEquals(expected, PPMGenerator(c).generate())
+        assertEquals(expected, PPMGenerator(c).generate().toString())
     }
 })
