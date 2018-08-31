@@ -16,5 +16,5 @@ fun drawClock() {
             }
         }
     }
-    PPMGenerator(c).save("/home/mike/IdeaProjects/kotlin_ray_tracer/clock.ppm")
+    PPMGenerator(c).save("clock.ppm")
 }
