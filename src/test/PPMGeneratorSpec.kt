@@ -18,7 +18,7 @@ object PPMGeneratorSpec : Spek({
         val red = Color(1f, 0f, 0f)
         val green = Color(0f, 1f, 0f)
         val blue = Color(0f, 0f, 1f)
-        val expected = "P3\n5 3\n255\n0 0 0 255 0 0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 255 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0 0 0 0 0 255"
+        val expected = "P3\n5 3\n255\n0 0 0 255 0 0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 255 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n"
         val c = Canvas(5, 3)
 
         c.setPixel(1, 0, red)

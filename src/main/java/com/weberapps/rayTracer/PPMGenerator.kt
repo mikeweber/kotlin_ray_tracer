@@ -41,9 +41,14 @@ class PPMGenerator(private val canvas: Canvas) {
     }
 
     private fun floatToInt(intensity: Float): Int {
-        var intensity = if (intensity < 0f) 0f else intensity
-        intensity = if (intensity > 1f) 1f else intensity
+        val i = if (intensity < 0f) {
+            0f
+        } else if (intensity > 1f) {
+            1f
+        } else {
+            intensity
+        }
 
-        return (intensity * MAX_INTENSITY).toInt()
+        return (i* MAX_INTENSITY).toInt()
     }
 }
