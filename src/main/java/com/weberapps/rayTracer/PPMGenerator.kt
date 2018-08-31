@@ -8,7 +8,7 @@ class PPMGenerator(private val canvas: Canvas) {
         const val MAX_LENGTH = 70
     }
 
-    fun save(filename: String): Unit {
+    fun save(filename: String) {
         val content = generate()
         val file = File(filename)
         return file.printWriter().use { out -> out.write(content) }
