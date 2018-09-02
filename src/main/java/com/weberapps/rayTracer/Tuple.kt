@@ -51,6 +51,10 @@ open class Tuple(val x: Float, val y: Float, val z: Float, val w: Float) {
         )
     }
 
+    fun reflect(surfaceNormal: Vector): Vector {
+        return Vector(this - surfaceNormal * 2f * this.dot(surfaceNormal))
+    }
+
     private fun attributeEquals(a: Float, b: Float, eps: Float = EPSILON): Boolean {
         return abs(a - b) <= eps
     }

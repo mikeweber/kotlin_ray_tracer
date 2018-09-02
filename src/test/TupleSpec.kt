@@ -138,4 +138,21 @@ object TupleSpec: Spek ({
         assertEquals(Color(0.9f, 0.2f, 0.04f), c1 * c2)
         assertEquals(Color(0.9f, 0.2f, 0.04f), c2 * c1)
     }
+
+    context("reflection") {
+        it("should reflect a vector approaching at 45 degrees") {
+            val v = Vector(1f, -1f, 0f)
+            val n = Vector(0f, 1f, 0f)
+            val r = v.reflect(n)
+            assertEquals(Vector(1f, 1f, 0f), r)
+        }
+
+        it("should reflect a vector off of a slanted surface") {
+            val v = Vector(0f, -1f, 0f)
+            val f = (Math.sqrt(2.0) / 2).toFloat()
+            val n = Vector(f, f, 0f)
+            val r = v.reflect(n)
+            assertEquals(Vector(1f, 0f, 0f), r)
+        }
+    }
 })
