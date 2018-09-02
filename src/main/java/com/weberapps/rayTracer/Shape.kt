@@ -26,7 +26,7 @@ interface Shape {
         }
     }
 
-    private fun center(): Point {
+    fun center(): Point {
         return Point(0f, 0f, 0f)
     }
 }

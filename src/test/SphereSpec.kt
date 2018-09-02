@@ -96,4 +96,51 @@ object SphereSpec : Spek({
             assertEquals(Matrix.eye(4), sphere.transform)
         }
     }
+
+    context("normal") {
+        var s = Sphere()
+        beforeEachTest {
+            s = Sphere()
+        }
+
+        it("should return a point on the X axis") {
+            val n = s.normal(Point(1f, 0f, 0f))
+            assertEquals(Vector(1f, 0f, 0f), n)
+        }
+
+        it("should return a point on the Y axis") {
+            val n = s.normal(Point(0f, 1f, 0f))
+            assertEquals(Vector(0f, 1f, 0f), n)
+        }
+
+        it("should return a point on the Z axis") {
+            val n = s.normal(Point(0f, 0f, 1f))
+            assertEquals(Vector(0f, 0f, 1f), n)
+        }
+
+        it("should be able to return a non-axial point") {
+            val f = (Math.sqrt(3.0) / 3).toFloat()
+            val n = s.normal(Point(f, f, f))
+            assertEquals(Vector(f, f, f), n)
+        }
+
+        it("should be a noramlized vector") {
+            val f = (Math.sqrt(3.0) / 3).toFloat()
+            val n = s.normal(Point(f, f, f))
+            assertEquals(n.normalize(), n)
+        }
+
+        it("should be able to be calculated for a translated sphere") {
+            s.transform = Transformation.translation(0f, 5f, 0f)
+            val n = s.normal(Point(1f, 5f, 0f))
+            assertEquals(Vector(1f, 0f, 0f), n)
+        }
+
+        it("should be able to be calculated for a scaled sphere") {
+            s.transform = Transformation.scale(1f, 0.5f, 1f)
+            val f = (Math.sqrt(2.0) / 2).toFloat()
+            val n = s.normal(Point(0f, f, -f))
+            assertEquals(Vector(0f, 0.97014f, -0.24254f), n)
+        }
+    }
 })
