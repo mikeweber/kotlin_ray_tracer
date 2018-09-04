@@ -50,7 +50,7 @@ object MaterialSpec: Spek({
             val normal = Vector(0f, 0f, -1f)
             val light = Light(Point(0f, 10f, -10f), Color(1f, 1f, 1f))
             val result = m.lighting(light, p, eye, normal)
-            val expected = Color(1.6364f, 1.6364f, 1.6364f)
+            val expected = Color(1.63638f, 1.63638f, 1.63638f)
             assertEquals(expected, result)
         }
 
