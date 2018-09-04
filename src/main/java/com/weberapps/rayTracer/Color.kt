@@ -16,8 +16,8 @@ class Color : Tuple {
         return Color(red * other.red, green * other.green, blue * other.blue)
     }
 
-    override operator fun times(other: Float): Color {
-        return Color(red * other, green * other, blue * other)
+    override operator fun times(scalar: Float): Color {
+        return Color(red * scalar, green * scalar, blue * scalar)
     }
 
     override operator fun plus(other: Color): Color {

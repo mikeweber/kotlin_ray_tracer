@@ -34,9 +34,6 @@ open class Tuple(val x: Float, val y: Float, val z: Float, val w: Float) {
     override operator fun equals(other: Any?): Boolean {
         if (other !is Tuple) return false
 
-        val xeq = attributeEquals(x, other.x)
-        val yeq = attributeEquals(y, other.y)
-        val zeq = attributeEquals(z, other.z)
         return attributeEquals(x, other.x) && attributeEquals(y, other.y) && attributeEquals(z, other.z) && attributeEquals(w, other.w)
     }
 
