@@ -3,8 +3,8 @@ package com.weberapps.rayTracer
 class Ray(val origin: Point, val direction: Vector) {
     constructor(originTuple: Tuple, directionTuple: Tuple) : this(Point(originTuple), Vector(directionTuple))
 
-    fun positionAt(t: Float): Tuple {
-        return origin + direction * t
+    fun positionAt(t: Float): Point {
+        return Point(origin + direction * t)
     }
 
     fun transform(transformation: Matrix): Ray {

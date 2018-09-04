@@ -7,23 +7,23 @@ import kotlin.math.sqrt
 const val EPSILON: Float = 0.00001f
 const val TAU: Double = (PI * 2)
 open class Tuple(val x: Float, val y: Float, val z: Float, val w: Float) {
-    operator fun plus(other: Tuple): Tuple {
+    open operator fun plus(other: Tuple): Tuple {
         return Tuple(x + other.x, y + other.y, z + other.z, w + other.w)
     }
 
-    operator fun minus(other: Tuple): Tuple {
+    open operator fun minus(other: Tuple): Tuple {
         return Tuple(x - other.x, y - other.y, z - other.z, w - other.w)
     }
 
-    operator fun times(scalar: Float): Tuple {
+    open operator fun times(scalar: Float): Tuple {
         return Tuple(x * scalar, y * scalar, z * scalar, w * scalar)
     }
 
-    operator fun div(scalar: Float): Tuple {
+    open operator fun div(scalar: Float): Tuple {
         return Tuple(x / scalar, y / scalar, z / scalar, w / scalar)
     }
 
-    operator fun unaryMinus(): Tuple {
+    open operator fun unaryMinus(): Tuple {
         return Tuple(-x, -y, -z, -w)
     }
 
@@ -34,6 +34,9 @@ open class Tuple(val x: Float, val y: Float, val z: Float, val w: Float) {
     override operator fun equals(other: Any?): Boolean {
         if (other !is Tuple) return false
 
+        val xeq = attributeEquals(x, other.x)
+        val yeq = attributeEquals(y, other.y)
+        val zeq = attributeEquals(z, other.z)
         return attributeEquals(x, other.x) && attributeEquals(y, other.y) && attributeEquals(z, other.z) && attributeEquals(w, other.w)
     }
 
@@ -57,5 +60,9 @@ open class Tuple(val x: Float, val y: Float, val z: Float, val w: Float) {
 
     private fun attributeEquals(a: Float, b: Float, eps: Float = EPSILON): Boolean {
         return abs(a - b) <= eps
+    }
+
+    open operator fun plus(other: Color): Color {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

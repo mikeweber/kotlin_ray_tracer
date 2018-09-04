@@ -2,6 +2,7 @@ package com.weberapps.rayTracer
 
 interface Shape {
     var transform: Matrix
+    var material: Material
 
     fun intersect(ray: Ray): Intersections {
         val transformedRay = ray.transform(transform.inverse())
@@ -28,5 +29,13 @@ interface Shape {
 
     fun center(): Point {
         return Point(0f, 0f, 0f)
+    }
+
+    fun normal(point: Point): Vector {
+        val objectPoint = transform.inverse() * point
+        val objectNormal = objectPoint- center()
+        val worldNormal = transform.inverse().transpose() * objectNormal
+
+        return Vector(worldNormal.normalize())
     }
 }
