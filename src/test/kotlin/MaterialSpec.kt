@@ -2,7 +2,10 @@ import com.weberapps.rayTracer.*
 import junit.framework.TestCase.assertEquals
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
+import org.junit.platform.runner.JUnitPlatform
+import org.junit.runner.RunWith
 
+@RunWith(JUnitPlatform::class)
 object MaterialSpec: Spek({
     context("initialization") {
         it("should store properties ambient, diffuse, specular and shininess") {
@@ -50,7 +53,7 @@ object MaterialSpec: Spek({
             val normal = Vector(0f, 0f, -1f)
             val light = Light(Point(0f, 10f, -10f), Color(1f, 1f, 1f))
             val result = m.lighting(light, p, eye, normal)
-            val expected = Color(1.6364f, 1.6364f, 1.6364f)
+            val expected = Color(1.63638f, 1.63638f, 1.63638f)
             assertEquals(expected, result)
         }
 
