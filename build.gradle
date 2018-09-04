@@ -1,6 +1,8 @@
 buildscript {
+    ext.kotlin_version = '1.2.61'
+
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.21"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
     }
 }
@@ -25,6 +27,7 @@ dependencies {
     testRuntime 'org.jetbrains.spek:spek-junit-platform-engine:1.1.5'
     testRuntime 'org.junit.platform:junit-platform-launcher:1.0.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.2.0'
     testImplementation 'org.junit.platform:junit-platform-runner:1.0.0'
     testImplementation 'org.junit.platform:junit-platform-launcher:1.0.0'
@@ -54,4 +57,16 @@ junitPlatform {
 }
 test {
     useJUnitPlatform()
+}
+idea {
+    module {
+        sourceDirs -= file('src/test')
+        testSourceDirs += file('src/test')
+    }
+}
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.weberapps.rayTracer.AppKt'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
