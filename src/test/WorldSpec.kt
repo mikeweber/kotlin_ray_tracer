@@ -29,7 +29,10 @@ object WorldSpec: Spek({
     }
 
     context("ray casting") {
-        val world = World.default()
+        var world = World.default()
+        beforeEachTest {
+            world = World.default()
+        }
 
         it("should intersect every object in a scene") {
             val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
@@ -39,6 +42,39 @@ object WorldSpec: Spek({
             assertEquals(4.5f, xs[1].t)
             assertEquals(5.5f, xs[2].t)
             assertEquals(  6f, xs[3].t)
+        }
+
+        it("should shade an intersection") {
+            val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
+            val shape = world.sceneObjects[0]
+            val hit = Intersection(4f, shape)
+            hit.prepareHit(ray)
+            val c = world.shadeHit(hit)
+
+            assertEquals(Color(0.38066f, 0.47583f, 0.2855f), c)
+        }
+
+        it("should shade an intersection from the inside") {
+            world.lightSources[0] = Light(Point(0f, 0.25f, 0f))
+            val ray = Ray(Point(0f, 0f, 0f), Vector(0f, 0f, 1f))
+            val shape = world.sceneObjects[1]
+            val hit = Intersection(0.5f, shape)
+            hit.prepareHit(ray)
+            val c = world.shadeHit(hit)
+
+            assertEquals(Color(0.90498f, 0.90498f, 0.90498f), c)
+        }
+
+        it("should return black when a ray misses") {
+            val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 1f, 0f))
+            val c = world.colorAt(ray)
+            assertEquals(Color(0f, 0f, 0f), c)
+        }
+
+        it("should return a color when the ray hits") {
+            val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
+            val c = world.colorAt(ray)
+            assertEquals(Color(0.38066f, 0.47583f, 0.2855f), c)
         }
     }
 })

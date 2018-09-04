@@ -11,11 +11,26 @@ class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources
         }
     }
 
+    fun colorAt(ray: Ray): Color {
+        val intersections = intersect(ray)
+        val hit = intersections.hit() ?: return Color(0f, 0f, 0f)
+
+        return shadeHit(hit.prepareHit(ray))
+    }
+
     fun intersect(ray: Ray): Intersections {
         val intersections = Intersections()
         for (obj in sceneObjects) {
             intersections.add(obj.intersect(ray))
         }
         return intersections
+    }
+
+    fun shadeHit(hit: Intersection): Color {
+        var color = Color(0f, 0f, 0f)
+        for (light in lightSources) {
+            color += hit.shape.material.lighting(light, hit.point, hit.eyeVector, hit.normalVector)
+        }
+        return color
     }
 }
