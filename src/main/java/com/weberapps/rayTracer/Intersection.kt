@@ -1,13 +1,13 @@
 package com.weberapps.rayTracer
 
-class Intersection(val t: Float, val shape: Shape) {
+class Intersection(val t: Float, val shape: Shape): Comparable<Intersection> {
     override fun equals(other: Any?): Boolean {
         if (other !is Intersection) return false
 
         return shape == other.shape && closeEnough(t, other.t)
     }
 
-    operator fun compareTo(other: Any?): Int {
+    override operator fun compareTo(other: Intersection): Int {
         if (other !is Intersection) return 0
 
         if (closeEnough(t, other.t)) return 0

@@ -1,8 +1,19 @@
 package com.weberapps.rayTracer
 
-class Intersections(override val size: Int = 0, private val elements: Array<Intersection> = arrayOf()) : Collection<Intersection> {
+import java.util.*
+
+class Intersections(override var size: Int = 0, private var elements: ArrayList<Intersection> = arrayListOf()) : Collection<Intersection> {
+    fun add(intersections: Intersections): Intersections {
+        for(i in intersections) { this.add(i) }
+        return this
+    }
+
     fun add(intersection: Intersection): Intersections {
-        return Intersections(size + 1, elements + arrayListOf(intersection))
+        size++
+        elements.add(intersection)
+        elements.sort()
+
+        return this
     }
 
     operator fun get(index: Int): Intersection {

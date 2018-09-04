@@ -14,12 +14,12 @@ class DrawSphere(filename: String = "sphere.ppm") {
     }
 
     private fun draw(): Canvas {
-        val color = Color(1f, 0.2f, 1f)
+        val color = Color(0.1f, 0.2f, 1f)
         val sphere = Sphere()
-        val material = Material(color)
+        val material = Material(color = color)
         sphere.material = material
-        val light = Light(Point(-10f, 10f, -10f), Color(1f, 1f, 1f))
-        val canvas = Canvas(500, 500, Color(1f, 1f, 1f))
+        val light = Light(Point(-10f, 10f, 10f), Color(1f, 1f, 1f))
+        val canvas = Canvas(500, 500)
         val rayOrigin = Point(0f, 0f, -5f)
         val wallSize = 7f
         val wallZ = 10f
