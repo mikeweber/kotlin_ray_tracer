@@ -52,5 +52,19 @@ class Transformation {
 
             return rotation
         }
+
+        fun viewTransform(from: Point, to: Point, up: Vector): Matrix {
+            val forwardVector = Vector(to - from).normalize()
+            val leftVector = forwardVector.cross(up.normalize())
+            val trueUp = leftVector.cross(forwardVector)
+
+            val orientation = Matrix(4, 4, arrayOf(
+                    floatArrayOf(leftVector.x, leftVector.y, leftVector.z, 0f),
+                    floatArrayOf(trueUp.x, trueUp.y, trueUp.z, 0f),
+                    floatArrayOf(-forwardVector.x, -forwardVector.y, -forwardVector.z, 0f),
+                    floatArrayOf(0f, 0f, 0f, 1f)
+            ))
+            return orientation * translation(-from.x, -from.y, -from.z)
+        }
     }
 }
