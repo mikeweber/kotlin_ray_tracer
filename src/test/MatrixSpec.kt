@@ -2,7 +2,7 @@ import com.weberapps.rayTracer.Matrix
 import com.weberapps.rayTracer.Tuple
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 
 object MatrixSpec: Spek({
     it("can initialize with a list of rows and columns") {
@@ -248,7 +248,7 @@ object MatrixSpec: Spek({
                     )
             )
             assertEquals(-2120f, m.determinant())
-            assert(m.isInvertable())
+            assertTrue(m.isInvertable())
         }
 
         it("knows when a matrix is not invertable") {
@@ -261,7 +261,7 @@ object MatrixSpec: Spek({
                     )
             )
             assertEquals(0f, m.determinant())
-            assert(!m.isInvertable())
+            assertFalse(m.isInvertable())
         }
 
         it("can invert a matrix") {
