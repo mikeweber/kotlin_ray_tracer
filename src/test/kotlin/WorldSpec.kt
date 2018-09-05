@@ -77,4 +77,28 @@ object WorldSpec: Spek({
             assertEquals(Color(0.38066f, 0.47583f, 0.2855f), c)
         }
     }
+
+    context("when determining if a point is shadowed") {
+        val world = World.default()
+
+        it("should not be shadowed when nothing is colinear with a point and light") {
+            val p = Point(0f, 10f, 0f)
+            assertFalse(world.isShadowed(p))
+        }
+
+        it("should be shadowed when the point is behind an object")  {
+            val p = Point(10f, -10f, 10f)
+            assertTrue(world.isShadowed(p))
+        }
+
+        it("should not be shadowed when the light is between the point and object") {
+            val p = Point(-20f, 20f, -20f)
+            assertFalse(world.isShadowed(p))
+        }
+
+        it("should not be shadowed when the point is betwen the light and the object") {
+            val p = Point(-2f, 2f, -2f)
+            assertFalse(world.isShadowed(p))
+        }
+    }
 })

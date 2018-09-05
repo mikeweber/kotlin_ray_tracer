@@ -5,7 +5,6 @@ import org.jetbrains.spek.api.dsl.*
 import org.junit.platform.runner.JUnitPlatform
 import org.junit.runner.RunWith
 
-@RunWith(JUnitPlatform::class)
 object MaterialSpec: Spek({
     context("initialization") {
         it("should store properties ambient, diffuse, specular and shininess") {
@@ -62,6 +61,14 @@ object MaterialSpec: Spek({
             val normal = Vector(0f, 0f, -1f)
             val light = Light(Point(0f, 0f, 10f), Color(1f, 1f, 1f))
             val result = m.lighting(light, p, eye, normal)
+            assertEquals(Color(0.1f, 0.1f, 0.1f), result)
+        }
+
+        it("should be darker in a shadow") {
+            val eye = Vector(0f, 0f, -1f)
+            val normal = Vector(0f, 0f, -1f)
+            val light = Light(Point(0f, 0f, -10f))
+            val result = m.lighting(light, p, eye, normal, inShadow = true)
             assertEquals(Color(0.1f, 0.1f, 0.1f), result)
         }
     }

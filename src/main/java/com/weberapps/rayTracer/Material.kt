@@ -10,7 +10,7 @@ class Material(
         val specular: Float = 0.9f,
         val shininess: Int = 200
 ) {
-    fun lighting(light: Light, position: Point, eyeVector: Vector, normalVector: Vector): Color {
+    fun lighting(light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean = false): Color {
         val effectiveColor = color * light.intensity
         val lightVector = (light.position - position).normalize()
         val ambientComponent = effectiveColor * ambient
@@ -19,15 +19,23 @@ class Material(
         var specularComponent = Color(0f, 0f, 0f)
 
         if (lightDotNormal > 0f) {
-            diffuseComponent = effectiveColor * lightDotNormal * diffuse
+            diffuseComponent = effectiveColor * lightDotNormal * effectiveDiffuse(inShadow)
             val reflectionVector = (-lightVector).reflect(normalVector)
             val reflectDotEye = reflectionVector.dot(eyeVector).pow(shininess)
             if (reflectDotEye > 0f) {
-                specularComponent = light.intensity * specular * reflectDotEye
+                specularComponent = light.intensity * effectiveSpecular(inShadow) * reflectDotEye
             }
         }
 
         return specularComponent + ambientComponent + diffuseComponent
+    }
+
+    fun effectiveDiffuse(inShadow: Boolean): Float {
+        return if (inShadow) 0f else diffuse
+    }
+
+    fun effectiveSpecular(inShadow: Boolean): Float {
+        return if (inShadow) 0f else specular
     }
 
     override fun equals(other: Any?): Boolean {

@@ -33,4 +33,23 @@ class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources
         }
         return color
     }
+
+    fun isShadowed(point: Point): Boolean {
+        var inShadow = false
+        for (light in lightSources) {
+            if (inShadow) return true
+
+            val v = light.position - point
+            val dist = v.magnitude()
+            val dir = v.normalize()
+
+            val ray = Ray(point, dir)
+            val xs = intersect(ray)
+
+            val h = xs.hit()
+            inShadow = (h != null && h.t < dist)
+
+        }
+        return inShadow
+    }
 }
