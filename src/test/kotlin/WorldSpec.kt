@@ -18,7 +18,7 @@ object WorldSpec: Spek({
         it("should have two objects and a single light source") {
             val s1 = Sphere(material = Material(color = Color(0.8f, 1f, 0.6f), diffuse = 0.7f, specular = 0.2f))
             val s2 = Sphere(transform = Transformation.scale(0.5f, 0.5f, 0.5f))
-            val light = Light(Point(-10f, 10f, -10f), Color(1f, 1f, 1f))
+            val light = Light(Point(-10f, 10f, -10f), Color.WHITE)
 
             assertEquals(2, world.sceneObjects.size)
             assertEquals(1, world.lightSources.size)
@@ -68,7 +68,7 @@ object WorldSpec: Spek({
         it("should return black when a ray misses") {
             val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 1f, 0f))
             val c = world.colorAt(ray)
-            assertEquals(Color(0f, 0f, 0f), c)
+            assertEquals(Color.BLACK, c)
         }
 
         it("should return a color when the ray hits") {

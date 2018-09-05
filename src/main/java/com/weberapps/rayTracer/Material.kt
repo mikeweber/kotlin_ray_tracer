@@ -4,19 +4,19 @@ import java.lang.Math.abs
 import kotlin.math.pow
 
 class Material(
-        val color: Color = Color(1f, 1f, 1f),
+        val color: Color = Color.WHITE,
         val ambient: Float = 0.1f,
         val diffuse: Float = 0.9f,
         val specular: Float = 0.9f,
         val shininess: Int = 200
 ) {
     fun lighting(light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean = false): Color {
-        val effectiveColor = color * light.intensity
-        val lightVector = (light.position - position).normalize()
-        val ambientComponent = effectiveColor * ambient
-        val lightDotNormal = lightVector.dot(normalVector)
-        var diffuseComponent = Color(0f, 0f, 0f)
-        var specularComponent = Color(0f, 0f, 0f)
+        val effectiveColor    = color * light.intensity
+        val lightVector       = (light.position - position).normalize()
+        val ambientComponent  = effectiveColor * ambient
+        val lightDotNormal    = lightVector.dot(normalVector)
+        var diffuseComponent  = Color.BLACK
+        var specularComponent = Color.BLACK
 
         if (lightDotNormal > 0f) {
             diffuseComponent = effectiveColor * lightDotNormal * effectiveDiffuse(inShadow)

@@ -9,7 +9,7 @@ object MaterialSpec: Spek({
     context("initialization") {
         it("should store properties ambient, diffuse, specular and shininess") {
             val m = Material()
-            assertEquals(Color(1f, 1f, 1f), m.color)
+            assertEquals(Color.WHITE, m.color)
             assertEquals(0.1f, m.ambient)
             assertEquals(0.9f, m.diffuse)
             assertEquals(0.9f, m.specular)
@@ -24,7 +24,7 @@ object MaterialSpec: Spek({
         it("should return full intensity when the eye is perpendicular to the surface") {
             val eye = Vector(0f, 0f, -1f)
             val normal = Vector(0f, 0f, -1f)
-            val light = Light(Point(0f, 0f, -10f), Color(1f, 1f, 1f))
+            val light = Light(Point(0f, 0f, -10f), Color.WHITE)
             val result = m.lighting(light, p, eye, normal)
             assertEquals(Color(1.9f, 1.9f, 1.9f), result)
         }
@@ -33,15 +33,15 @@ object MaterialSpec: Spek({
             val f = (Math.sqrt(2.0) / 2).toFloat()
             val eye = Vector(0f, f, f)
             val normal = Vector(0f, 0f, -1f)
-            val light = Light(Point(0f, 0f, -10f), Color(1f, 1f, 1f))
+            val light = Light(Point(0f, 0f, -10f), Color.WHITE)
             val result = m.lighting(light, p, eye, normal)
-            assertEquals(Color(1f, 1f, 1f), result)
+            assertEquals(Color.WHITE, result)
         }
 
         it("should reduce diffuse component when light source is offset 45 degrees") {
             val eye = Vector(0f, 0f, -1f)
             val normal = Vector(0f, 0f, -1f)
-            val light = Light(Point(0f, 10f, -10f), Color(1f, 1f, 1f))
+            val light = Light(Point(0f, 10f, -10f), Color.WHITE)
             val result = m.lighting(light, p, eye, normal)
             assertEquals(Color(0.7364f, 0.7364f, 0.7364f), result)
         }
@@ -50,7 +50,7 @@ object MaterialSpec: Spek({
             val f = (Math.sqrt(2.0) / 2).toFloat()
             val eye = Vector(0f, -f, -f)
             val normal = Vector(0f, 0f, -1f)
-            val light = Light(Point(0f, 10f, -10f), Color(1f, 1f, 1f))
+            val light = Light(Point(0f, 10f, -10f), Color.WHITE)
             val result = m.lighting(light, p, eye, normal)
             val expected = Color(1.63638f, 1.63638f, 1.63638f)
             assertEquals(expected, result)
@@ -59,7 +59,7 @@ object MaterialSpec: Spek({
         it("should only have an ambient component when the eye and light are on opposite sides") {
             val eye = Vector(0f, 0f, -1f)
             val normal = Vector(0f, 0f, -1f)
-            val light = Light(Point(0f, 0f, 10f), Color(1f, 1f, 1f))
+            val light = Light(Point(0f, 0f, 10f), Color.WHITE)
             val result = m.lighting(light, p, eye, normal)
             assertEquals(Color(0.1f, 0.1f, 0.1f), result)
         }

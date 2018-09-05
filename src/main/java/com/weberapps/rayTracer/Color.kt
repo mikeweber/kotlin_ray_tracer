@@ -12,6 +12,14 @@ class Color : Tuple {
 
     val alpha get() = this.w
 
+    companion object {
+        val BLACK = Color(0f, 0f, 0f)
+        val WHITE = Color(1f, 1f, 1f)
+        val RED   = Color(1f, 0f, 0f)
+        val GREEN = Color(0f, 1f, 0f)
+        val BLUE  = Color(0f, 0f, 1f)
+    }
+
     operator fun times(other: Color): Color {
         return Color(red * other.red, green * other.green, blue * other.blue)
     }

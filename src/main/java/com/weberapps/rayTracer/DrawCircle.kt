@@ -19,7 +19,7 @@ class DrawCircle(filename: String = "circle.ppm") {
         val wallSize = 7f
 
         val sphere = Sphere()
-        val canvas = Canvas(500, 500, Color(1f, 1f, 1f))
+        val canvas = Canvas(500, 500, Color.WHITE)
         val pixelSize = wallSize / canvas.width
         val half = wallSize / 2
         val red = Color(1f, 0f, 0f)

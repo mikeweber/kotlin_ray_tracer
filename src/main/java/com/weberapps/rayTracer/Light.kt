@@ -1,6 +1,6 @@
 package com.weberapps.rayTracer
 
-class Light(val position: Point, val intensity: Color = Color(1f, 1f, 1f)) {
+class Light(val position: Point, val intensity: Color = Color.WHITE) {
     override fun equals(other: Any?): Boolean {
         if (other !is Light) return false
 
