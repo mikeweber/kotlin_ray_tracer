@@ -24,7 +24,11 @@ open class Tuple(val x: Float, val y: Float, val z: Float, val w: Float) {
     }
 
     fun dot(other: Tuple): Float {
-        return x * other.x + y * other.y + z * other.z + w * other.w;
+        return x * other.x + y * other.y + z * other.z + w * other.w
+    }
+
+    override fun toString(): String {
+        return "Tuple($x, $y, $z, $w)"
     }
 
     override operator fun equals(other: Any?): Boolean {

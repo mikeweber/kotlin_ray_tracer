@@ -20,6 +20,19 @@ class Color : Tuple {
         val BLUE  = Color(0f, 0f, 1f)
     }
 
+    override fun toString(): String {
+        val description = when (this) {
+            BLACK -> "BLACK"
+            WHITE -> "WHITE"
+            RED   -> "RED"
+            GREEN -> "GREEN"
+            BLUE  -> "BLUE"
+            else  -> "$red, $green, $blue"
+        }
+
+        return "Color($description)"
+    }
+
     operator fun times(other: Color): Color {
         return Color(red * other.red, green * other.green, blue * other.blue)
     }

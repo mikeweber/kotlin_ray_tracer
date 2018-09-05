@@ -29,27 +29,19 @@ class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources
     fun shadeHit(hit: Intersection): Color {
         var color = Color.BLACK
         for (light in lightSources) {
-            color += hit.shape.material.lighting(light, hit.point, hit.eyeVector, hit.normalVector)
+            color += hit.shape.material.lighting(light, hit.point, hit.eyeVector, hit.normalVector, isShadowed(light, hit.point))
         }
         return color
     }
 
-    fun isShadowed(point: Point): Boolean {
-        var inShadow = false
-        for (light in lightSources) {
-            if (inShadow) return true
+    fun isShadowed(light: Light, point: Point): Boolean {
+        val v = light.position - point
+        val dist = v.magnitude()
+        val dir = v.normalize()
 
-            val v = light.position - point
-            val dist = v.magnitude()
-            val dir = v.normalize()
+        val ray = Ray(point, dir)
+        val hit = intersect(ray).hit() ?: return false
 
-            val ray = Ray(point, dir)
-            val xs = intersect(ray)
-
-            val h = xs.hit()
-            inShadow = (h != null && h.t < dist)
-
-        }
-        return inShadow
+        return hit.t < dist
     }
 }

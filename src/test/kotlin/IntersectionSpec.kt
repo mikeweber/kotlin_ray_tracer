@@ -19,7 +19,7 @@ class IntersectionSpec : Spek({
             val sphere = Sphere()
             val hit = Intersection(4f, sphere)
             hit.prepareHit(ray)
-            assertEquals(Point(0f, 0f, -1f), hit.point)
+            assertEquals(Point(0f, 0f, -1.0001f), hit.point)
             assertEquals(Vector(0f, 0f, -1f), hit.eyeVector)
             assertEquals(Vector(0f, 0f, -1f), hit.normalVector)
         }
@@ -37,10 +37,19 @@ class IntersectionSpec : Spek({
             val sphere = Sphere()
             val hit = Intersection(1f, sphere)
             hit.prepareHit(ray)
-            assertEquals(Point(0f, 0f, 1f), hit.point)
+            assertEquals(Point(0f, 0f, 0.9999f), hit.point)
             assertEquals(Vector(0f, 0f, -1f), hit.eyeVector)
             assertTrue(hit.inside)
             assertEquals(Vector(0f, 0f, -1f), hit.normalVector)
+        }
+
+        it("should return a point slightly above the normal of the point") {
+            val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
+            val sphere = Sphere()
+            val hit = Intersection(4f, sphere)
+            hit.prepareHit(ray)
+            assertTrue(hit.point.z < -1f)
+            assertTrue(hit.point.z > -1.1f)
         }
     }
 })

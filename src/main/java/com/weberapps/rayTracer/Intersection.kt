@@ -12,12 +12,13 @@ class Intersection(val t: Float, val shape: Shape, var inside: Boolean = false, 
         return if (t < other.t) -1 else 1
     }
 
-    fun prepareHit(ray: Ray): Intersection {
+    fun prepareHit(ray: Ray, surfaceOffset: Float = 0.0001f): Intersection {
         point = ray.positionAt(t)
         eyeVector = -ray.direction
         normalVector = shape.normal(point)
         inside = normalVector.dot(eyeVector) < 0f
         if (inside) normalVector = -normalVector
+        point = Point(point + normalVector * surfaceOffset)
 
         return this
     }

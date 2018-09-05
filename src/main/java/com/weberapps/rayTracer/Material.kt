@@ -30,11 +30,11 @@ class Material(
         return specularComponent + ambientComponent + diffuseComponent
     }
 
-    fun effectiveDiffuse(inShadow: Boolean): Float {
+    private fun effectiveDiffuse(inShadow: Boolean): Float {
         return if (inShadow) 0f else diffuse
     }
 
-    fun effectiveSpecular(inShadow: Boolean): Float {
+    private fun effectiveSpecular(inShadow: Boolean): Float {
         return if (inShadow) 0f else specular
     }
 

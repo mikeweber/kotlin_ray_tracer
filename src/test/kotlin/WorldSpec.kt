@@ -62,7 +62,7 @@ object WorldSpec: Spek({
             hit.prepareHit(ray)
             val c = world.shadeHit(hit)
 
-            assertEquals(Color(0.90498f, 0.90498f, 0.90498f), c)
+            assertEquals(Color(0.90495f, 0.90495f, 0.90495f), c)
         }
 
         it("should return black when a ray misses") {
@@ -80,25 +80,42 @@ object WorldSpec: Spek({
 
     context("when determining if a point is shadowed") {
         val world = World.default()
+        val light = world.lightSources[0]
 
         it("should not be shadowed when nothing is colinear with a point and light") {
             val p = Point(0f, 10f, 0f)
-            assertFalse(world.isShadowed(p))
+            assertFalse(world.isShadowed(light, p))
         }
 
         it("should be shadowed when the point is behind an object")  {
             val p = Point(10f, -10f, 10f)
-            assertTrue(world.isShadowed(p))
+            assertTrue(world.isShadowed(light, p))
         }
 
         it("should not be shadowed when the light is between the point and object") {
             val p = Point(-20f, 20f, -20f)
-            assertFalse(world.isShadowed(p))
+            assertFalse(world.isShadowed(light, p))
         }
 
         it("should not be shadowed when the point is betwen the light and the object") {
             val p = Point(-2f, 2f, -2f)
-            assertFalse(world.isShadowed(p))
+            assertFalse(world.isShadowed(light, p))
+        }
+    }
+
+    context("when shadeHit is given an intersection in a shadow") {
+        it("should only return the ambient color") {
+            val light = Light(Point(0f, 0f, -10f))
+            val s1 = Sphere()
+            val s2Transform = Transformation.translation(0f, 0f, 10f)
+            val s2 = Sphere(transform = s2Transform)
+            val world = World(sceneObjects = arrayListOf(s1, s2), lightSources = arrayListOf(light))
+            val ray = Ray(Point(0f, 0f, 5f), Vector(0f, 0f, 1f))
+            val hit = Intersection(4f, s2)
+            hit.prepareHit(ray)
+            val color = world.shadeHit(hit)
+
+            assertEquals(Color(0.1f, 0.1f, 0.1f), color)
         }
     }
 })
