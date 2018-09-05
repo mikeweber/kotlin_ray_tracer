@@ -1,11 +1,7 @@
 package com.weberapps.rayTracer
 
-import java.lang.Math.PI
-import java.lang.Math.abs
 import kotlin.math.sqrt
 
-const val EPSILON: Float = 0.00001f
-const val TAU: Double = (PI * 2)
 open class Tuple(val x: Float, val y: Float, val z: Float, val w: Float) {
     open operator fun plus(other: Tuple): Tuple {
         return Tuple(x + other.x, y + other.y, z + other.z, w + other.w)
@@ -34,9 +30,6 @@ open class Tuple(val x: Float, val y: Float, val z: Float, val w: Float) {
     override operator fun equals(other: Any?): Boolean {
         if (other !is Tuple) return false
 
-        val xeq = attributeEquals(x, other.x)
-        val yeq = attributeEquals(y, other.y)
-        val zeq = attributeEquals(z, other.z)
         return attributeEquals(x, other.x) && attributeEquals(y, other.y) && attributeEquals(z, other.z) && attributeEquals(w, other.w)
     }
 
@@ -44,7 +37,7 @@ open class Tuple(val x: Float, val y: Float, val z: Float, val w: Float) {
         return sqrt(x * x + y * y + z * z + w * w)
     }
 
-    fun normalize(): Tuple {
+    open fun normalize(): Tuple {
         val mag = magnitude()
         return Tuple(
                 x / mag,
@@ -59,7 +52,7 @@ open class Tuple(val x: Float, val y: Float, val z: Float, val w: Float) {
     }
 
     private fun attributeEquals(a: Float, b: Float, eps: Float = EPSILON): Boolean {
-        return abs(a - b) <= eps
+        return Math.abs(a - b) <= eps
     }
 
     open operator fun plus(other: Color): Color {

@@ -23,4 +23,13 @@ class Vector : Tuple {
                 x * other.y - y * other.x
         )
     }
+
+    override fun normalize(): Vector {
+        val mag = magnitude()
+        return Vector(
+                x / mag,
+                y / mag,
+                z / mag
+        )
+    }
 }
