@@ -33,8 +33,15 @@ class DrawSceneWithPlanes(filename: String = "scene_with_planes.ppm", hsize: Int
         val rightWall = Plane(transform = rightWallTransform, material = matte)
 
         val middleTransform = Transformation.translation(-0.5f, 1f, 0.5f)
-        val middleMaterial = SolidColor(
-                color = Color(0.1f, 1f, 0.5f),
+        val middleMaterialTransform =
+                Transformation.translation(0.05f, 0f, 0f) *
+                        Transformation.rotateY(-TAU / 8) *
+                        Transformation.rotateZ(-TAU / 16) *
+                        Transformation.scale(0.1f, 0.1f, 0.1f)
+        val middleMaterial = StripePattern(
+                zig = Color(0.1f, 1f, 0.5f),
+                zag = Color(0.6f, 1f, 0.7f),
+                transform = middleMaterialTransform,
                 diffuse = 0.7f,
                 specular = 0.3f
         )
@@ -60,7 +67,10 @@ class DrawSceneWithPlanes(filename: String = "scene_with_planes.ppm", hsize: Int
 
         val world = World(
                 arrayListOf(floor, leftWall, rightWall, middleSphere, rightSphere, leftSphere),
-                arrayListOf(Light(Point(-10f, 10f, -10f), Color(0.5f, 0.5f, 0.5f)), Light(Point(10f, 10f, -10f), Color(0.5f, 0.5f, 0.5f)))
+                arrayListOf(
+                        Light(Point(-10f, 10f, -10f)),
+                        Light(Point( 10f, 10f, -10f), Color(0.05f, 0.05f, 0.05f))
+                )
         )
 
         val viewTransform = Transformation.viewTransform(
