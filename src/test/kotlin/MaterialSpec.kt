@@ -2,8 +2,6 @@ import com.weberapps.rayTracer.*
 import junit.framework.TestCase.assertEquals
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
-import org.junit.platform.runner.JUnitPlatform
-import org.junit.runner.RunWith
 
 object MaterialSpec: Spek({
     context("initialization") {

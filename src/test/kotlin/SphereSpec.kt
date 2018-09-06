@@ -124,7 +124,7 @@ object SphereSpec : Spek({
             assertEquals(Vector(f, f, f), n)
         }
 
-        it("should be a noramlized vector") {
+        it("should be a normalized vector") {
             val f = (Math.sqrt(3.0) / 3).toFloat()
             val n = s.normal(Point(f, f, f))
             assertEquals(n.normalize(), n)
