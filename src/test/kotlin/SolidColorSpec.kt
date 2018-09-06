@@ -3,10 +3,10 @@ import junit.framework.TestCase.assertEquals
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 
-object MaterialSpec: Spek({
+object SolidColorSpec: Spek({
     context("initialization") {
         it("should store properties ambient, diffuse, specular and shininess") {
-            val m = Material()
+            val m = SolidColor()
             assertEquals(Color.WHITE, m.color)
             assertEquals(0.1f, m.ambient)
             assertEquals(0.9f, m.diffuse)
@@ -16,7 +16,7 @@ object MaterialSpec: Spek({
     }
 
     context("Lighting a material") {
-        val m = Material()
+        val m = SolidColor()
         val p = Point(0f, 0f, 0f)
 
         it("should return full intensity when the eye is perpendicular to the surface") {

@@ -58,8 +58,4 @@ open class Tuple(val x: Float, val y: Float, val z: Float, val w: Float) {
     private fun attributeEquals(a: Float, b: Float, eps: Float = EPSILON): Boolean {
         return Math.abs(a - b) <= eps
     }
-
-    open operator fun plus(other: Color): Color {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 }

@@ -8,7 +8,7 @@ interface Shape {
         return localIntersect(ray.transform(transform.inverse()))
     }
 
-    fun localIntersect(ray: Ray): Intersections
+    fun localIntersect(localRay: Ray): Intersections
 
     fun normal(point: Point): Vector {
         val localPoint  = Point(transform.inverse() * point)
@@ -18,5 +18,5 @@ interface Shape {
         return worldNormal.normalize()
     }
 
-    fun localNormal(point: Point): Vector
+    fun localNormal(localPoint: Point): Vector
 }

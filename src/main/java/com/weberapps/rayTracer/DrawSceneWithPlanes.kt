@@ -19,7 +19,7 @@ class DrawSceneWithPlanes(filename: String = "scene_with_planes.ppm", hsize: Int
     }
 
     fun draw(hsize: Int, vsize: Int): Canvas {
-        val matte = Material(Color(1f, 0.9f, 0.9f), specular = 0f)
+        val matte = SolidColor(Color(1f, 0.9f, 0.9f), specular = 0f)
         val floor = Plane(material = matte)
 
         val leftWallTransform = Transformation.translation(0f, 0f, 5f) *
@@ -33,7 +33,7 @@ class DrawSceneWithPlanes(filename: String = "scene_with_planes.ppm", hsize: Int
         val rightWall = Plane(transform = rightWallTransform, material = matte)
 
         val middleTransform = Transformation.translation(-0.5f, 1f, 0.5f)
-        val middleMaterial = Material(
+        val middleMaterial = SolidColor(
                 color = Color(0.1f, 1f, 0.5f),
                 diffuse = 0.7f,
                 specular = 0.3f
@@ -42,7 +42,7 @@ class DrawSceneWithPlanes(filename: String = "scene_with_planes.ppm", hsize: Int
 
         val rightTransform = Transformation.translation(1.5f, 0.5f, -0.5f) *
                 Transformation.scale(0.5f, 0.5f, 0.5f)
-        val rightMaterial = Material(
+        val rightMaterial = SolidColor(
                 color = Color(0.5f, 1f, 0.1f),
                 diffuse = 0.7f,
                 specular = 0.7f
@@ -51,7 +51,7 @@ class DrawSceneWithPlanes(filename: String = "scene_with_planes.ppm", hsize: Int
 
         val leftTransform = Transformation.translation(-1.75f, 0.5f, -0.5f) *
                 Transformation.scale(0.5f, 0.5f, 0.5f)
-        val leftMaterial = Material(
+        val leftMaterial = SolidColor(
                 color = Color(1f, 0.7f, 0f),
                 diffuse = 0.7f,
                 specular = 0.3f

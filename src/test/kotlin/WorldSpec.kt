@@ -16,7 +16,7 @@ object WorldSpec: Spek({
         val world = World.default()
 
         it("should have two objects and a single light source") {
-            val s1 = Sphere(material = Material(color = Color(0.8f, 1f, 0.6f), diffuse = 0.7f, specular = 0.2f))
+            val s1 = Sphere(material = SolidColor(color = Color(0.8f, 1f, 0.6f), diffuse = 0.7f, specular = 0.2f))
             val s2 = Sphere(transform = Transformation.scale(0.5f, 0.5f, 0.5f))
             val light = Light(Point(-10f, 10f, -10f), Color.WHITE)
 

@@ -41,7 +41,7 @@ class Color : Tuple {
         return Color(red * scalar, green * scalar, blue * scalar)
     }
 
-    override operator fun plus(other: Color): Color {
+    operator fun plus(other: Color): Color {
         return Color(red + other.red, green + other.green, blue + other.blue)
     }
 }

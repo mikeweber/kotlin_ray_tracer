@@ -2,15 +2,15 @@ package com.weberapps.rayTracer
 
 import kotlin.math.abs
 
-class Plane(override var transform: Matrix = Matrix.eye(4), override var material: Material = Material()) : Shape {
-    override fun localIntersect(ray: Ray): Intersections {
-        if (abs(ray.direction.y) < EPSILON) return Intersections(0)
+class Plane(override var transform: Matrix = Matrix.eye(4), override var material: Material = SolidColor()) : Shape {
+    override fun localIntersect(localRay: Ray): Intersections {
+        if (abs(localRay.direction.y) < EPSILON) return Intersections(0)
 
-        val t = -ray.origin.y / ray.direction.y
+        val t = -localRay.origin.y / localRay.direction.y
         return Intersections().add(Intersection(t, this))
     }
 
-    override fun localNormal(point: Point): Vector {
+    override fun localNormal(localPoint: Point): Vector {
         return Vector(0f, 1f, 0f)
     }
 }

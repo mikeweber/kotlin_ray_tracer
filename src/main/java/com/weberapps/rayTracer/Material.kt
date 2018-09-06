@@ -3,22 +3,22 @@ package com.weberapps.rayTracer
 import java.lang.Math.abs
 import kotlin.math.pow
 
-class Material(
-        val color: Color = Color.WHITE,
-        val ambient: Float = 0.1f,
-        val diffuse: Float = 0.9f,
-        val specular: Float = 0.9f,
-        val shininess: Int = 200
-) {
-    fun lighting(light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean = false): Color {
-        val effectiveColor    = color * light.intensity
+interface Material {
+    val ambient: Float
+    val diffuse: Float
+    val specular: Float
+    val shininess: Int
+
+    fun lighting(light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean = false): Color
+
+    fun calculateColor(effectiveColor: Color, light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean): Color {
         val lightVector       = (light.position - position).normalize()
         val ambientComponent  = effectiveColor * ambient
         val lightDotNormal    = lightVector.dot(normalVector)
         var diffuseComponent  = Color.BLACK
         var specularComponent = Color.BLACK
 
-        if (lightDotNormal > 0f) {
+        if (lightDotNormal < 0f) {
             diffuseComponent = effectiveColor * lightDotNormal * effectiveDiffuse(inShadow)
             val reflectionVector = (-lightVector).reflect(normalVector)
             val reflectDotEye = reflectionVector.dot(eyeVector).pow(shininess)
@@ -38,18 +38,7 @@ class Material(
         return if (inShadow) 0f else specular
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (other !is Material) return false
-
-        return color == other.color &&
-                attributeEquals(ambient, other.ambient) &&
-                attributeEquals(diffuse, other.diffuse) &&
-                attributeEquals(specular, other.specular) &&
-                shininess == other.shininess
-    }
-
-
-    private fun attributeEquals(a: Float, b: Float, eps: Float = EPSILON): Boolean {
+    fun attributeEquals(a: Float, b: Float, eps: Float = EPSILON): Boolean {
         return abs(a - b) <= eps
     }
 }

@@ -147,12 +147,12 @@ object SphereSpec : Spek({
     context("material property") {
         it("has a default material") {
             val s = Sphere()
-            assertEquals(Material(), s.material)
+            assertEquals(SolidColor(), s.material)
         }
 
         it("can be assigned a material") {
             val s = Sphere()
-            val m = Material(ambient = 0.3f)
+            val m = SolidColor(ambient = 0.3f)
             s.material = m
             assertEquals(m, s.material)
         }
