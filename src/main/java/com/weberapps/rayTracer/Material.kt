@@ -9,7 +9,7 @@ interface Material {
     val specular: Float
     val shininess: Int
 
-    fun lighting(light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean = false): Color
+    fun lighting(shape: Shape, light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean = false): Color
 
     fun calculateColor(effectiveColor: Color, light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean): Color {
         val lightVector       = (light.position - position).normalize()
@@ -18,7 +18,7 @@ interface Material {
         var diffuseComponent  = Color.BLACK
         var specularComponent = Color.BLACK
 
-        if (lightDotNormal < 0f) {
+        if (lightDotNormal > 0f) {
             diffuseComponent = effectiveColor * lightDotNormal * effectiveDiffuse(inShadow)
             val reflectionVector = (-lightVector).reflect(normalVector)
             val reflectDotEye = reflectionVector.dot(eyeVector).pow(shininess)

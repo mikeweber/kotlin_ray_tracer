@@ -3,14 +3,22 @@ package com.weberapps.rayTracer
 class StripePattern(
         val zig: Color = Color.WHITE,
         val zag: Color = Color.BLACK,
+        val transform: Matrix = Matrix.eye(4),
         override val ambient: Float = 0.1f,
         override val diffuse: Float = 0.9f,
         override val specular: Float = 0.9f,
         override val shininess: Int = 200
 ): Material {
-    override fun lighting(light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean): Color {
-        val effectiveColor= stripeAt(position) * light.intensity
+    override fun lighting(shape: Shape, light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean): Color {
+        val effectiveColor= stripeAtObject(shape, position) * light.intensity
         return calculateColor(effectiveColor, light, position, eyeVector, normalVector, inShadow)
+    }
+
+    fun stripeAtObject(shape: Shape, worldSpacePoint: Point): Color {
+        val objectSpacePoint = shape.transform.inverse() * worldSpacePoint
+        val patternSpacePoint = Point(transform.inverse() * objectSpacePoint)
+
+        return stripeAt(patternSpacePoint)
     }
 
     fun stripeAt(point: Point): Color {

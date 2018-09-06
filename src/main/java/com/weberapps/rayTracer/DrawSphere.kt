@@ -39,7 +39,7 @@ class DrawSphere(filename: String = "sphere.ppm") {
                 val point = ray.positionAt(hit.t)
                 val normal = hit.shape.normal(point)
                 val eye = -ray.direction
-                canvas.setPixel(x, y, hit.shape.material.lighting(light, point, eye, normal))
+                canvas.setPixel(x, y, hit.shape.material.lighting(hit.shape, light, point, eye, normal))
             }
         }
 

@@ -44,11 +44,42 @@ object StripePatternSpec: Spek({
             val eyeVector = Vector(0f, 0f, -1f)
             val normalVector = Vector(0f, 0f, -1f)
             val light = Light(Point(0f, 0f, -10f))
-            val c1 = m.lighting(light, Point(0.9f, 0f, 0f), eyeVector, normalVector, false)
-            val c2 = m.lighting(light, Point(1.1f, 0f, 0f), eyeVector, normalVector, false)
+            val c1 = m.lighting(Sphere(), light, Point(0.9f, 0f, 0f), eyeVector, normalVector, false)
+            val c2 = m.lighting(Sphere(), light, Point(1.1f, 0f, 0f), eyeVector, normalVector, false)
 
             assertEquals(Color.WHITE, c1)
             assertEquals(Color.BLACK, c2)
+        }
+    }
+
+    context("when the object has been transformed") {
+        it("should move with the object") {
+            val scale = Transformation.scale(2f, 2f, 2f)
+            val stripes = StripePattern()
+            val obj = Sphere(transform = scale, material = stripes)
+
+            assertEquals(Color.WHITE, stripes.stripeAtObject(obj, Point(1.5f, 0f, 0f)))
+        }
+    }
+
+    context("when the pattern has been transformed") {
+        it("should move the pattern") {
+            val scale = Transformation.scale(2f, 2f, 2f)
+            val stripes = StripePattern(transform = scale)
+            val obj = Sphere(material = stripes)
+
+            assertEquals(Color.WHITE, stripes.stripeAtObject(obj, Point(1.5f, 0f, 0f)))
+        }
+    }
+
+    context("when the pattern and shape have been transformed") {
+        it("should move with both") {
+            val scale = Transformation.scale(2f, 2f, 2f)
+            val translation = Transformation.translation(0.5f, 0f, 0f)
+            val stripes = StripePattern(transform = translation)
+            val obj = Sphere(transform = scale, material = stripes)
+
+            assertEquals(Color.WHITE, stripes.stripeAtObject(obj, Point(2.5f, 0f, 0f)))
         }
     }
 })

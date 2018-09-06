@@ -29,7 +29,7 @@ class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources
     fun shadeHit(hit: Intersection): Color {
         var color = Color.BLACK
         for (light in lightSources) {
-            color += hit.shape.material.lighting(light, hit.point, hit.eyeVector, hit.normalVector, isShadowed(light, hit.point))
+            color += hit.shape.material.lighting(hit.shape, light, hit.point, hit.eyeVector, hit.normalVector, isShadowed(light, hit.point))
         }
         return color
     }
