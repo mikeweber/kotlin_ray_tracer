@@ -9,9 +9,10 @@ class StripePattern(
         override val specular: Float = 0.9f,
         override val shininess: Int = 200
 ): Material {
-    override fun lighting(shape: Shape, light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean): Color {
-        val effectiveColor= stripeAtObject(shape, position) * light.intensity
-        return calculateColor(effectiveColor, light, position, eyeVector, normalVector, inShadow)
+    override fun lighting(hit: Intersection, light: Light, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color? {
+        // shape: Shape, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean
+        val effectiveColor= stripeAtObject(hit.shape, hit.point) * light.intensity
+        return calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
     }
 
     fun stripeAtObject(shape: Shape, worldSpacePoint: Point): Color {

@@ -4,6 +4,10 @@ class Vector : Tuple {
     constructor(x: Float, y: Float, z: Float) : super(x, y, z, 0f)
     constructor(tuple: Tuple) : this(tuple.x, tuple.y, tuple.z)
 
+    operator fun plus(other: Vector): Vector {
+        return Vector(x + other.x, y + other.y, z + other.z)
+    }
+
     override operator fun times(scalar: Float): Vector {
         return Vector(x * scalar, y * scalar, z * scalar)
     }

@@ -7,9 +7,9 @@ class SolidColor(
         override val specular: Float = 0.9f,
         override val shininess: Int = 200
 ) : Material {
-    override fun lighting(shape: Shape, light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean): Color {
+    override fun lighting(hit: Intersection, light: Light, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color? {
         val effectiveColor = color * light.intensity
-        return calculateColor(effectiveColor, light, position, eyeVector, normalVector, inShadow)
+        return calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
     }
 
     override fun equals(other: Any?): Boolean {

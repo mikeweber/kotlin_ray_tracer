@@ -39,10 +39,10 @@ class Intersections(override var size: Int = 0, private val elements: ArrayList<
         return false
     }
 
-    fun hit(): Intersection? {
+    fun hit(includeTransparentMaterial: Boolean = true): Intersection? {
         var closest: Intersection? = null
         elements.forEach {
-            if (it.t >= 0 && it.t < (closest?.t ?: Float.POSITIVE_INFINITY)) {
+            if (it.t >= 0 && (includeTransparentMaterial || it.shape.material !is TransparentMaterial) && it.t < (closest?.t ?: Float.POSITIVE_INFINITY)) {
                 closest = it
             }
         }

@@ -36,10 +36,7 @@ class DrawSphere(filename: String = "sphere.ppm") {
 
                 val hit = xs.hit() ?: continue
 
-                val point = ray.positionAt(hit.t)
-                val normal = hit.shape.normal(point)
-                val eye = -ray.direction
-                canvas.setPixel(x, y, hit.shape.material.lighting(hit.shape, light, point, eye, normal))
+                canvas.setPixel(x, y, hit.prepareHit(ray).colorAt(light) ?: Color.BLACK)
             }
         }
 

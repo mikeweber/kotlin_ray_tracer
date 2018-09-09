@@ -1,6 +1,6 @@
 package com.weberapps.rayTracer
 
-class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources: ArrayList<Light> = arrayListOf()) {
+class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources: ArrayList<Light> = arrayListOf(), private val background: Color = Color.BLACK) {
     companion object {
         fun default(): World {
             val s1 = Sphere(material = SolidColor(color = Color(0.8f, 1f, 0.6f), diffuse = 0.7f, specular = 0.2f))
@@ -11,11 +11,11 @@ class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources
         }
     }
 
-    fun colorAt(ray: Ray): Color {
-        val intersections = intersect(ray)
-        val hit = intersections.hit() ?: return Color.BLACK
+    fun colorAt(ray: Ray, refractionsLeft: Int = 5): Color {
+        if (refractionsLeft <= 0) return background
+        val hit = intersect(ray).hit() ?: return background
 
-        return shadeHit(hit.prepareHit(ray))
+        return shadeHit(hit.prepareHit(ray), refractionsLeft)
     }
 
     fun intersect(ray: Ray): Intersections {
@@ -26,10 +26,10 @@ class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources
         return intersections
     }
 
-    fun shadeHit(hit: Intersection): Color {
+    fun shadeHit(hit: Intersection, refractionsLeft: Int): Color {
         var color = Color.BLACK
         for (light in lightSources) {
-            color += hit.shape.material.lighting(hit.shape, light, hit.point, hit.eyeVector, hit.normalVector, isShadowed(light, hit.point))
+            color += hit.colorAt(light, refractionsLeft, this) ?: background
         }
         return color
     }

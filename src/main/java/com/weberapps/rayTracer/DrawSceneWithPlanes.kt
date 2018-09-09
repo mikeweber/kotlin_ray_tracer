@@ -11,7 +11,7 @@ class DrawSceneWithPlanes(filename: String = "scene_with_planes.ppm", hsize: Int
         if (!filename.startsWith("/")) {
             absolutePath = Paths.get("").toAbsolutePath().toString() + "/" + filename
         }
-        println("Saving circle to $absolutePath")
+        println("Saving render to $absolutePath")
         println("Beginning draw")
         PPMGenerator(draw(hsize, vsize)).save(absolutePath)
         println("Finished draw in ${Duration.between(t0, Instant.now())}")
@@ -65,18 +65,23 @@ class DrawSceneWithPlanes(filename: String = "scene_with_planes.ppm", hsize: Int
         )
         val leftSphere = Sphere(transform = leftTransform, material = leftMaterial)
 
+        val glassTransform1 = Transformation.translation(1f, 1f, -2f) *
+                Transformation.scale(1f, 1f, 1f)
+        val glass = TransparentMaterial(1.3f)
+        val glassSphere1 = Sphere(transform = glassTransform1, material = glass)
+
         val world = World(
-                arrayListOf(floor, leftWall, rightWall, middleSphere, rightSphere, leftSphere),
+                arrayListOf(floor, leftWall, rightWall, middleSphere, rightSphere, leftSphere, glassSphere1),
                 arrayListOf(
-                        Light(Point(-10f, 10f, -10f)),
-                        Light(Point( 10f, 10f, -10f), Color(0.05f, 0.05f, 0.05f))
+                        Light(Point(-10f, 10f, -10f)) //,
+                        // Light(Point( 10f, 10f, -10f), Color(0.05f, 0.05f, 0.05f))
                 )
         )
 
         val viewTransform = Transformation.viewTransform(
-                Point(0f, 1.5f, -5f),
-                Point(0f, 1f, 0f),
-                Vector(0f, 1f, 0f).normalize()
+                from = Point(3f, 2f, -5f),
+                to = Point(0f, 1f, 0f),
+                up = Vector(0f, 1f, 0f).normalize()
         )
         val camera = Camera(hsize, vsize, TAU / 6, transform = viewTransform)
 

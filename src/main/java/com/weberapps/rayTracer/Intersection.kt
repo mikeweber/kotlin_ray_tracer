@@ -12,6 +12,23 @@ class Intersection(val t: Float, val shape: Shape, var inside: Boolean = false, 
         return if (t < other.t) -1 else 1
     }
 
+    fun colorAt(light: Light, refractionsLeft: Int = 0, world: World? = null): Color? {
+        return shape.material.lighting(this, light, world, isShadowed(light, world), refractionsLeft)
+    }
+
+    private fun isShadowed(light: Light, world: World?): Boolean {
+        if (world == null) return false
+
+        val v = light.position - point
+        val dist = v.magnitude()
+        val dir = v.normalize()
+
+        val ray = Ray(point, dir)
+        val hit = world.intersect(ray).hit(includeTransparentMaterial = false) ?: return false
+
+        return hit.t < dist
+    }
+
     fun prepareHit(ray: Ray, surfaceOffset: Float = 0.0001f): Intersection {
         point = ray.positionAt(t)
         eyeVector = -ray.direction

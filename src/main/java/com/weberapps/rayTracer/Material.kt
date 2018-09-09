@@ -9,7 +9,7 @@ interface Material {
     val specular: Float
     val shininess: Int
 
-    fun lighting(shape: Shape, light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean = false): Color
+    fun lighting(hit: Intersection, light: Light, world: World? = null, inShadow: Boolean = false, refractionsLeft: Int = 5, surfaceOffset: Float = 0.0001f): Color?
 
     fun calculateColor(effectiveColor: Color, light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean): Color {
         val lightVector       = (light.position - position).normalize()
