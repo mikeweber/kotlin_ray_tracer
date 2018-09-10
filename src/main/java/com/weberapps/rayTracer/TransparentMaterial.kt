@@ -15,9 +15,9 @@ open class TransparentMaterial(
     override fun lighting(hit: Intersection, light: Light, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color? {
         if (world == null) return null
 
-        val kr = fresnel(-hit.eyeVector, hit.normalVector)
+        var reflectivity = fresnel(-hit.eyeVector, hit.normalVector)
         var refractionColor = Color.BLACK
-        if (kr < 1f) {
+        if (reflectivity < 1f) {
             val direction = refract(-hit.eyeVector, hit.normalVector, 1f) ?: return null
             val point = Point(hit.point - hit.normalVector * 2f * surfaceOffset)
             val nextRay = Ray(point, direction)
@@ -28,11 +28,11 @@ open class TransparentMaterial(
         val reflectionPoint = hit.point + hit.normalVector * surfaceOffset
         val reflectionColor = world.colorAt(Ray(reflectionPoint, reflectionDirection), refractionsLeft - 1)
 
-        return reflectionColor * kr + refractionColor * (1f - kr)
+        return reflectionColor * reflectivity + refractionColor * (1f - reflectivity)
     }
 
     private fun reflect(angleOfIncidence: Vector, normal: Vector): Vector {
-        return angleOfIncidence - Vector(normal * angleOfIncidence.dot(normal) ) * 2f
+        return angleOfIncidence - normal * angleOfIncidence.dot(normal) * 2f
     }
 
     private fun refract(angleOfIncidence: Vector, normal: Vector, externalRefractiveIndex: Float = 1f): Vector? {
@@ -52,7 +52,7 @@ open class TransparentMaterial(
         return angleOfIncidence * eta + n * (eta * cosi - Math.sqrt(k.toDouble()).toFloat())
     }
 
-    open protected fun fresnel(angleOfIncidence: Vector, normal: Vector, externalRefractiveIndex: Float = 1f): Float {
+    protected open fun fresnel(angleOfIncidence: Vector, normal: Vector, externalRefractiveIndex: Float = 1f): Float {
         var cosi = clamp(-1f, angleOfIncidence.dot(normal), 1f)
         // refractiveIndex
         val eta = if (cosi > 0f) {
