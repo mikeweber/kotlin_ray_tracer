@@ -44,8 +44,10 @@ object StripePatternSpec: Spek({
             val eyeVector = Vector(0f, 0f, -1f)
             val normalVector = Vector(0f, 0f, -1f)
             val light = Light(Point(0f, 0f, -10f))
-            val c1 = m.lighting(Sphere(), light, Point(0.9f, 0f, 0f), eyeVector, normalVector, false)
-            val c2 = m.lighting(Sphere(), light, Point(1.1f, 0f, 0f), eyeVector, normalVector, false)
+            val hit1 = Intersection(1f, Sphere(), inside = false, point = Point(0.9f, 0f, 0f), eyeVector = eyeVector, normalVector = normalVector)
+            val hit2 = Intersection(1f, Sphere(), inside = false, point = Point(1.1f, 0f, 0f), eyeVector = eyeVector, normalVector = normalVector)
+            val c1 = m.lighting(hit1, light)
+            val c2 = m.lighting(hit2, light)
 
             assertEquals(Color.WHITE, c1)
             assertEquals(Color.BLACK, c2)

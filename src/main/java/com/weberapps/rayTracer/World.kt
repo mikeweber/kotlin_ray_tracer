@@ -26,7 +26,7 @@ class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources
         return intersections
     }
 
-    fun shadeHit(hit: Intersection, refractionsLeft: Int): Color {
+    fun shadeHit(hit: Intersection, refractionsLeft: Int = 5): Color {
         var color = Color.BLACK
         for (light in lightSources) {
             color += hit.colorAt(light, refractionsLeft, this) ?: background
