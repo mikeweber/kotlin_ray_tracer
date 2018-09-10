@@ -8,6 +8,10 @@ class Vector : Tuple {
         return Vector(x + other.x, y + other.y, z + other.z)
     }
 
+    operator fun minus(other: Vector): Vector {
+        return Vector(x - other.x, y - other.y, z - other.z)
+    }
+
     override operator fun times(scalar: Float): Vector {
         return Vector(x * scalar, y * scalar, z * scalar)
     }

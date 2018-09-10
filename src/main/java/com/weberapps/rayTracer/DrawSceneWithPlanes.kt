@@ -70,11 +70,16 @@ class DrawSceneWithPlanes(filename: String = "scene_with_planes.ppm", hsize: Int
         val glass = TransparentMaterial(1.3f)
         val glassSphere1 = Sphere(transform = glassTransform1, material = glass)
 
+        val mirror = ReflectiveMaterial()
+        val mirrorTransform = Transformation.translation(-1.0f, 0.8f, 4.7f) *
+                Transformation.scale(0.8f, 0.8f, 0.8f)
+        val mirrorSphere = Sphere(transform = mirrorTransform, material = mirror)
+
         val world = World(
-                arrayListOf(floor, leftWall, rightWall, middleSphere, rightSphere, leftSphere, glassSphere1),
+                arrayListOf(floor, leftWall, rightWall, middleSphere, rightSphere, leftSphere, mirrorSphere),
                 arrayListOf(
-                        Light(Point(-10f, 10f, -10f)) //,
-                        // Light(Point( 10f, 10f, -10f), Color(0.05f, 0.05f, 0.05f))
+                        Light(Point(-10f, 10f, -10f)),
+                        Light(Point( 10f, 10f, -10f), Color(0.05f, 0.05f, 0.05f))
                 )
         )
 
