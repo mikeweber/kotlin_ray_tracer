@@ -4,7 +4,7 @@ import java.nio.file.Paths
 import java.time.Duration
 import java.time.Instant
 
-class DrawSceneWithPlanes(filename: String = "scene_with_planes.ppm", hsize: Int = 480, vsize: Int = 270) {
+class DrawSceneWithPlanes(filename: String = "scene_with_planes.ppm", val hsize: Int = 480, val vsize: Int = 270) {
     init {
         val t0 = Instant.now()
         var absolutePath = filename
@@ -13,19 +13,22 @@ class DrawSceneWithPlanes(filename: String = "scene_with_planes.ppm", hsize: Int
         }
         println("Saving render to $absolutePath")
         println("Beginning draw")
-        PPMGenerator(draw(hsize, vsize)).save(absolutePath)
+        val canvas = draw()
         println("Finished draw in ${Duration.between(t0, Instant.now())}")
+        PPMGenerator(canvas).save(absolutePath)
+        println("Finished save in ${Duration.between(t0, Instant.now())}")
         println("Done")
     }
 
-    fun draw(hsize: Int, vsize: Int): Canvas {
+    fun draw(): Canvas {
         val matte = SolidColor(Color(1f, 0.9f, 0.9f), specular = 0f)
+        val mirror = ReflectiveMaterial()
         val floor = Plane(material = matte)
 
         val leftWallTransform = Transformation.translation(0f, 0f, 5f) *
                 Transformation.rotateY(-TAU / 8) *
                 Transformation.rotateX(TAU / 4)
-        val leftWall = Plane(transform = leftWallTransform, material = matte)
+        val leftWall = Plane(transform = leftWallTransform, material = mirror)
 
         val rightWallTransform = Transformation.translation(0f, 0f, 5f) *
                 Transformation.rotateY(TAU / 8) *
@@ -70,16 +73,15 @@ class DrawSceneWithPlanes(filename: String = "scene_with_planes.ppm", hsize: Int
         val glass = TransparentMaterial(1.3f)
         val glassSphere1 = Sphere(transform = glassTransform1, material = glass)
 
-        val mirror = ReflectiveMaterial()
         val mirrorTransform = Transformation.translation(-1.0f, 0.8f, 4.7f) *
                 Transformation.scale(0.8f, 0.8f, 0.8f)
         val mirrorSphere = Sphere(transform = mirrorTransform, material = mirror)
 
         val world = World(
-                arrayListOf(floor, leftWall, rightWall, middleSphere, rightSphere, leftSphere, mirrorSphere),
+                arrayListOf(floor, leftWall, rightWall, middleSphere, rightSphere, leftSphere),
                 arrayListOf(
-                        Light(Point(-10f, 10f, -10f)),
-                        Light(Point( 10f, 10f, -10f), Color(0.05f, 0.05f, 0.05f))
+                        Light(Point(-10f, 10f, -10f))
+                        // Light(Point( 10f, 10f, -10f), Color(0.05f, 0.05f, 0.05f))
                 )
         )
 
