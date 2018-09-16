@@ -8,6 +8,10 @@ class Vector : Tuple {
         return Vector(x + other.x, y + other.y, z + other.z)
     }
 
+    operator fun plus(other: Point): Point {
+        return Point(x + other.x, y + other.y, z + other.z)
+    }
+
     operator fun minus(other: Vector): Vector {
         return Vector(x - other.x, y - other.y, z - other.z)
     }

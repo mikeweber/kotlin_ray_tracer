@@ -12,6 +12,10 @@ class Point : Tuple {
         return Point(x / scalar, y / scalar, z / scalar)
     }
 
+    operator fun plus(other: Vector): Point {
+        return Point(x + other.x, y + other.y, z + other.z)
+    }
+
     override operator fun unaryMinus(): Point {
         return Point(-x, -y, -z)
     }

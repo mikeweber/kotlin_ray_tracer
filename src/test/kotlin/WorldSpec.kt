@@ -1,4 +1,5 @@
 import com.weberapps.rayTracer.*
+import javafx.scene.transform.Transform
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.*
@@ -116,6 +117,54 @@ object WorldSpec: Spek({
             val color = world.shadeHit(hit)
 
             assertEquals(Color(0.1f, 0.1f, 0.1f), color)
+        }
+    }
+
+    context("when shadeHit is a reflective surface") {
+        it("should return the shadeHit from the reflection's viewpoint") {
+            val glass = ReflectiveMaterial()
+            val wallTransform = Transformation.rotateX(TAU / 4)
+            val wall = Plane(material = glass, transform = wallTransform)
+            val sphereTransform = Transformation.translation(2f, 0f, -3f)
+            val sphereColor = SolidColor(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
+            val sphere = Sphere(transform = sphereTransform, material = sphereColor)
+            val light = Light(Point(2f, 0f, -1f))
+            val world = World(arrayListOf(wall, sphere), arrayListOf(light))
+
+            val directRay = Ray(Point(2f, 0f, -4f), Vector(0f, 0f, 1f))
+            val missRay   = Ray(Point(0f, 0f, -2f), Vector( 0f, 0f, 1f))
+            val hitRay    = Ray(Point(-2f, 0f, -2f), Vector(1f, 0f, 1f).normalize())
+
+            val directHit = world.intersect(directRay).hit() ?: fail("Should be pointed directly at sphere")
+            val miss      = world.intersect(missRay).hit()   ?: fail("Expected a hit against the glass")
+            val hit       = world.intersect(hitRay).hit()    ?: fail("Expected a hit against the glass")
+
+            assertEquals(Color.WHITE, world.shadeHit(directHit))
+            assertEquals(Color.BLACK, world.shadeHit(miss.prepareHit(missRay)))
+            assertEquals(Color.WHITE, world.shadeHit(hit.prepareHit(hitRay)))
+        }
+
+        it("should return the shadeHit from the reflection's viewpoint when the plane is angled") {
+            val glass = ReflectiveMaterial()
+            val wallTransform = Transformation.rotateY(-TAU / 8) * Transformation.rotateX(TAU / 4)
+            val wall = Plane(material = glass, transform = wallTransform)
+            val sphereTransform = Transformation.translation(3f, 0f, 0f)
+            val sphereColor = SolidColor(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
+            val sphere = Sphere(transform = sphereTransform, material = sphereColor)
+            val light = Light(Point(2f, 0f, 0f))
+            val world = World(arrayListOf(wall, sphere), arrayListOf(light))
+
+            val directRay = Ray(Point(1f, 0f, 0f), Vector(1f, 0f, 0f))
+            val missRay   = Ray(Point(1f, 0f, 0f), Vector( -1f, 0f, 0f))
+            val hitRay    = Ray(Point(0f, 0f, -2f), Vector(0f, 0f, 1f))
+
+            val directHit = world.intersect(directRay).hit() ?: fail("Should be pointed directly at sphere")
+            val miss      = world.intersect(missRay).hit()   ?: fail("Expected a hit against the glass")
+            val hit       = world.intersect(hitRay).hit()    ?: fail("Expected a hit against the glass")
+
+            assertEquals(Color.WHITE, world.shadeHit(directHit))
+            assertEquals(Color.BLACK, world.shadeHit(miss.prepareHit(missRay)))
+            assertEquals(Color.WHITE, world.shadeHit(hit.prepareHit(hitRay)))
         }
     }
 })

@@ -1,6 +1,14 @@
 package com.weberapps.rayTracer
 
-class Intersection(val t: Float, val shape: Shape, var inside: Boolean = false, var point: Point = Point(0f, 0f, 0f), var eyeVector: Vector = Vector(0f, 0f, 1f), var normalVector: Vector = Vector(0f, 0f,1f)): Comparable<Intersection> {
+class Intersection(
+        val t: Float,
+        val shape: Shape,
+        var inside: Boolean = false,
+        var point: Point = Point(0f, 0f, 0f),
+        var eyeVector: Vector = Vector(0f, 0f, 1f),
+        var normalVector: Vector = Vector(0f, 0f,1f),
+        var rayVector: Vector = Vector(0f, 0f, 1f)
+): Comparable<Intersection> {
     override fun equals(other: Any?): Boolean {
         if (other !is Intersection) return false
 
@@ -31,6 +39,7 @@ class Intersection(val t: Float, val shape: Shape, var inside: Boolean = false, 
 
     fun prepareHit(ray: Ray, surfaceOffset: Float = 0.0001f): Intersection {
         point = ray.positionAt(t)
+        rayVector = ray.direction
         eyeVector = -ray.direction
         normalVector = shape.normal(point)
         inside = normalVector.dot(eyeVector) < 0f

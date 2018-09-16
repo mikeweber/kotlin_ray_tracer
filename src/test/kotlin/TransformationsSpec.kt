@@ -6,7 +6,7 @@ object TransformationsSpec: Spek({
     it("should be able to create a translation") {
         val transform = Transformation.translation(5f, -3f, 2f)
         val p = Point(-3f, 4f, 5f)
-        assertEquals(Point(2f, 1f, 7f), transform *p)
+        assertEquals(Point(2f, 1f, 7f), transform * p)
     }
 
     it("should be able to scale") {
@@ -40,6 +40,27 @@ object TransformationsSpec: Spek({
 
         assertEquals(Point(-(Math.sqrt(2.0) / 2f).toFloat(), (Math.sqrt(2.0) / 2f).toFloat(), 0f), eighth.times(p))
         assertEquals(Point(-1f, 0f, 0f), quarter.times(p))
+    }
+
+    it("should be able to compound translations") {
+        val t1 = Transformation.translation(1f, 0f, 0f)
+        val t2 = Transformation.translation(3f, 0f, 0f)
+        val r1 = Transformation.rotateZ(-TAU / 4.0)
+        val r2 = Transformation.rotateZ(-TAU / 8.0)
+        val compoundedTransform1 = r1 * t2 * t1
+        val p = Point(-3f, 4f, 5f)
+        assertEquals(Point(4f, -1f, 5f), compoundedTransform1 * p)
+
+        val t4 = Transformation.translation(5f, 0f, 0f)
+        assertEquals(Point(4f, -6f, 5f), compoundedTransform1 * t4 * p)
+        val compoundedTransform2 = r1 * compoundedTransform1 * t4
+        assertEquals(Point(-6f, -4f, 5f), compoundedTransform2 * p)
+
+        val cos = Math.cos(-TAU / 8.0).toFloat()
+        val sin = Math.sin(-TAU / 8.0).toFloat()
+        assertEquals(Point(11f, 4f, 5f), t1 * t2 * t4 * t4 * p)
+        assertEquals(Point(-11f, -4f, 5f), compoundedTransform2 * t4 * p)
+        assertEquals(Point(-11f * cos - sin * -4f, -11f * sin + -4 * cos , 5f), r2 * compoundedTransform2 * t4 * p)
     }
 
     context("view transformation") {

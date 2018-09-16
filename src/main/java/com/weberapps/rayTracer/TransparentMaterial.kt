@@ -15,23 +15,22 @@ open class TransparentMaterial(
     override fun lighting(hit: Intersection, light: Light, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color? {
         if (world == null) return null
 
-        var reflectivity = fresnel(-hit.eyeVector, hit.normalVector)
+        var reflectivity = fresnel(hit.rayVector, hit.normalVector)
         var refractionColor = Color.BLACK
         if (reflectivity < 1f) {
-            val direction = refract(-hit.eyeVector, hit.normalVector, 1f) ?: return null
+            val direction = refract(hit.rayVector, hit.normalVector, 1f) ?: return null
             val point = Point(hit.point - hit.normalVector * 2f * surfaceOffset)
             val nextRay = Ray(point, direction)
             refractionColor = world.colorAt(nextRay, refractionsLeft - 1)
         }
 
-        val reflectionDirection = reflect(-hit.eyeVector, hit.normalVector).normalize()
-        val reflectionPoint = hit.point + hit.normalVector * surfaceOffset
-        val reflectionColor = world.colorAt(Ray(reflectionPoint, reflectionDirection), refractionsLeft - 1)
+        val reflectionDirection = reflect(hit.rayVector, hit.normalVector.normalize()).normalize()
+        val reflectionColor = world.colorAt(Ray(hit.point, reflectionDirection), refractionsLeft - 1)
 
         return reflectionColor * reflectivity + refractionColor * (1f - reflectivity)
     }
 
-    private fun reflect(angleOfIncidence: Vector, normal: Vector): Vector {
+    fun reflect(angleOfIncidence: Vector, normal: Vector): Vector {
         return angleOfIncidence - normal * angleOfIncidence.dot(normal) * 2f
     }
 
