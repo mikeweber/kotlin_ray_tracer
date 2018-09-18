@@ -15,7 +15,7 @@ object ShapeSpec: Spek({
         }
 
         it("should have a default material") {
-            assertEquals(SolidColor(), shape.material)
+            assertEquals(Material(), shape.material)
         }
 
         it("should be able to set the transform") {
@@ -25,7 +25,7 @@ object ShapeSpec: Spek({
         }
 
         it("should be able to set the material") {
-            val material = SolidColor(Color.BLUE)
+            val material = Material(Color.BLUE)
             shape.material = material
             assertEquals(material, shape.material)
         }

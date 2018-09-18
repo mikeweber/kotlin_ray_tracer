@@ -20,7 +20,7 @@ class DrawScene(filename: String = "scene_with_multiple_shadows.ppm", hsize: Int
 
     fun draw(hsize: Int, vsize: Int): Canvas {
         val squash = Transformation.scale(10f, 0.01f, 10f)
-        val matte = SolidColor(Color(1f, 0.9f, 0.9f), specular = 0f)
+        val matte = Material(Color(1f, 0.9f, 0.9f), specular = 0f)
         val floor = Sphere(transform = squash, material = matte)
 
         val leftWallTransform = Transformation.translation(0f, 0f, 5f) *
@@ -36,7 +36,7 @@ class DrawScene(filename: String = "scene_with_multiple_shadows.ppm", hsize: Int
         val rightWall = Sphere(transform = rightWallTransform, material = matte)
 
         val middleTransform = Transformation.translation(-0.5f, 1f, 0.5f)
-        val middleMaterial = SolidColor(
+        val middleMaterial = Material(
                 color = Color(0.1f, 1f, 0.5f),
                 diffuse = 0.7f,
                 specular = 0.3f
@@ -45,7 +45,7 @@ class DrawScene(filename: String = "scene_with_multiple_shadows.ppm", hsize: Int
 
         val rightTransform = Transformation.translation(1.5f, 0.5f, -0.5f) *
                 Transformation.scale(0.5f, 0.5f, 0.5f)
-        val rightMaterial = SolidColor(
+        val rightMaterial = Material(
                 color = Color(0.5f, 1f, 0.1f),
                 diffuse = 0.7f,
                 specular = 0.7f
@@ -54,7 +54,7 @@ class DrawScene(filename: String = "scene_with_multiple_shadows.ppm", hsize: Int
 
         val leftTransform = Transformation.translation(-1.75f, 0.5f, -0.5f) *
                 Transformation.scale(0.5f, 0.5f, 0.5f)
-        val leftMaterial = SolidColor(
+        val leftMaterial = Material(
                 color = Color(1f, 0.7f, 0f),
                 diffuse = 0.7f,
                 specular = 0.3f

@@ -7,7 +7,8 @@ class Intersection(
         var point: Point = Point(0f, 0f, 0f),
         var eyeVector: Vector = Vector(0f, 0f, 1f),
         var normalVector: Vector = Vector(0f, 0f,1f),
-        var rayVector: Vector = Vector(0f, 0f, 1f)
+        var rayVector: Vector = Vector(0f, 0f, 1f),
+        var reflectVector: Vector = Vector(0f, 0f, -1f)
 ): Comparable<Intersection> {
     override fun equals(other: Any?): Boolean {
         if (other !is Intersection) return false
@@ -24,7 +25,7 @@ class Intersection(
         return shape.material.lighting(this, light, world, isShadowed(light, world), refractionsLeft)
     }
 
-    private fun isShadowed(light: Light, world: World?): Boolean {
+    fun isShadowed(light: Light, world: World?): Boolean {
         if (world == null) return false
 
         val v = light.position - point
@@ -42,11 +43,16 @@ class Intersection(
         rayVector = ray.direction
         eyeVector = -ray.direction
         normalVector = shape.normal(point)
+        reflectVector = reflect(rayVector, normalVector)
         inside = normalVector.dot(eyeVector) < 0f
         if (inside) normalVector = -normalVector
         point = Point(point + normalVector * surfaceOffset)
 
         return this
+    }
+
+    private fun reflect(direction: Vector, normal: Vector): Vector {
+        return direction - normal * direction.dot(normal) * 2f
     }
 
     private fun closeEnough(f1: Float, f2: Float, eps: Float = EPSILON): Boolean {

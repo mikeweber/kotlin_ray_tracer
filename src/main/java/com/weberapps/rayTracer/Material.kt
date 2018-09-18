@@ -2,14 +2,35 @@ package com.weberapps.rayTracer
 
 import java.lang.Math.abs
 import kotlin.math.pow
+open class Material(
+        open val color: Color           = Color.WHITE,
+        open val ambient: Float         = 0.1f,
+        open val diffuse: Float         = 0.9f,
+        open val specular: Float        = 0.9f,
+        open val shininess: Int         = 200,
+        open val reflective: Float      = 0f
+) {
+    open fun lighting(hit: Intersection, light: Light, world: World? = null, inShadow: Boolean = false, refractionsLeft: Int = 5, surfaceOffset: Float = 0.001f): Color {
+        val effectiveColor = color * light.intensity
+        var surfaceColor = calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
 
-interface Material {
-    val ambient: Float
-    val diffuse: Float
-    val specular: Float
-    val shininess: Int
+        return reflectedColor(hit, world, refractionsLeft) * reflective + surfaceColor * (1f - reflective)
+    }
 
-    fun lighting(hit: Intersection, light: Light, world: World? = null, inShadow: Boolean = false, refractionsLeft: Int = 5, surfaceOffset: Float = 0.0001f): Color?
+    fun reflectedColor(hit: Intersection, world: World? = null, refractionsLeft: Int = 5): Color {
+        if (reflective == 0f || world == null) return Color.BLACK
+
+        val reflectedRay = Ray(hit.point, hit.reflectVector)
+        return world.colorAt(reflectedRay, refractionsLeft - 1)
+    }
+
+    fun reflect(angleOfIncidence: Vector, normal: Vector): Vector {
+        return angleOfIncidence - normal * angleOfIncidence.dot(normal) * 2f
+    }
+
+    fun clamp(min: Float, value: Float, max: Float): Float {
+        return Math.max(min, Math.min(value, max))
+    }
 
     fun calculateColor(effectiveColor: Color, light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean): Color {
         val lightVector       = (light.position - position).normalize()
@@ -36,6 +57,17 @@ interface Material {
 
     private fun effectiveSpecular(inShadow: Boolean): Float {
         return if (inShadow) 0f else specular
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is Material) return false
+
+        return color == other.color
+                && ambient == other.ambient
+                && diffuse == other.diffuse
+                && specular == other.specular
+                && shininess == other.shininess
+                && reflective == other.reflective
     }
 
     fun attributeEquals(a: Float, b: Float, eps: Float = EPSILON): Boolean {

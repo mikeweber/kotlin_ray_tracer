@@ -51,9 +51,9 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
         val world = initWorld()
         val focus = Point(world.sceneObjects[0].transform * Point(0f, 0f, 0f))
         var renderCount = 0
-        val spacing = 0.03f
-        for (i in -1..1) {
-            for (j in -1..1) {
+        val spacing = 0.01f
+        for (i in -3..3) {
+            for (j in -3..3) {
                 val t0 = Instant.now()
                 canvas += render(world, from = Point(i * spacing, 2f + j * spacing, -5f), focus = focus)
                 println("Finished render $renderCount in ${Duration.between(t0, Instant.now())}")
@@ -79,8 +79,8 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
     }
 
     fun initWorld(): World {
-        val matte = SolidColor(Color(1f, 0.9f, 0.9f), specular = 0f)
-        val mirror = ReflectiveMaterial()
+        val matte = Material(Color(1f, 0.9f, 0.9f), specular = 0f)
+        val mirror = Material(reflective = 1f)
         val floor = Plane(material = matte)
 
         val backWallTransform = Transformation.rotateX(TAU / 4)
@@ -112,7 +112,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
 
         val rightTransform = Transformation.translation(1.5f, 0.5f, -0.5f) *
                 Transformation.scale(0.5f, 0.5f, 0.5f)
-        val rightMaterial = SolidColor(
+        val rightMaterial = Material(
                 color = Color(0.5f, 1f, 0.1f),
                 diffuse = 0.7f,
                 specular = 0.7f
@@ -121,7 +121,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
 
         val leftTransform = Transformation.translation(-1.75f, 0.5f, -0.5f) *
                 Transformation.scale(0.5f, 0.5f, 0.5f)
-        val leftMaterial = SolidColor(
+        val leftMaterial = Material(
                 color = Color(1f, 0.7f, 0f),
                 diffuse = 0.7f,
                 specular = 0.3f
@@ -130,7 +130,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
 
         val glassTransform1 = Transformation.translation(1f, 1f, -2f) *
                 Transformation.scale(1f, 1f, 1f)
-        val glass = TransparentMaterial(1.3f)
+        val glass = TransparentMaterial(refractiveIndex = 1.3f)
         val glassSphere1 = Sphere(transform = glassTransform1, material = glass)
 
         val mirrorTransform = Transformation.translation(-1.0f, 0.8f, 4.7f) *

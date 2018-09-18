@@ -2,7 +2,7 @@ package com.weberapps.rayTracer
 
 class TestShape : Shape {
     override var transform: Matrix = Matrix.eye(4)
-    override var material: Material = SolidColor()
+    override var material: Material = Material()
     var savedRay: Ray = Ray(Point(0f, 0f, 0f), Vector(0f, 0f, 1f))
 
     override fun localIntersect(localRay: Ray): Intersections {

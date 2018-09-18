@@ -1,5 +1,4 @@
 import com.weberapps.rayTracer.*
-import javafx.scene.transform.Transform
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.*
@@ -17,7 +16,7 @@ object WorldSpec: Spek({
         val world = World.default()
 
         it("should have two objects and a single light source") {
-            val s1 = Sphere(material = SolidColor(color = Color(0.8f, 1f, 0.6f), diffuse = 0.7f, specular = 0.2f))
+            val s1 = Sphere(material = Material(color = Color(0.8f, 1f, 0.6f), diffuse = 0.7f, specular = 0.2f))
             val s2 = Sphere(transform = Transformation.scale(0.5f, 0.5f, 0.5f))
             val light = Light(Point(-10f, 10f, -10f), Color.WHITE)
 
@@ -79,31 +78,6 @@ object WorldSpec: Spek({
         }
     }
 
-    context("when determining if a point is shadowed") {
-        val world = World.default()
-        val light = world.lightSources[0]
-
-        it("should not be shadowed when nothing is colinear with a point and light") {
-            val p = Point(0f, 10f, 0f)
-            assertFalse(world.isShadowed(light, p))
-        }
-
-        it("should be shadowed when the point is behind an object")  {
-            val p = Point(10f, -10f, 10f)
-            assertTrue(world.isShadowed(light, p))
-        }
-
-        it("should not be shadowed when the light is between the point and object") {
-            val p = Point(-20f, 20f, -20f)
-            assertFalse(world.isShadowed(light, p))
-        }
-
-        it("should not be shadowed when the point is betwen the light and the object") {
-            val p = Point(-2f, 2f, -2f)
-            assertFalse(world.isShadowed(light, p))
-        }
-    }
-
     context("when shadeHit is given an intersection in a shadow") {
         it("should only return the ambient color") {
             val light = Light(Point(0f, 0f, -10f))
@@ -121,12 +95,23 @@ object WorldSpec: Spek({
     }
 
     context("when shadeHit is a reflective surface") {
+        it("should return a mix of reflected and material color") {
+            val world = World.default()
+            val moveDown = Transformation.translation(0f, -1f, 0f)
+            val shape = Plane(transform = moveDown, material = Material(reflective = 0.5f))
+            val f = (Math.sqrt(2.0) / 2.0).toFloat()
+            val ray = Ray(Point(0f, 0f, -3f), Vector(0f, -f, f))
+            val hit = Intersection(Math.sqrt(2.0).toFloat(), shape)
+            val color = world.shadeHit(hit.prepareHit(ray))
+            assertEquals(Color(0.87677f, 0.92436f, 0.82918f), color)
+        }
+
         it("should return the shadeHit from the reflection's viewpoint") {
-            val glass = ReflectiveMaterial()
+            val glass = Material(reflective = 1f)
             val wallTransform = Transformation.rotateX(TAU / 4)
             val wall = Plane(material = glass, transform = wallTransform)
             val sphereTransform = Transformation.translation(2f, 0f, -3f)
-            val sphereColor = SolidColor(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
+            val sphereColor = Material(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
             val sphere = Sphere(transform = sphereTransform, material = sphereColor)
             val light = Light(Point(2f, 0f, -1f))
             val world = World(arrayListOf(wall, sphere), arrayListOf(light))
@@ -145,11 +130,11 @@ object WorldSpec: Spek({
         }
 
         it("should return the shadeHit from the reflection's viewpoint when the plane is angled") {
-            val glass = ReflectiveMaterial()
+            val glass = Material(reflective = 1f)
             val wallTransform = Transformation.rotateY(-TAU / 8) * Transformation.rotateX(TAU / 4)
             val wall = Plane(material = glass, transform = wallTransform)
             val sphereTransform = Transformation.translation(3f, 0f, 0f)
-            val sphereColor = SolidColor(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
+            val sphereColor = Material(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
             val sphere = Sphere(transform = sphereTransform, material = sphereColor)
             val light = Light(Point(2f, 0f, 0f))
             val world = World(arrayListOf(wall, sphere), arrayListOf(light))

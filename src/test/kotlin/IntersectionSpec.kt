@@ -51,5 +51,43 @@ class IntersectionSpec : Spek({
             assertTrue(hit.point.z < -1f)
             assertTrue(hit.point.z > -1.1f)
         }
+
+        it("should precompute the reflection vector") {
+            val f = (Math.sqrt(2.0) / 2.0).toFloat()
+            val shape = Plane()
+            val ray = Ray(Point(0f, 1f, -1f), Vector(0f, -f, f))
+            val hit = Intersection(Math.sqrt(2.0).toFloat(), shape)
+            hit.prepareHit(ray)
+            assertEquals(Vector(0f, f, f), hit.reflectVector)
+        }
+    }
+
+    context("when determining if a point is shadowed") {
+        val world = World.default()
+        val light = world.lightSources[0]
+
+        it("should not be shadowed when nothing is colinear with a point and light") {
+            val p = Point(0f, 10f, 0f)
+            val int = Intersection(1f, Sphere(), point = p)
+            assertFalse(int.isShadowed(light, world))
+        }
+
+        it("should be shadowed when the point is behind an object")  {
+            val p = Point(10f, -10f, 10f)
+            val int = Intersection(1f, Sphere(), point = p)
+            assertTrue(int.isShadowed(light, world))
+        }
+
+        it("should not be shadowed when the light is between the point and object") {
+            val p = Point(-20f, 20f, -20f)
+            val int = Intersection(1f, Sphere(), point = p)
+            assertFalse(int.isShadowed(light, world))
+        }
+
+        it("should not be shadowed when the point is betwen the light and the object") {
+            val p = Point(-2f, 2f, -2f)
+            val int = Intersection(1f, Sphere(), point = p)
+            assertFalse(int.isShadowed(light, world))
+        }
     }
 })
