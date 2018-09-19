@@ -2,23 +2,27 @@ package com.weberapps.rayTracer
 
 
 // For reference of refractiveIndices:
-// air: 1.0
-// water: 1.3
-// glass: 1.5
-// diamond: 1.8
-class TransparentMaterial(color: Color = Color.WHITE, ambient: Float = 0f, diffuse: Float = 0f, specular: Float = 0f, shininess: Int = 0, reflective: Float = 1f, val refractiveIndex: Float) : Material(color, ambient, diffuse, specular, shininess, reflective) {
-    override fun lighting(hit: Intersection, light: Light, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color {
+// vacuum: 1.0
+// air: 1.00029
+// water: 1.333
+// glass: 1.52
+// diamond: 2.417
+class TransparentMaterial(color: Color = Color.WHITE, ambient: Float = 0f, diffuse: Float = 0f, specular: Float = 0f, shininess: Int = 0, val refractiveIndex: Float) : Material(color, ambient, diffuse, specular, shininess, 0f) {
+    override fun surfaceColor(hit: Intersection, light: Light, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color {
         val effectiveColor = color * light.intensity
-        var refractionColor = calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
-        var reflectivity = fresnel(hit.rayVector, hit.normalVector) * reflective
-        if (world != null && reflectivity < 1f) {
-            val direction = refract(hit.rayVector, hit.normalVector, 1f) ?: return Color.BLACK
-            val point = Point(hit.point - hit.normalVector * 2f * surfaceOffset)
-            val nextRay = Ray(point, direction)
-            refractionColor = world.colorAt(nextRay, refractionsLeft - 1)
-        }
+        var reflectivity = fresnel(hit.rayVector, hit.normalVector)
 
-        return reflectedColor(hit, world, refractionsLeft) * reflective + refractionColor * (1f - reflectivity)
+        return refractionColor(effectiveColor, reflectivity, light, hit, world, inShadow, refractionsLeft, surfaceOffset)
+    }
+
+    private fun refractionColor(effectiveColor: Color, reflectivity: Float, light: Light, hit: Intersection, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color {
+        var refractionColor = calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
+        if (world == null || reflectivity < 1f) return refractionColor
+
+        val direction = refract(hit.rayVector, hit.normalVector, 1f) ?: return Color.BLACK
+        val point = Point(hit.point - hit.normalVector * 2f * surfaceOffset)
+        val nextRay = Ray(point, direction)
+        return world.colorAt(nextRay, refractionsLeft - 1)
     }
 
     private fun refract(angleOfIncidence: Vector, normal: Vector, externalRefractiveIndex: Float = 1f): Vector? {
