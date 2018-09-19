@@ -2,6 +2,7 @@ package com.weberapps.rayTracer
 
 import java.lang.Math.abs
 import kotlin.math.pow
+
 open class Material(
         open val color: Color           = Color.WHITE,
         open val ambient: Float         = 0.1f,
@@ -10,11 +11,8 @@ open class Material(
         open val shininess: Int         = 200,
         open val reflective: Float      = 0f
 ) {
-    open fun lighting(hit: Intersection, light: Light, world: World? = null, inShadow: Boolean = false, refractionsLeft: Int = 5, surfaceOffset: Float = 0.001f): Color {
-        val effectiveColor = color * light.intensity
-        var surfaceColor = calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
-
-        return reflectedColor(hit, world, refractionsLeft) * reflective + surfaceColor * (1f - reflective)
+    fun lighting(hit: Intersection, light: Light, world: World? = null, inShadow: Boolean = false, refractionsLeft: Int = 5, surfaceOffset: Float = 0.001f): Color {
+        return reflectedColor(hit, world, refractionsLeft) * reflective + surfaceColor(hit, light, world, inShadow, refractionsLeft, surfaceOffset) * (1f - reflective)
     }
 
     fun reflectedColor(hit: Intersection, world: World? = null, refractionsLeft: Int = 5): Color {
@@ -31,6 +29,11 @@ open class Material(
     fun clamp(min: Float, value: Float, max: Float): Float {
         return Math.max(min, Math.min(value, max))
     }
+
+  open fun surfaceColor(hit: Intersection, light: Light, world: World? = null, inShadow: Boolean = false, refractionsLeft: Int = 5, surfaceOffset: Float = 0.001f): Color {
+    val effectiveColor = color * light.intensity
+    return calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
+  }
 
     fun calculateColor(effectiveColor: Color, light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean): Color {
         val lightVector       = (light.position - position).normalize()
