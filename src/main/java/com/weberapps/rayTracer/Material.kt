@@ -4,12 +4,14 @@ import java.lang.Math.abs
 import kotlin.math.pow
 
 open class Material(
-  open val color: Color       = Color.WHITE,
-  open val ambient: Float     = 0.1f,
-  open val diffuse: Float     = 0.9f,
-  open val specular: Float    = 0.9f,
-  open val shininess: Int     = 200,
-  open val reflective: Float    = 0f
+  open val color: Color           = Color.WHITE,
+  open val ambient: Float         = 0.1f,
+  open val diffuse: Float         = 0.9f,
+  open val specular: Float        = 0.9f,
+  open val shininess: Int         = 200,
+  open val reflective: Float      = 0f,
+  open val transparency: Float    = 0f,
+  open val refractiveIndex: Float = 1f
 ) {
   fun lighting(hit: Intersection, light: Light, world: World? = null, inShadow: Boolean = false, refractionsLeft: Int = 5, surfaceOffset: Float = 0.001f): Color {
     return reflectedColor(hit, world, refractionsLeft) * reflective + surfaceColor(hit, light, world, inShadow, refractionsLeft, surfaceOffset) * (1f - reflective)
@@ -20,6 +22,10 @@ open class Material(
 
     val reflectedRay = Ray(hit.point, hit.reflectVector)
     return world.colorAt(reflectedRay, refractionsLeft - 1)
+  }
+
+  fun refractedColor(hit: Intersection, world: World? = null, refractionsLeft: Int = 5): Color {
+    return Color.BLACK
   }
 
   fun reflect(angleOfIncidence: Vector, normal: Vector): Vector {

@@ -60,6 +60,15 @@ object IntersectionSpec : Spek({
       hit.prepareHit(ray)
       assertEquals(Vector(0f, f, f), hit.reflectVector)
     }
+
+    it("should precompute a point below the surface") {
+      val shape = Sphere()
+      val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
+      val hit = Intersection(4f, shape)
+      val xs = Intersections(1, arrayListOf(hit))
+
+      assertEquals(-0.95f, hit.prepareHit(ray, xs).underPoint.z, 0.05f)
+    }
   }
 
   context("when determining if a point is shadowed") {
