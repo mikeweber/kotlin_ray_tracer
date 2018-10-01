@@ -157,4 +157,44 @@ object SphereSpec : Spek({
       assertEquals(m, s.material)
     }
   }
+
+  context("glass sphere") {
+    it("correctly calculates n1 and n2 at various intersections") {
+      val aTransform = Transformation.scale(2f, 2f, 2f)
+      val aMaterial = TransparentMaterial(refractiveIndex = 1.5f)
+      val bTransform = Transformation.translation(0f, 0f, -0.25f)
+      val bMaterial = TransparentMaterial(refractiveIndex = 2f)
+      val cTransform = Transformation.translation(0f, 0f, 0.25f)
+      val cMaterial = TransparentMaterial(refractiveIndex = 2.5f)
+
+      val a = Sphere(aTransform, aMaterial)
+      val b = Sphere(bTransform, bMaterial)
+      val c = Sphere(cTransform, cMaterial)
+
+      val ray = Ray(Point(0f, 0f, -4f), Vector(0f, 0f, 1f))
+      val xs = Intersections(6,
+        arrayListOf(
+          Intersection(2.00f, a),
+          Intersection(2.75f, b),
+          Intersection(3.25f, c),
+          Intersection(4.75f, b),
+          Intersection(5.25f, c),
+          Intersection(6.00f, a)
+        )
+      )
+      val expectedValues = arrayListOf(
+        floatArrayOf(1.0f, 1.5f),
+        floatArrayOf(1.5f, 2.0f),
+        floatArrayOf(2.0f, 2.5f),
+        floatArrayOf(2.5f, 2.5f),
+        floatArrayOf(2.5f, 1.5f),
+        floatArrayOf(1.5f, 1.0f)
+      )
+      for ((index, hit) in xs.iterator().withIndex()) {
+        hit.prepareHit(ray, xs)
+        assertEquals(expectedValues[index][0], hit.n1)
+        assertEquals(expectedValues[index][1], hit.n2)
+      }
+    }
+  }
 })

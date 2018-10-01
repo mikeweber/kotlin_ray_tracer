@@ -7,17 +7,17 @@ package com.weberapps.rayTracer
 // water: 1.333
 // glass: 1.52
 // diamond: 2.417
-class TransparentMaterial(color: Color = Color.WHITE, ambient: Float = 0f, diffuse: Float = 0f, specular: Float = 0f, shininess: Int = 0, val refractiveIndex: Float) : Material(color, ambient, diffuse, specular, shininess, 0f) {
+class TransparentMaterial(color: Color = Color.WHITE, ambient: Float = 0f, diffuse: Float = 0f, specular: Float = 0f, shininess: Int = 0, refractiveIndex: Float, transparency: Float = 1f) : Material(color, ambient, diffuse, specular, shininess, 0f, transparency, refractiveIndex) {
   override fun surfaceColor(hit: Intersection, light: Light, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color {
     val effectiveColor = color * light.intensity
     var reflectivity = fresnel(hit.rayVector, hit.normalVector)
 
-    return refractionColor(effectiveColor, reflectivity, light, hit, world, inShadow, refractionsLeft, surfaceOffset)
+    return refractedColor(effectiveColor, reflectivity, light, hit, world, inShadow, refractionsLeft, surfaceOffset)
   }
 
-  private fun refractionColor(effectiveColor: Color, reflectivity: Float, light: Light, hit: Intersection, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color {
-    var refractionColor = calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
-    if (world == null || reflectivity < 1f) return refractionColor
+  private fun refractedColor(effectiveColor: Color, reflectivity: Float, light: Light, hit: Intersection, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color {
+    var refractedColor = calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
+    if (world == null || reflectivity < 1f) return refractedColor
 
     val direction = refract(hit.rayVector, hit.normalVector, 1f) ?: return Color.BLACK
     val point = Point(hit.point - hit.normalVector * 2f * surfaceOffset)

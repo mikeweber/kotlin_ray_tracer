@@ -7,7 +7,7 @@ class Plane(override var transform: Matrix = Matrix.eye(4), override var materia
     if (abs(localRay.direction.y) < EPSILON) return Intersections(0)
 
     val t = -localRay.origin.y / localRay.direction.y
-    return Intersections().add(Intersection(t, this))
+    return Intersections(1, arrayListOf(Intersection(t, this)))
   }
 
   override fun localNormal(localPoint: Point): Vector {

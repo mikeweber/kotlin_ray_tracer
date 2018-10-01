@@ -8,7 +8,10 @@ class Intersection(
   var eyeVector: Vector = Vector(0f, 0f, 1f),
   var normalVector: Vector = Vector(0f, 0f,1f),
   var rayVector: Vector = Vector(0f, 0f, 1f),
-  var reflectVector: Vector = Vector(0f, 0f, -1f)
+  var reflectVector: Vector = Vector(0f, 0f, -1f),
+  var n1: Float? = null,
+  var n2: Float? = null,
+  var underPoint: Point = Point(0f, 0f, 0f)
 ): Comparable<Intersection> {
   override fun equals(other: Any?): Boolean {
     if (other !is Intersection) return false
@@ -38,17 +41,47 @@ class Intersection(
     return hit.t < dist
   }
 
-  fun prepareHit(ray: Ray, surfaceOffset: Float = 0.0001f): Intersection {
-    point = ray.positionAt(t)
+  fun prepareHit(ray: Ray, intersections: Intersections = Intersections(), surfaceOffset: Float = 0.0001f): Intersection {
+    val hitPoint = ray.positionAt(t)
     rayVector = ray.direction
     eyeVector = -ray.direction
-    normalVector = shape.normal(point)
+    normalVector = shape.normal(hitPoint)
     reflectVector = reflect(rayVector, normalVector)
     inside = normalVector.dot(eyeVector) < 0f
     if (inside) normalVector = -normalVector
-    point = Point(point + normalVector * surfaceOffset)
+    point = Point(hitPoint + normalVector * surfaceOffset)
+    underPoint = Point(hitPoint  - normalVector * surfaceOffset)
+    determineRefractiveIndices(intersections)
 
     return this
+  }
+
+  private fun determineRefractiveIndices(intersections: Intersections, defaultRefractiveIndex: Float = 1f) {
+    val containers = ArrayList<Shape>()
+    for (intersection in intersections) {
+      if (intersection == this) {
+        n1 = if (containers.isEmpty()) {
+          defaultRefractiveIndex
+        } else {
+          containers.last().material.refractiveIndex
+        }
+      }
+
+      if (containers.indexOf(intersection.shape) < 0) {
+        containers.add(intersection.shape)
+      } else {
+        containers.remove(intersection.shape)
+      }
+
+      if (intersection == this) {
+        n2 = if (containers.isEmpty()) {
+          defaultRefractiveIndex
+        } else {
+          containers.last().material.refractiveIndex
+        }
+        break
+      }
+    }
   }
 
   private fun reflect(direction: Vector, normal: Vector): Vector {
