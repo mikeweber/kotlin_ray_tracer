@@ -9,8 +9,8 @@ class Intersection(
   var normalVector: Vector = Vector(0f, 0f,1f),
   var rayVector: Vector = Vector(0f, 0f, 1f),
   var reflectVector: Vector = Vector(0f, 0f, -1f),
-  var n1: Float? = null,
-  var n2: Float? = null,
+  var n1: Float = 1f,
+  var n2: Float = 1f,
   var underPoint: Point = Point(0f, 0f, 0f)
 ): Comparable<Intersection> {
   override fun equals(other: Any?): Boolean {
@@ -54,6 +54,23 @@ class Intersection(
     determineRefractiveIndices(intersections)
 
     return this
+  }
+
+  fun schlick(): Float {
+    var cos = eyeVector.dot(normalVector).toDouble()
+
+    // total internal refraction only occurs if n1 is greater than n2
+    if (n1 > n2) {
+      val n = n1 / n2
+      val sin2T = n * n * (1f - (cos * cos))
+      if (sin2T > 1f) return 1f
+
+      val cosT = Math.sqrt(1.0 - sin2T)
+      cos = cosT
+    }
+
+    val r0 = Math.pow((n1 - n2) / (n1 + n2).toDouble(), 2.0)
+    return (r0 + (1.0 - r0) * Math.pow((1 - cos), 5.0)).toFloat()
   }
 
   private fun determineRefractiveIndices(intersections: Intersections, defaultRefractiveIndex: Float = 1f) {

@@ -10,7 +10,7 @@ class CheckerboardMaterial(
         override val shininess: Int = 200,
         override val reflective: Float = 0.1f
 ) : Material() {
-    override fun lighting(hit: Intersection, light: Light, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color {
+    override fun surfaceColor(hit: Intersection, light: Light, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color {
         val effectiveColor= squareAtObject(hit.shape, hit.point) * light.intensity
         return calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
     }

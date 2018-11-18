@@ -116,9 +116,9 @@ object WorldSpec: Spek({
       val light = Light(Point(2f, 0f, -1f))
       val world = World(arrayListOf(wall, sphere), arrayListOf(light))
 
-      val directRay = Ray(Point(2f, 0f, -4f), Vector(0f, 0f, 1f))
-      val missRay   = Ray(Point(0f, 0f, -2f), Vector( 0f, 0f, 1f))
-      val hitRay  = Ray(Point(-2f, 0f, -2f), Vector(1f, 0f, 1f).normalize())
+      val directRay = Ray(Point( 2f, 0f, -4f), Vector(0f, 0f, 1f))
+      val missRay   = Ray(Point( 0f, 0f, -2f), Vector(0f, 0f, 1f))
+      val hitRay    = Ray(Point(-2f, 0f, -2f), Vector(1f, 0f, 1f).normalize())
 
       val directHit = world.intersect(directRay).hit() ?: fail("Should be pointed directly at sphere")
       val miss    = world.intersect(missRay).hit()   ?: fail("Expected a hit against the glass")

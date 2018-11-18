@@ -99,4 +99,38 @@ object IntersectionSpec : Spek({
       assertFalse(int.isShadowed(light, world))
     }
   }
+
+  context("reflectance") {
+    val glass = Material(refractiveIndex = 1.52f)
+    val sphere = Sphere(material = glass)
+
+    it("should return 1 when total internal reflection") {
+      val f = (Math.sqrt(2.0) / 2.0).toFloat()
+      val r = Ray(Point(0f, 0f, f), Vector(0f, 1f, 0f))
+      val xs = Intersections(2, arrayListOf(Intersection(-f, sphere), Intersection(f, sphere)))
+
+      val comps = xs[1].prepareHit(r, xs)
+      assertTrue(comps.n1 > 1f)
+      val reflectance = comps.schlick()
+      assertEquals(1f, reflectance)
+    }
+
+    it("should have low reflectance when the ray is a perpendicular intersection") {
+      val r = Ray(Point(0f, 0f, 0f), Vector(0f, 1f, 0f))
+      val xs = Intersections(2, arrayListOf(Intersection(-1f, sphere), Intersection(1f, sphere)))
+
+      val comps = xs[1].prepareHit(r, xs)
+      val reflectance = comps.schlick()
+      assertEquals(0.04f, reflectance, 0.01f)
+    }
+
+    it("should be reflective when the ray is at a shallow intersection") {
+      val r = Ray(Point(0f, 0.99f, -2f), Vector(0f, 0f, 1f))
+      val xs = Intersections(2, arrayListOf(Intersection(1.8589f, sphere)))
+
+      val comps = xs[0].prepareHit(r, xs)
+      val reflectance = comps.schlick()
+      assertEquals(0.4901f, reflectance, 0.00001f)
+    }
+  }
 })

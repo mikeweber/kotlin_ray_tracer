@@ -10,7 +10,7 @@ package com.weberapps.rayTracer
 class TransparentMaterial(color: Color = Color.WHITE, ambient: Float = 0f, diffuse: Float = 0f, specular: Float = 0f, shininess: Int = 0, refractiveIndex: Float, transparency: Float = 1f) : Material(color, ambient, diffuse, specular, shininess, 0f, transparency, refractiveIndex) {
   override fun surfaceColor(hit: Intersection, light: Light, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color {
     val effectiveColor = color * light.intensity
-    var reflectivity = fresnel(hit.rayVector, hit.normalVector)
+    var reflectivity = hit.schlick()
 
     return refractedColor(effectiveColor, reflectivity, light, hit, world, inShadow, refractionsLeft, surfaceOffset)
   }
@@ -40,23 +40,5 @@ class TransparentMaterial(color: Color = Color.WHITE, ambient: Float = 0f, diffu
     if (k < 0) return null
 
     return angleOfIncidence * eta + n * (eta * cosi - Math.sqrt(k.toDouble()).toFloat())
-  }
-
-  private fun fresnel(angleOfIncidence: Vector, normal: Vector, externalRefractiveIndex: Float = 1f): Float {
-    var cosi = clamp(-1f, angleOfIncidence.dot(normal), 1f)
-    // refractiveIndex
-    val eta = if (cosi > 0f) {
-      refractiveIndex / externalRefractiveIndex
-    } else {
-      externalRefractiveIndex / refractiveIndex
-    }
-    val sint = eta * Math.sqrt(Math.max(0.0, (1 - cosi * cosi).toDouble())).toFloat()
-    if (sint >= 1) return 1f
-    val cost = Math.sqrt(Math.max(0.0, (1 - sint * sint).toDouble())).toFloat()
-    cosi = Math.abs(cosi)
-    val rs = ((refractiveIndex * cosi) - (externalRefractiveIndex * cost)) / ((refractiveIndex * cosi) + (externalRefractiveIndex * cost))
-    val rp = ((externalRefractiveIndex * cosi) - (refractiveIndex * cost)) / ((externalRefractiveIndex * cosi) + (refractiveIndex * cost))
-
-    return (rs * rs + rp * rp) / 2
   }
 }

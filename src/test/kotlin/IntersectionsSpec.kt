@@ -2,7 +2,6 @@ import com.weberapps.rayTracer.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 
 object IntersectionsSpec : Spek({
   val sphere = Sphere()
