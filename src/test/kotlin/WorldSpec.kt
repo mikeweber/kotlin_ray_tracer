@@ -103,7 +103,7 @@ object WorldSpec: Spek({
             val ray = Ray(Point(0f, 0f, -3f), Vector(0f, -f, f))
             val hit = Intersection(Math.sqrt(2.0).toFloat(), shape)
             val color = world.shadeHit(hit.prepareHit(ray))
-            assertEquals(Color(0.87677f, 0.92436f, 0.82918f), color)
+            assertEquals(Color(0.53355f, 0.58114f, 0.48597f), color)
         }
 
         it("should return the shadeHit from the reflection's viewpoint") {

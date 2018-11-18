@@ -8,7 +8,8 @@ import kotlin.math.PI
 class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize: Int = 90) {
     init {
         val t0 = Instant.now()
-        saveCanvas(renderFocus())
+        // saveCanvas(renderFocus())
+        saveCanvas(render(initWorld()))
         println("Finished in ${Duration.between(t0, Instant.now())}")
     }
 
@@ -80,8 +81,9 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
 
     fun initWorld(): World {
         val matte = Material(Color(1f, 0.9f, 0.9f), specular = 0f)
-        val mirror = Material(reflective = 1f)
-        val floor = Plane(material = matte)
+        val checkers = CheckerboardMaterial(reflective = 0.2f)
+        val mirror = Material(reflective = 0.6f)
+        val floor = Plane(material = checkers, transform = Transformation.rotateY(TAU / 4))
 
         val backWallTransform = Transformation.rotateX(TAU / 4)
         val backWall = Plane(transform = backWallTransform, material = mirror)
@@ -124,7 +126,8 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
         val leftMaterial = Material(
                 color = Color(1f, 0.7f, 0f),
                 diffuse = 0.7f,
-                specular = 0.3f
+                specular = 0.3f,
+                reflective = 0.2f
         )
         val leftSphere = Sphere(transform = leftTransform, material = leftMaterial)
 
