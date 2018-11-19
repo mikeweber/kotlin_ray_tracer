@@ -48,8 +48,8 @@ object WorldSpec: Spek({
       val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
       val shape = world.sceneObjects[0]
       val hit = Intersection(4f, shape)
-      hit.prepareHit(ray)
-      val c = world.shadeHit(hit)
+      val comps = hit.prepareHit(ray)
+      val c = world.shadeHit(comps)
 
       assertEquals(Color(0.38066f, 0.47583f, 0.2855f), c)
     }
@@ -59,8 +59,8 @@ object WorldSpec: Spek({
       val ray = Ray(Point(0f, 0f, 0f), Vector(0f, 0f, 1f))
       val shape = world.sceneObjects[1]
       val hit = Intersection(0.5f, shape)
-      hit.prepareHit(ray)
-      val c = world.shadeHit(hit)
+      val comps = hit.prepareHit(ray)
+      val c = world.shadeHit(comps)
 
       assertEquals(Color(0.90495f, 0.90495f, 0.90495f), c)
     }
@@ -87,8 +87,8 @@ object WorldSpec: Spek({
       val world = World(sceneObjects = arrayListOf(s1, s2), lightSources = arrayListOf(light))
       val ray = Ray(Point(0f, 0f, 5f), Vector(0f, 0f, 1f))
       val hit = Intersection(4f, s2)
-      hit.prepareHit(ray)
-      val color = world.shadeHit(hit)
+      val comps = hit.prepareHit(ray)
+      val color = world.shadeHit(comps)
 
       assertEquals(Color(0.1f, 0.1f, 0.1f), color)
     }
@@ -150,6 +150,93 @@ object WorldSpec: Spek({
       assertEquals(Color.WHITE, world.shadeHit(directHit))
       assertEquals(Color.BLACK, world.shadeHit(miss.prepareHit(missRay)))
       assertEquals(Color.WHITE, world.shadeHit(hit.prepareHit(hitRay)))
+    }
+
+    it("should also work for semi-transparent material") {
+      val world = World.default()
+      val f = (Math.sqrt(2.0) / 2.0).toFloat()
+      val r = Ray(Point(0f, 0f, -3f), Vector(0f, -f, f))
+      val halfReflectiveTransparent = Material(reflective = 0.5f, transparency = 0.5f, refractiveIndex = 1.5f)
+      val floor = Plane(transform = Transformation.translation(0f, -1f, 0f), material = halfReflectiveTransparent)
+      val ball = Sphere(Transformation.translation(0f, -3.5f, -0.5f), Material(color = Color.RED, ambient = 0.5f))
+
+      world.sceneObjects.add(floor)
+      world.sceneObjects.add(ball)
+
+      val xs = Intersections(1, arrayListOf(Intersection(Math.sqrt(2.0).toFloat(), floor)))
+      val comps = xs[0].prepareHit(r, xs)
+      val color = world.shadeHit(comps, 5)
+      assertEquals(Color(0.93391f, 0.69643f, 0.69243f), color)
+    }
+  }
+
+  context("refracted color") {
+    it("should return black when no opaque surface") {
+      val world = World.default()
+      val shape = world.sceneObjects.first()
+      val r = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
+      val xs = Intersections(2, arrayListOf(Intersection(4f, shape), Intersection(6f, shape)))
+      val comps = xs[0].prepareHit(r, xs)
+      val c = shape.material.refractedColor(comps)
+      assertEquals(Color.BLACK, c)
+    }
+
+    it("should return black when the max recursive depth is hit") {
+      val world = World.default()
+      val shape = world.sceneObjects.first()
+      shape.material = Material(transparency = 1f, refractiveIndex = 1.5f)
+      val r = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
+      val xs = Intersections(2, arrayListOf(Intersection(4f, shape), Intersection(6f, shape)))
+      val comps = xs[0].prepareHit(r, xs)
+      val c = shape.material.refractedColor(comps, world, 0)
+      assertEquals(Color.BLACK, c)
+    }
+
+    it("should return black when under total internal reflection") {
+      val world = World.default()
+      val shape = world.sceneObjects.first()
+      shape.material = Material(transparency = 1f, refractiveIndex = 1.5f)
+      val f = (Math.sqrt(2.0) / 2.0).toFloat()
+      val r = Ray(Point(0f, 0f, f), Vector(0f, 1f, 0f))
+      val xs = Intersections(2, arrayListOf(Intersection(-f, shape), Intersection(f, shape)))
+
+      val comps = xs[1].prepareHit(r, xs)
+      val c = shape.material.refractedColor(comps, world)
+      assertEquals(Color.BLACK, c)
+    }
+
+    it("should spawn a second ray") {
+      val world = World.default()
+      val a = world.sceneObjects.first()
+      val b = world.sceneObjects.last()
+      a.material = TestMaterial(ambient = 1f)
+      b.material = Material(transparency = 1f, refractiveIndex = 1.5f)
+      val r = Ray(Point(0f, 0f, 0.1f), Vector(0f, 1f, 0f))
+      val xs = Intersections(4, arrayListOf(Intersection(-0.9899f, a), Intersection(-0.4899f, b), Intersection(0.4899f, b), Intersection(0.9899f, a)))
+      val comps = xs[2].prepareHit(r, xs)
+      val c = comps.shape.material.refractedColor(comps, world)
+      assertEquals(Color(0f, 0.99878f, 0.04724f), c)
+    }
+
+    it("should reflect and refract") {
+      val world = World.default()
+      val floor = Plane(
+        transform = Transformation.translation(0f, -1f, 0f),
+        material = Material(transparency = 0.5f, refractiveIndex = 1.5f)
+      )
+      val ball = Sphere(
+        transform = Transformation.translation(0f, -3.5f, -0.5f),
+        material = Material(color = Color.RED, ambient = 0.5f)
+      )
+      world.sceneObjects.add(floor)
+      world.sceneObjects.add(ball)
+      val f = (Math.sqrt(2.0) / 2.0).toFloat()
+      val r = Ray(Point(0f, 0f, -3f), Vector(0f, -f, f))
+      val xs = Intersections(1, arrayListOf(Intersection(f, floor)))
+      val comps = xs[0].prepareHit(r, xs)
+      val color = world.shadeHit(comps)
+
+      assertEquals(Color(0.93642f, 0.68642f, 0.68642f), color)
     }
   }
 })

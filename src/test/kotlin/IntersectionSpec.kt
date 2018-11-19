@@ -18,38 +18,38 @@ object IntersectionSpec : Spek({
       val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
       val sphere = Sphere()
       val hit = Intersection(4f, sphere)
-      hit.prepareHit(ray)
-      assertEquals(Point(0f, 0f, -1.0001f), hit.point)
-      assertEquals(Vector(0f, 0f, -1f), hit.eyeVector)
-      assertEquals(Vector(0f, 0f, -1f), hit.normalVector)
+      val comps = hit.prepareHit(ray)
+      assertEquals(Point(0f, 0f, -1.0001f), comps.point)
+      assertEquals(Vector(0f, 0f, -1f), comps.eyeVector)
+      assertEquals(Vector(0f, 0f, -1f), comps.normalVector)
     }
 
     it("should set the inside flag to false when the ray originates outside the shape") {
       val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
       val sphere = Sphere()
       val hit = Intersection(4f, sphere)
-      hit.prepareHit(ray)
-      assertFalse(hit.inside)
+      val comps = hit.prepareHit(ray)
+      assertFalse(comps.inside)
     }
 
     it("should set the inside flag to true when the ray originates inside the shape") {
       val ray = Ray(Point(0f, 0f, 0f), Vector(0f, 0f, 1f))
       val sphere = Sphere()
       val hit = Intersection(1f, sphere)
-      hit.prepareHit(ray)
-      assertEquals(Point(0f, 0f, 0.9999f), hit.point)
-      assertEquals(Vector(0f, 0f, -1f), hit.eyeVector)
-      assertTrue(hit.inside)
-      assertEquals(Vector(0f, 0f, -1f), hit.normalVector)
+      val comps = hit.prepareHit(ray)
+      assertEquals(Point(0f, 0f, 0.9999f), comps.point)
+      assertEquals(Vector(0f, 0f, -1f), comps.eyeVector)
+      assertTrue(comps.inside)
+      assertEquals(Vector(0f, 0f, -1f), comps.normalVector)
     }
 
     it("should return a point slightly above the normal of the point") {
       val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
       val sphere = Sphere()
       val hit = Intersection(4f, sphere)
-      hit.prepareHit(ray)
-      assertTrue(hit.point.z < -1f)
-      assertTrue(hit.point.z > -1.1f)
+      val comps = hit.prepareHit(ray)
+      assertTrue(comps.point.z < -1f)
+      assertTrue(comps.point.z > -1.1f)
     }
 
     it("should precompute the reflection vector") {
@@ -57,8 +57,8 @@ object IntersectionSpec : Spek({
       val shape = Plane()
       val ray = Ray(Point(0f, 1f, -1f), Vector(0f, -f, f))
       val hit = Intersection(Math.sqrt(2.0).toFloat(), shape)
-      hit.prepareHit(ray)
-      assertEquals(Vector(0f, f, f), hit.reflectVector)
+      val comps = hit.prepareHit(ray)
+      assertEquals(Vector(0f, f, f), comps.reflectVector)
     }
 
     it("should precompute a point below the surface") {

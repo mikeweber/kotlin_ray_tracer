@@ -161,11 +161,11 @@ object SphereSpec : Spek({
   context("glass sphere") {
     it("correctly calculates n1 and n2 at various intersections") {
       val aTransform = Transformation.scale(2f, 2f, 2f)
-      val aMaterial = TransparentMaterial(refractiveIndex = 1.5f)
+      val aMaterial = Material(refractiveIndex = 1.5f)
       val bTransform = Transformation.translation(0f, 0f, -0.25f)
-      val bMaterial = TransparentMaterial(refractiveIndex = 2f)
+      val bMaterial = Material(refractiveIndex = 2f)
       val cTransform = Transformation.translation(0f, 0f, 0.25f)
-      val cMaterial = TransparentMaterial(refractiveIndex = 2.5f)
+      val cMaterial = Material(refractiveIndex = 2.5f)
 
       val a = Sphere(aTransform, aMaterial)
       val b = Sphere(bTransform, bMaterial)
@@ -191,9 +191,9 @@ object SphereSpec : Spek({
         floatArrayOf(1.5f, 1.0f)
       )
       for ((index, hit) in xs.iterator().withIndex()) {
-        hit.prepareHit(ray, xs)
-        assertEquals(expectedValues[index][0], hit.n1)
-        assertEquals(expectedValues[index][1], hit.n2)
+        val comps = hit.prepareHit(ray, xs)
+        assertEquals(expectedValues[index][0], comps.n1)
+        assertEquals(expectedValues[index][1], comps.n2)
       }
     }
   }

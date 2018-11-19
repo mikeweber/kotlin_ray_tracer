@@ -43,17 +43,17 @@ class Intersection(
 
   fun prepareHit(ray: Ray, intersections: Intersections = Intersections(), surfaceOffset: Float = 0.0001f): Intersection {
     val hitPoint = ray.positionAt(t)
-    rayVector = ray.direction
-    eyeVector = -ray.direction
-    normalVector = shape.normal(hitPoint)
-    reflectVector = reflect(rayVector, normalVector)
-    inside = normalVector.dot(eyeVector) < 0f
+    val rayVector = ray.direction
+    val eyeVector = -ray.direction
+    var normalVector = shape.normal(hitPoint)
+    val reflectVector = reflect(rayVector, normalVector)
+    val inside = normalVector.dot(eyeVector) < 0f
     if (inside) normalVector = -normalVector
-    point = Point(hitPoint + normalVector * surfaceOffset)
-    underPoint = Point(hitPoint  - normalVector * surfaceOffset)
-    determineRefractiveIndices(intersections)
+    val point = Point(hitPoint + normalVector * surfaceOffset)
+    val underPoint = Point(hitPoint  - normalVector * surfaceOffset)
+    val (n1, n2) = determineRefractiveIndices(intersections)
 
-    return this
+    return Intersection(t, shape, inside, point, eyeVector, normalVector, rayVector, reflectVector, n1, n2, underPoint)
   }
 
   fun schlick(): Float {
@@ -73,15 +73,19 @@ class Intersection(
     return (r0 + (1.0 - r0) * Math.pow((1 - cos), 5.0)).toFloat()
   }
 
-  private fun determineRefractiveIndices(intersections: Intersections, defaultRefractiveIndex: Float = 1f) {
+  private fun determineRefractiveIndices(intersections: Intersections, defaultRefractiveIndex: Float = 1f): Pair<Float, Float> {
     val containers = ArrayList<Shape>()
+    var newN1 = n1
+    var newN2 = n2
+
     for (intersection in intersections) {
       if (intersection == this) {
-        n1 = if (containers.isEmpty()) {
-          defaultRefractiveIndex
-        } else {
-          containers.last().material.refractiveIndex
-        }
+        newN1 =
+          if (containers.isEmpty()) {
+            defaultRefractiveIndex
+          } else {
+            containers.last().material.refractiveIndex
+          }
       }
 
       if (containers.indexOf(intersection.shape) < 0) {
@@ -91,14 +95,17 @@ class Intersection(
       }
 
       if (intersection == this) {
-        n2 = if (containers.isEmpty()) {
-          defaultRefractiveIndex
-        } else {
-          containers.last().material.refractiveIndex
-        }
+        newN2 =
+          if (containers.isEmpty()) {
+            defaultRefractiveIndex
+          } else {
+            containers.last().material.refractiveIndex
+          }
         break
       }
     }
+
+    return Pair(newN1, newN2)
   }
 
   private fun reflect(direction: Vector, normal: Vector): Vector {

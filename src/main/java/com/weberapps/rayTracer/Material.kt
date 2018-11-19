@@ -11,34 +11,37 @@ open class Material(
   open val shininess: Int         = 200,
   open val reflective: Float      = 0f,
   open val transparency: Float    = 0f,
-  open val refractiveIndex: Float = 1f
+  open val refractiveIndex: Float = VACUUM
 ) {
   fun lighting(hit: Intersection, light: Light, world: World? = null, inShadow: Boolean = false, refractionsLeft: Int = 5, surfaceOffset: Float = 0.001f): Color {
-    return reflectedColor(hit, world, refractionsLeft) * reflective + surfaceColor(hit, light, world, inShadow, refractionsLeft, surfaceOffset) * (1f - reflective)
+    val surface   = surfaceColor(hit, light, world, inShadow, refractionsLeft, surfaceOffset)
+    val reflected = reflectedColor(hit, world, refractionsLeft)
+    val refracted = refractedColor(hit, world, refractionsLeft)
+
+    if (reflective == 0f || transparency == 0f) return surface + reflected + refracted
+
+    val reflectance = hit.schlick()
+    return surface + reflected * reflectance + refracted * (1f - reflectance)
   }
 
-  fun reflectedColor(hit: Intersection, world: World? = null, refractionsLeft: Int = 5): Color {
+  companion object {
+    val VACUUM = 1f
+    val AIR = 1.00029f
+    val WATER = 1.333f
+    val GLASS = 1.52f
+    val DIAMOND = 2.417f
+  }
+
+  private fun reflectedColor(hit: Intersection, world: World? = null, refractionsLeft: Int = 5): Color {
     if (reflective == 0f || world == null) return Color.BLACK
 
     val reflectedRay = Ray(hit.point, hit.reflectVector)
-    return world.colorAt(reflectedRay, refractionsLeft - 1)
-  }
-
-  fun refractedColor(hit: Intersection, world: World? = null, refractionsLeft: Int = 5): Color {
-    return Color.BLACK
-  }
-
-  fun reflect(angleOfIncidence: Vector, normal: Vector): Vector {
-    return angleOfIncidence - normal * angleOfIncidence.dot(normal) * 2f
-  }
-
-  fun clamp(min: Float, value: Float, max: Float): Float {
-    return Math.max(min, Math.min(value, max))
+    return world.colorAt(reflectedRay, refractionsLeft - 1) * reflective
   }
 
   open fun surfaceColor(hit: Intersection, light: Light, world: World? = null, inShadow: Boolean = false, refractionsLeft: Int = 5, surfaceOffset: Float = 0.001f): Color {
-  val effectiveColor = color * light.intensity
-  return calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
+    val effectiveColor = color * light.intensity
+    return calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
   }
 
   fun calculateColor(effectiveColor: Color, light: Light, position: Point, eyeVector: Vector, normalVector: Vector, inShadow: Boolean): Color {
@@ -81,5 +84,21 @@ open class Material(
 
   fun attributeEquals(a: Float, b: Float, eps: Float = EPSILON): Boolean {
     return abs(a - b) <= eps
+  }
+
+  fun refractedColor(hit: Intersection, world: World? = null, refractionsLeft: Int = 5): Color {
+    if (refractionsLeft <= 0 || transparency <= 0f || world == null) return Color.BLACK
+
+    val nRatio = hit.n1 / hit.n2
+    val cosI = hit.eyeVector.dot(hit.normalVector)
+    val sin2T = nRatio * nRatio * (1f - cosI * cosI)
+    if (sin2T > 1f) return Color.BLACK
+
+    val cosT = Math.sqrt(1.0 - sin2T)
+    val direction = hit.normalVector * (nRatio * cosI - cosT).toFloat() - hit.eyeVector * nRatio
+    val refractRay = Ray(hit.underPoint, direction)
+
+    val result = world.colorAt(refractRay, refractionsLeft - 1)
+    return result * transparency
   }
 }
