@@ -107,7 +107,7 @@ object WorldSpec: Spek({
     }
 
     it("should return the shadeHit from the reflection's viewpoint") {
-      val glass = Material(reflective = 1f)
+      val glass = Material(color = Color.BLACK, reflective = 1f, ambient = 0f, specular = 0f, diffuse = 0f, shininess = 0)
       val wallTransform = Transformation.rotateX(TAU / 4)
       val wall = Plane(material = glass, transform = wallTransform)
       val sphereTransform = Transformation.translation(2f, 0f, -3f)
@@ -125,12 +125,13 @@ object WorldSpec: Spek({
       val hit     = world.intersect(hitRay).hit()  ?: fail("Expected a hit against the glass")
 
       assertEquals(Color.WHITE, world.shadeHit(directHit))
-      assertEquals(Color.BLACK, world.shadeHit(miss.prepareHit(missRay)))
+      val c = world.shadeHit(miss.prepareHit(missRay))
+      assertEquals(Color.BLACK, c)
       assertEquals(Color.WHITE, world.shadeHit(hit.prepareHit(hitRay)))
     }
 
     it("should return the shadeHit from the reflection's viewpoint when the plane is angled") {
-      val glass = Material(reflective = 1f)
+      val glass = Material(reflective = 1f, ambient = 0f)
       val wallTransform = Transformation.rotateY(-TAU / 8) * Transformation.rotateX(TAU / 4)
       val wall = Plane(material = glass, transform = wallTransform)
       val sphereTransform = Transformation.translation(3f, 0f, 0f)
@@ -232,7 +233,7 @@ object WorldSpec: Spek({
       world.sceneObjects.add(ball)
       val f = (Math.sqrt(2.0) / 2.0).toFloat()
       val r = Ray(Point(0f, 0f, -3f), Vector(0f, -f, f))
-      val xs = Intersections(1, arrayListOf(Intersection(f, floor)))
+      val xs = Intersections(1, arrayListOf(Intersection(Math.sqrt(2.0).toFloat(), floor)))
       val comps = xs[0].prepareHit(r, xs)
       val color = world.shadeHit(comps)
 
