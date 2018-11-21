@@ -69,7 +69,7 @@ class Intersection(
       cos = cosT
     }
 
-    val r0 = Math.pow((n1 - n2) / (n1 + n2).toDouble(), 2.0)
+    val r0 = Math.pow(((n1 - n2) / (n1 + n2)).toDouble(), 2.0)
     return (r0 + (1.0 - r0) * Math.pow((1 - cos), 5.0)).toFloat()
   }
 
