@@ -1,14 +1,16 @@
 package com.weberapps.rayTracer
 
 class CheckeredPattern(
-  override val color: Color = Color.WHITE,
-  val tock: Color = Color.BLACK,
-  val transform: Matrix = Matrix.eye(4),
-  override val ambient: Float = 0.1f,
-  override val diffuse: Float = 0.9f,
-  override val specular: Float = 0.9f,
-  override val shininess: Int = 200,
-  override val reflective: Float = 0.1f
+  override val color: Color           = Color.WHITE,
+  val tock: Color                     = Color.BLACK,
+  val transform: Matrix               = Matrix.eye(4),
+  override val ambient: Float         = 0.1f,
+  override val diffuse: Float         = 0.9f,
+  override val specular: Float        = 0.9f,
+  override val shininess: Int         = 200,
+  override val reflective: Float      = 0.1f,
+  override val transparency: Float    = 0f,
+  override val refractiveIndex: Float = VACUUM
 ): Material(color, ambient, diffuse, specular, shininess, reflective) {
   val tick get() = color
 
