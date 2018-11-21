@@ -1,4 +1,4 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
 import java.nio.file.Paths
 import java.time.Duration
@@ -18,7 +18,7 @@ class DrawScene(filename: String = "scene_with_multiple_shadows.ppm", hsize: Int
     println("Done")
   }
 
-  fun draw(hsize: Int, vsize: Int): Canvas {
+  fun draw(hsize: Int, vsize: Int): com.weberapps.ray.tracer.Canvas {
     val squash = Transformation.scale(10f, 0.01f, 10f)
     val matte = Material(Color(1f, 0.9f, 0.9f), specular = 0f)
     val floor = Sphere(transform = squash, material = matte)
@@ -71,7 +71,7 @@ class DrawScene(filename: String = "scene_with_multiple_shadows.ppm", hsize: Int
       Point(0f, 1f, 0f),
       Vector(0f, 1f, 0f).normalize()
     )
-    val camera = Camera(hsize, vsize, TAU / 6, transform = viewTransform)
+    val camera = com.weberapps.ray.tracer.Camera(hsize, vsize, TAU / 6, transform = viewTransform)
 
     return camera.render(world)
   }

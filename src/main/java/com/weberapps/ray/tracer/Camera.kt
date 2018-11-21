@@ -1,10 +1,13 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
-class Camera(val hsize: Int, val vsize: Int, fieldOfView: Double = (TAU / 4), var transform: Matrix = Matrix.eye(4)) {
+class Camera(val hsize: Int, val vsize: Int, fieldOfView: Double = (com.weberapps.ray.tracer.TAU / 4), var transform: com.weberapps.ray.tracer.Matrix = com.weberapps.ray.tracer.Matrix.Companion.eye(
+  4
+)
+) {
   var halfWidth = Math.tan(fieldOfView / 2.0)
   var halfHeight = Math.tan(fieldOfView / 2.0)
   var pixelSize: Float = 0f
-  var fieldOfView: Double = (TAU / 4.0)
+  var fieldOfView: Double = (com.weberapps.ray.tracer.TAU / 4.0)
   set(value) {
     field = value
     pixelSize = calculatePixelSize()
@@ -15,8 +18,8 @@ class Camera(val hsize: Int, val vsize: Int, fieldOfView: Double = (TAU / 4), va
     this.fieldOfView = fieldOfView
   }
 
-  fun render(world: World): Canvas {
-    val canvas = Canvas(hsize, vsize)
+  fun render(world: com.weberapps.ray.tracer.World): com.weberapps.ray.tracer.Canvas {
+    val canvas = com.weberapps.ray.tracer.Canvas(hsize, vsize)
     for (y in 0..(vsize - 1)) {
       for (x in 0..(hsize - 1)) {
         val ray = rayForPixel(x, y)
@@ -27,7 +30,7 @@ class Camera(val hsize: Int, val vsize: Int, fieldOfView: Double = (TAU / 4), va
     return canvas
   }
 
-  fun rayForPixel(px: Int, py: Int): Ray {
+  fun rayForPixel(px: Int, py: Int): com.weberapps.ray.tracer.Ray {
     val xOffset = (px + 0.5f) * pixelSize
     val yOffset = (py + 0.5f) * pixelSize
 
@@ -35,12 +38,12 @@ class Camera(val hsize: Int, val vsize: Int, fieldOfView: Double = (TAU / 4), va
     val worldY = halfHeight - yOffset
 
     val invertedTransform = transform.inverse()
-    val pixel  = invertedTransform * Point(worldX.toFloat(), worldY.toFloat(), -1f)
-    val origin = invertedTransform * Point(0f, 0f, 0f)
+    val pixel  = invertedTransform * com.weberapps.ray.tracer.Point(worldX.toFloat(), worldY.toFloat(), -1f)
+    val origin = invertedTransform * com.weberapps.ray.tracer.Point(0f, 0f, 0f)
     val dir = (pixel - origin)
     val direction = dir.normalize()
 
-    return Ray(origin, direction)
+    return com.weberapps.ray.tracer.Ray(origin, direction)
   }
 
   private fun calculatePixelSize(): Float {

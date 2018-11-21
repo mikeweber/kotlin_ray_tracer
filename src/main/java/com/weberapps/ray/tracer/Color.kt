@@ -1,4 +1,4 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
 class Color : Tuple {
   constructor(red: Float, green: Float, blue: Float): super(red, green, blue, 0.0f)

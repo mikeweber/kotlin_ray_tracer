@@ -1,7 +1,7 @@
-import com.weberapps.rayTracer.Color
-import com.weberapps.rayTracer.Point
-import com.weberapps.rayTracer.Tuple
-import com.weberapps.rayTracer.Vector
+import com.weberapps.ray.tracer.Color
+import com.weberapps.ray.tracer.Point
+import com.weberapps.ray.tracer.Tuple
+import com.weberapps.ray.tracer.Vector
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.assertEquals

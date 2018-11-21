@@ -1,5 +1,5 @@
-import com.weberapps.rayTracer.Matrix
-import com.weberapps.rayTracer.Tuple
+import com.weberapps.ray.tracer.Matrix
+import com.weberapps.ray.tracer.Tuple
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.*

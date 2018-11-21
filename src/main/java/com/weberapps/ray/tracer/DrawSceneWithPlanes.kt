@@ -1,4 +1,4 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
 import java.nio.file.Paths
 import java.time.Duration
@@ -12,7 +12,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
     println("Finished in ${Duration.between(t0, Instant.now())}")
   }
 
-  fun saveCanvas(canvas: Canvas, saveAs: String = filename) {
+  fun saveCanvas(canvas: com.weberapps.ray.tracer.Canvas, saveAs: String = filename) {
     var absolutePath = saveAs
     if (!absolutePath.startsWith("/")) {
       absolutePath = Paths.get("").toAbsolutePath().toString() + "/" + saveAs
@@ -46,8 +46,8 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
     println("Finished animation in ${Duration.between(t0, Instant.now())}")
   }
 
-  fun renderFocus(): Canvas {
-    var canvas = Canvas(hsize, vsize)
+  fun renderFocus(): com.weberapps.ray.tracer.Canvas {
+    var canvas = com.weberapps.ray.tracer.Canvas(hsize, vsize)
     val world = initWorld()
     val focus = Point(world.sceneObjects[0].transform * Point(0f, 0f, 0f))
     var renderCount = 0
@@ -67,19 +67,19 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
       world: World,
       from: Point = Point(0f, 2f, -5f),
       focus: Point = Point(0f, 1f, 0f)
-  ): Canvas {
+  ): com.weberapps.ray.tracer.Canvas {
     val viewTransform = Transformation.viewTransform(
       from = from,
       to = focus,
       up = Vector(0f, 1f, 0f).normalize()
     )
-    val camera = Camera(hsize, vsize, TAU / 6, transform = viewTransform)
+    val camera = com.weberapps.ray.tracer.Camera(hsize, vsize, TAU / 6, transform = viewTransform)
 
     return camera.render(world)
   }
 
   fun initWorld(): World {
-    val checkered = CheckeredPattern(reflective = 0.1f)
+    val checkered = com.weberapps.ray.tracer.CheckeredPattern(reflective = 0.1f)
     val mirror = Material(reflective = 0.6f)
     val floor = Plane(material = checkered)
 
@@ -91,7 +91,11 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
     val rightWallTransform = Transformation.translation(0f, 0f, 5f) *
       Transformation.rotateY(TAU / 8) *
       Transformation.rotateX(TAU / 4)
-    val blueRedCheckered = CheckeredPattern(color = Color(0.3f, 0.3f, 0.3f), tock = Color(0.5f, 0.5f, 0.5f), reflective = 0f)
+    val blueRedCheckered = com.weberapps.ray.tracer.CheckeredPattern(
+      color = Color(0.3f, 0.3f, 0.3f),
+      tock = Color(0.5f, 0.5f, 0.5f),
+      reflective = 0f
+    )
     val rightWall = Plane(transform = rightWallTransform, material = blueRedCheckered)
 
     val middleTransform = Transformation.translation(-0.5f, 1f, 0.5f)

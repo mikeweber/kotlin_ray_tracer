@@ -1,4 +1,4 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
 class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources: ArrayList<Light> = arrayListOf(), private val background: Color = Color.BLACK) {
   companion object {

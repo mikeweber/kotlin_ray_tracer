@@ -1,4 +1,4 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
 interface Shape {
   var transform: Matrix

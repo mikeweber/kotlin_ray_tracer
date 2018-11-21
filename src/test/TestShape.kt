@@ -1,4 +1,4 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
 class TestShape : Shape {
   override var transform: Matrix = Matrix.eye(4)

@@ -1,4 +1,4 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
 class Ray(val origin: Point, val direction: Vector) {
   constructor(originTuple: Tuple, directionTuple: Tuple) : this(Point(originTuple), Vector(directionTuple))

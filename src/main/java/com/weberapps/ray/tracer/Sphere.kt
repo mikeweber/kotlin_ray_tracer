@@ -1,4 +1,4 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
 class Sphere(override var transform: Matrix = Matrix.eye(4), override var material: Material = Material()) : Shape {
   override fun equals(other: Any?): Boolean {

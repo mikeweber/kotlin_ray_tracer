@@ -1,4 +1,4 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
 class Intersections(override var size: Int = 0, private val elements: ArrayList<Intersection> = arrayListOf()) : Collection<Intersection> {
   fun add(intersections: Intersections): Intersections {

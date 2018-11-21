@@ -1,4 +1,4 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
 class StripePattern(
   val zig: Color                      = Color.WHITE,

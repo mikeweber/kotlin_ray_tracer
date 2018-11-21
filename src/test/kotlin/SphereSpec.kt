@@ -1,4 +1,4 @@
-import com.weberapps.rayTracer.*
+import com.weberapps.ray.tracer.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.assertEquals

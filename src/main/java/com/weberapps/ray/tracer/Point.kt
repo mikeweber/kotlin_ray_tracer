@@ -1,4 +1,4 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
 class Point : Tuple {
   constructor(x: Float, y: Float, z: Float) : super(x, y, z, 1.0f)

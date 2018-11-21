@@ -1,8 +1,8 @@
 import com.sun.management.VMOption
-import com.weberapps.rayTracer.Cube
-import com.weberapps.rayTracer.Point
-import com.weberapps.rayTracer.Ray
-import com.weberapps.rayTracer.Vector
+import com.weberapps.ray.tracer.Cube
+import com.weberapps.ray.tracer.Point
+import com.weberapps.ray.tracer.Ray
+import com.weberapps.ray.tracer.Vector
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.it

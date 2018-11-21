@@ -1,8 +1,8 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
 import java.io.*
 
-class PPMGenerator(private val canvas: Canvas) {
+class PPMGenerator(private val canvas: com.weberapps.ray.tracer.Canvas) {
   companion object {
     const val MAX_INTENSITY = 255
     const val MAX_LENGTH = 70

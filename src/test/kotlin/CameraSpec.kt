@@ -1,4 +1,4 @@
-import com.weberapps.rayTracer.*
+import com.weberapps.ray.tracer.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.*
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions.*
 object CameraSpec: Spek({
   context("initialization") {
     it("should be initialized with canvas sizes and field of view") {
-      val c = Camera(160, 120, TAU / 4)
+      val c = com.weberapps.ray.tracer.Camera(160, 120, TAU / 4)
       assertEquals(160, c.hsize)
       assertEquals(120, c.vsize)
       assertEquals(TAU / 4, c.fieldOfView)
@@ -14,20 +14,20 @@ object CameraSpec: Spek({
     }
 
     it("should calculate pixel size for a horizontal canvas") {
-      val c = Camera(200, 125)
+      val c = com.weberapps.ray.tracer.Camera(200, 125)
       assertEquals(0.01f, c.pixelSize, 0.001f)
     }
 
     it("should calculate the pixel size for a vertical canvas") {
-      val c = Camera(125, 200)
+      val c = com.weberapps.ray.tracer.Camera(125, 200)
       assertEquals(0.01f, c.pixelSize, 0.001f)
     }
   }
 
   context("constructing rays") {
-    var c = Camera(201, 101)
+    var c = com.weberapps.ray.tracer.Camera(201, 101)
     beforeEachTest {
-      c = Camera(201, 101)
+      c = com.weberapps.ray.tracer.Camera(201, 101)
     }
 
     it("should be able to pass through the center of the canvas") {
@@ -57,7 +57,7 @@ object CameraSpec: Spek({
       val from = Point(0f, 0f, -5f)
       val to = Point(0f, 0f, 0f)
       val up = Vector(0f, 1f, 0f)
-      val c = Camera(11, 11, transform = Transformation.viewTransform(from, to, up))
+      val c = com.weberapps.ray.tracer.Camera(11, 11, transform = Transformation.viewTransform(from, to, up))
       val image = c.render(w)
       assertEquals(Color(0.38066f, 0.47583f, 0.2855f), image.getPixel(5, 5))
     }

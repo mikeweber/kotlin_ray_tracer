@@ -1,7 +1,7 @@
-package com.weberapps.rayTracer
+package com.weberapps.ray.tracer
 
 fun drawClock() {
-  val c = Canvas(100, 100)
+  val c = com.weberapps.ray.tracer.Canvas(100, 100)
   val p = Point(0f, 0f, 1f)
   val white = Color(1f, 1f, 1f)
 
