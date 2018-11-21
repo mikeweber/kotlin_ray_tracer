@@ -1,4 +1,12 @@
-import com.weberapps.ray.tracer.*
+import com.weberapps.ray.tracer.intersection.Intersection
+import com.weberapps.ray.tracer.intersection.Intersections
+import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.math.Matrix
+import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Ray
+import com.weberapps.ray.tracer.math.Transformation
+import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.shape.Sphere
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -172,7 +180,8 @@ object SphereSpec : Spek({
       val c = Sphere(cTransform, cMaterial)
 
       val ray = Ray(Point(0f, 0f, -4f), Vector(0f, 0f, 1f))
-      val xs = Intersections(6,
+      val xs = Intersections(
+        6,
         arrayListOf(
           Intersection(2.00f, a),
           Intersection(2.75f, b),

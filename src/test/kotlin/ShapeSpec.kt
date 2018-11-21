@@ -1,4 +1,11 @@
 import com.weberapps.ray.tracer.*
+import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.math.Matrix
+import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Ray
+import com.weberapps.ray.tracer.math.Transformation
+import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.math.Color
 import junit.framework.TestCase.assertEquals
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*

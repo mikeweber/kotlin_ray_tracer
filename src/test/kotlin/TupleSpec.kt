@@ -1,7 +1,7 @@
-import com.weberapps.ray.tracer.Color
-import com.weberapps.ray.tracer.Point
-import com.weberapps.ray.tracer.Tuple
-import com.weberapps.ray.tracer.Vector
+import com.weberapps.ray.tracer.math.Color
+import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Tuple
+import com.weberapps.ray.tracer.math.Vector
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -102,8 +102,8 @@ object TupleSpec: Spek ({
     val a1 = Vector(1f, 2f, 3f)
     val a2 = Vector(2f, 3f, 4f)
 
-    assertEquals(Vector(-1f,  2f, -1f), a1.cross(a2))
-    assertEquals(Vector( 1f, -2f,  1f), a2.cross(a1))
+    assertEquals(Vector(-1f, 2f, -1f), a1.cross(a2))
+    assertEquals(Vector(1f, -2f, 1f), a2.cross(a1))
   }
 
   it("should be able to create a color") {
@@ -133,8 +133,8 @@ object TupleSpec: Spek ({
   }
 
   it("should be able to multiply a color by a color") {
-    val c1 = Color(  1f, 0.2f, 0.4f)
-    val c2 = Color(0.9f,   1f, 0.1f)
+    val c1 = Color(1f, 0.2f, 0.4f)
+    val c2 = Color(0.9f, 1f, 0.1f)
     assertEquals(Color(0.9f, 0.2f, 0.04f), c1 * c2)
     assertEquals(Color(0.9f, 0.2f, 0.04f), c2 * c1)
   }

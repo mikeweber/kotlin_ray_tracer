@@ -1,7 +1,13 @@
 package com.weberapps.ray.tracer
 
+import com.weberapps.ray.tracer.intersection.Intersection
+import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.math.Color
+import com.weberapps.ray.tracer.math.Light
+import com.weberapps.ray.tracer.renderer.World
+
 class TestMaterial(
-  color: Color           = Color.WHITE,
+  color: Color = Color.WHITE,
   ambient: Float         = 0.1f,
   diffuse: Float         = 0.9f,
   specular: Float        = 0.9f,

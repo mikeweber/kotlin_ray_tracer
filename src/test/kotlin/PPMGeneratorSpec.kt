@@ -1,13 +1,13 @@
-import com.weberapps.ray.tracer.Canvas
-import com.weberapps.ray.tracer.Color
-import com.weberapps.ray.tracer.PPMGenerator
+import com.weberapps.ray.tracer.renderer.Canvas
+import com.weberapps.ray.tracer.math.Color
+import com.weberapps.ray.tracer.renderer.PPMGenerator
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.assertEquals
 
 object PPMGeneratorSpec : Spek({
   it("should generate a header") {
-    val c = com.weberapps.ray.tracer.Canvas(5, 3)
+    val c = Canvas(5, 3)
     val result = PPMGenerator(c).generate().toString().split("\n")
     assertEquals("P3", result[0])
     assertEquals("5 3", result[1])
@@ -19,7 +19,7 @@ object PPMGeneratorSpec : Spek({
     val green = Color(0f, 1f, 0f)
     val blue = Color(0f, 0f, 1f)
     val expected = "P3\n5 3\n255\n0 0 0 255 0 0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 255 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n"
-    val c = com.weberapps.ray.tracer.Canvas(5, 3)
+    val c = Canvas(5, 3)
 
     c.setPixel(1, 0, red)
     c.setPixel(2, 1, green)

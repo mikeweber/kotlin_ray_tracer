@@ -1,4 +1,12 @@
-import com.weberapps.ray.tracer.*
+import com.weberapps.ray.tracer.intersection.Intersection
+import com.weberapps.ray.tracer.intersection.Intersections
+import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Ray
+import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.renderer.World
+import com.weberapps.ray.tracer.shape.Plane
+import com.weberapps.ray.tracer.shape.Sphere
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.*
@@ -107,7 +115,13 @@ object IntersectionSpec : Spek({
     it("should return 1 when total internal reflection") {
       val f = (Math.sqrt(2.0) / 2.0).toFloat()
       val r = Ray(Point(0f, 0f, f), Vector(0f, 1f, 0f))
-      val xs = Intersections(2, arrayListOf(Intersection(-f, sphere), Intersection(f, sphere)))
+      val xs = Intersections(
+        2,
+        arrayListOf(
+          Intersection(-f, sphere),
+          Intersection(f, sphere)
+        )
+      )
 
       val comps = xs[1].prepareHit(r, xs)
       assertTrue(comps.n1 > 1f)
@@ -117,7 +131,13 @@ object IntersectionSpec : Spek({
 
     it("should have low reflectance when the ray is a perpendicular intersection") {
       val r = Ray(Point(0f, 0f, 0f), Vector(0f, 1f, 0f))
-      val xs = Intersections(2, arrayListOf(Intersection(-1f, sphere), Intersection(1f, sphere)))
+      val xs = Intersections(
+        2,
+        arrayListOf(
+          Intersection(-1f, sphere),
+          Intersection(1f, sphere)
+        )
+      )
 
       val comps = xs[1].prepareHit(r, xs)
       val reflectance = comps.schlick()
@@ -126,7 +146,10 @@ object IntersectionSpec : Spek({
 
     it("should be reflective when the ray is at a shallow intersection") {
       val r = Ray(Point(0f, 0.99f, -2f), Vector(0f, 0f, 1f))
-      val xs = Intersections(2, arrayListOf(Intersection(1.8589f, sphere)))
+      val xs = Intersections(
+        2,
+        arrayListOf(Intersection(1.8589f, sphere))
+      )
 
       val comps = xs[0].prepareHit(r, xs)
       val reflectance = comps.schlick()
