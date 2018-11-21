@@ -1,6 +1,10 @@
 package com.weberapps.ray.tracer.intersection
 
 class Intersections(override var size: Int = 0, private val elements: ArrayList<Intersection> = arrayListOf()) : Collection<Intersection> {
+  constructor(vararg intersections: Intersection) : this(0) {
+    for (i in intersections) add(i)
+  }
+
   fun add(intersections: Intersections): Intersections {
     for (i in intersections) { add(i) }
 
