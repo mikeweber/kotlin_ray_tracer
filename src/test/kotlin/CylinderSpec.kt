@@ -47,12 +47,28 @@ object CylinderSpec: Spek ({
   }
 
   context("when calculating normal") {
-    it("should return the point with 0 at the y component") {
+    it("should return the point perpendicular to the y axis") {
       val examples = arrayListOf(
         Pair(Point( 1f,  0f,  0f), Vector( 1f, 0f,  0f)),
         Pair(Point( 0f,  5f, -1f), Vector( 0f, 0f, -1f)),
         Pair(Point( 0f, -2f,  1f), Vector( 0f, 0f,  1f)),
         Pair(Point(-1f,  1f,  0f), Vector(-1f, 0f,  0f))
+      )
+
+      for ((point, normal) in examples) {
+        assertEquals(normal, cyl.localNormal(point))
+      }
+    }
+
+    it("should return a vector pointing in the y direction") {
+      val cyl = Cylinder(minimum = 1f, maximum = 2f, closed = true)
+      val examples = arrayListOf(
+        Pair(Point(  0f, 1f,   0f), Vector(0f, -1f, 0f)),
+        Pair(Point(0.5f, 1f,   0f), Vector(0f, -1f, 0f)),
+        Pair(Point(  0f, 1f, 0.5f), Vector(0f, -1f, 0f)),
+        Pair(Point(  0f, 2f,   0f), Vector(0f,  1f, 0f)),
+        Pair(Point(0.5f, 2f,   0f), Vector(0f,  1f, 0f)),
+        Pair(Point(  0f, 2f, 0.5f), Vector(0f,  1f, 0f))
       )
 
       for ((point, normal) in examples) {

@@ -75,6 +75,14 @@ class Cylinder(
   }
 
   override fun localNormal(localPoint: Point): Vector {
-    return Vector(localPoint.x, 0f, localPoint.z)
+    val dist = localPoint.x * localPoint.x + localPoint.z * localPoint.z
+
+    return if (dist < 1f && localPoint.y >= maximum - EPSILON) {
+      Vector(0f, 1f, 0f)
+    } else if (dist < 1f && localPoint.y <= minimum + EPSILON) {
+      Vector(0f, -1f, 0f)
+    } else {
+      Vector(localPoint.x, 0f, localPoint.z)
+    }
   }
 }
