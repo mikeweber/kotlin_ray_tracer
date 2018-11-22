@@ -16,4 +16,7 @@ class Ray(val origin: Point, val direction: Vector) {
       transformation * direction
     )
   }
+  override fun toString(): String {
+    return "Ray($origin -> $direction)"
+  }
 }

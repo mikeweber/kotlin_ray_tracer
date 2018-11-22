@@ -7,6 +7,9 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.it
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import java.lang.Float.NEGATIVE_INFINITY
+import java.lang.Float.POSITIVE_INFINITY
 
 object CylinderSpec: Spek ({
   val cyl = Cylinder()
@@ -54,6 +57,53 @@ object CylinderSpec: Spek ({
 
       for ((point, normal) in examples) {
         assertEquals(normal, cyl.localNormal(point))
+      }
+    }
+  }
+
+  context("truncating cylinders") {
+    it("should have no minimum or maximum by default") {
+      assertEquals(POSITIVE_INFINITY, cyl.maximum)
+      assertEquals(NEGATIVE_INFINITY, cyl.minimum)
+    }
+
+    it("should be able to set a minimum and maximum") {
+      val cyl = Cylinder(maximum = 2f, minimum = 1f)
+      val examples = arrayListOf(
+        Pair(Ray(Point(0f, 1.5f,  0f), Vector(0.1f, 1f, 0f).normalize()), 0),
+        Pair(Ray(Point(0f,   3f, -5f), Vector(  0f, 0f, 1f)), 0),
+        Pair(Ray(Point(0f,   0f, -5f), Vector(  0f, 0f, 1f)), 0),
+        Pair(Ray(Point(0f,   2f, -5f), Vector(  0f, 0f, 1f)), 0),
+        Pair(Ray(Point(0f,   1f, -5f), Vector(  0f, 0f, 1f)), 0),
+        Pair(Ray(Point(0f, 1.5f, -2f), Vector(  0f, 0f, 1f)), 2)
+      )
+
+      for ((ray, count) in examples) {
+        val xs = cyl.localIntersect(ray)
+        assertEquals(count, xs.size)
+      }
+    }
+
+    it("should be able to be capped") {
+      val cyl = Cylinder(maximum = 1f, minimum = 0f, closed = true)
+      assertTrue(cyl.closed)
+    }
+
+    it("should intersect the capped cylinder") {
+      val cyl = Cylinder(maximum = 2f, minimum = 1f, closed = true)
+      val examples = arrayListOf(
+        Pair(Ray(Point(0f,  3f,  0f), Vector(0f, -1f, 0f).normalize()), 2),
+        Pair(Ray(Point(0f,  3f, -2f), Vector(0f, -1f, 2f).normalize()), 2),
+        Pair(Ray(Point(0f,  3.99f, -2f), Vector(0f, -1f, 1f).normalize()), 2), // corner case
+        Pair(Ray(Point(0f,  0f, -2f), Vector(0f,  1f, 2f).normalize()), 2),
+        Pair(Ray(Point(0f, -0.99f, -2f), Vector(0f,  1f, 1f).normalize()), 2)  // corner case
+      )
+
+      for ((ray, count) in examples) {
+        println("testing ray $ray")
+        val xs = cyl.localIntersect(ray)
+        if (count != xs.size) println(ray.origin + ray.direction * xs[0].t)
+        assertEquals(count, xs.size)
       }
     }
   }

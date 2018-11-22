@@ -1,12 +1,14 @@
 package com.weberapps.ray.tracer.intersection
 
+import com.weberapps.ray.tracer.shape.Shape
+
 class Intersections(override var size: Int = 0, private val elements: ArrayList<Intersection> = arrayListOf()) : Collection<Intersection> {
   constructor(vararg intersections: Intersection) : this(0) {
     for (i in intersections) add(i)
   }
 
   fun add(intersections: Intersections): Intersections {
-    for (i in intersections) { add(i) }
+    for (i in intersections) add(i)
 
     return this
   }
@@ -17,6 +19,10 @@ class Intersections(override var size: Int = 0, private val elements: ArrayList<
     elements.sort()
 
     return this
+  }
+
+  fun add(t: Float, shape: Shape): Intersections {
+    return add(Intersection(t, shape))
   }
 
   operator fun get(index: Int): Intersection {
