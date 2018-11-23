@@ -116,9 +116,7 @@ object CylinderSpec: Spek ({
       )
 
       for ((ray, count) in examples) {
-        println("testing ray $ray")
         val xs = cyl.localIntersect(ray)
-        if (count != xs.size) println(ray.origin + ray.direction * xs[0].t)
         assertEquals(count, xs.size)
       }
     }
