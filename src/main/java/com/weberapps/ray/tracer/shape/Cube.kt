@@ -10,7 +10,11 @@ import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.material.Material
 import java.lang.Float.POSITIVE_INFINITY
 
-class Cube(override var transform: Matrix = Matrix.eye(4), override var material: Material = Material()) :
+class Cube(
+  override var transform: Matrix = Matrix.eye(4),
+  override var material: Material = Material(),
+  override var parent: Shape? = null
+) :
   Shape {
   override fun localIntersect(localRay: Ray): Intersections {
     val (xtmin, xtmax) = checkAxis(localRay.origin.x, localRay.direction.x)

@@ -8,7 +8,11 @@ import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.material.Material
 
-class Sphere(override var transform: Matrix = Matrix.eye(4), override var material: Material = Material()) :
+class Sphere(
+  override var transform: Matrix = Matrix.eye(4),
+  override var material: Material = Material(),
+  override var parent: Shape? = null
+) :
   Shape {
   override fun equals(other: Any?): Boolean {
     if (other !is Shape) return false

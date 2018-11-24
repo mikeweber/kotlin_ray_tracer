@@ -10,6 +10,7 @@ import com.weberapps.ray.tracer.material.Material
 interface Shape {
   var transform: Matrix
   var material: Material
+  var parent: Shape?
 
   fun intersect(ray: Ray): Intersections {
     return localIntersect(ray.transform(transform.inverse()))
@@ -18,12 +19,20 @@ interface Shape {
   fun localIntersect(localRay: Ray): Intersections
 
   fun normal(point: Point): Vector {
-    val localPoint  = Point(transform.inverse() * point)
-    val localNormal = localNormal(localPoint)
-    val worldNormal  = Vector(transform.inverse().transpose() * localNormal)
-
-    return worldNormal.normalize()
+    return normalToWorld(localNormal(worldToObject(point)))
   }
 
   fun localNormal(localPoint: Point): Vector
+
+  fun worldToObject(point: Point): Point {
+    val localPoint = parent?.worldToObject(point) ?: point
+
+    return Point(transform.inverse() * localPoint)
+  }
+
+  fun normalToWorld(vector: Vector): Vector {
+    var normal = Vector(transform.inverse().transpose() * vector).normalize()
+
+    return parent?.normalToWorld(normal) ?: normal
+  }
 }

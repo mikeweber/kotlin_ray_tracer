@@ -9,9 +9,9 @@ import com.weberapps.ray.tracer.shape.Shape
 import com.weberapps.ray.tracer.renderer.World
 
 class StripePattern(
-  val zig: Color = Color.WHITE,
-  val zag: Color = Color.BLACK,
-  val transform: Matrix = Matrix.eye(4),
+  val zig: Color                      = Color.WHITE,
+  val zag: Color                      = Color.BLACK,
+  override val transform: Matrix      = Matrix.eye(4),
   override val ambient: Float         = 0.1f,
   override val diffuse: Float         = 0.9f,
   override val specular: Float        = 0.9f,
@@ -19,14 +19,14 @@ class StripePattern(
   override val reflective: Float      = 0f,
   override val transparency: Float    = 0f,
   override val refractiveIndex: Float = VACUUM
-): Material(zig, ambient, diffuse, specular, shininess, reflective) {
+): Material(zig, transform, ambient, diffuse, specular, shininess, reflective) {
   override fun surfaceColor(hit: Intersection, light: Light, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color {
-    val effectiveColor= stripeAtObject(hit.shape, hit.point) * light.intensity
+    val effectiveColor = stripeAtObject(hit.shape, hit.point) * light.intensity
     return calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
   }
 
   fun stripeAtObject(shape: Shape, worldSpacePoint: Point): Color {
-    val objectSpacePoint = shape.transform.inverse() * worldSpacePoint
+    val objectSpacePoint = shape.worldToObject(worldSpacePoint)
     val patternSpacePoint = Point(transform.inverse() * objectSpacePoint)
 
     return stripeAt(patternSpacePoint)

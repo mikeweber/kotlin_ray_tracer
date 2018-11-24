@@ -11,6 +11,8 @@ import com.weberapps.ray.tracer.shape.Shape
 class TestShape : Shape {
   override var transform: Matrix = Matrix.eye(4)
   override var material: Material = Material()
+  override var parent: Shape? = null
+
   var savedRay: Ray =
     Ray(Point(0f, 0f, 0f), Vector(0f, 0f, 1f))
 

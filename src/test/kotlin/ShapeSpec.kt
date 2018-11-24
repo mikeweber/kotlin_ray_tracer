@@ -6,9 +6,11 @@ import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Transformation
 import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.math.Color
+import com.weberapps.ray.tracer.shape.Group
 import junit.framework.TestCase.assertEquals
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
+import org.junit.jupiter.api.Assertions.assertNull
 
 object ShapeSpec: Spek({
   context("TestShape") {
@@ -35,6 +37,10 @@ object ShapeSpec: Spek({
       val material = Material(Color.BLUE)
       shape.material = material
       assertEquals(material, shape.material)
+    }
+
+    it("should not have a parent object by default") {
+      assertNull(shape.parent)
     }
 
     it("should save the transformed ray") {

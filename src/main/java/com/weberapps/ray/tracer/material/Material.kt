@@ -1,18 +1,15 @@
 package com.weberapps.ray.tracer.material
 
-import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.constants.EPSILON
 import com.weberapps.ray.tracer.intersection.Intersection
-import com.weberapps.ray.tracer.math.Light
-import com.weberapps.ray.tracer.math.Point
-import com.weberapps.ray.tracer.math.Ray
-import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.math.*
 import com.weberapps.ray.tracer.renderer.World
 import java.lang.Math.abs
 import kotlin.math.pow
 
 open class Material(
-  open val color: Color = Color.WHITE,
+  open val color: Color           = Color.WHITE,
+  open val transform: Matrix      = Matrix.eye(4),
   open val ambient: Float         = 0.1f,
   open val diffuse: Float         = 0.9f,
   open val specular: Float        = 0.9f,
