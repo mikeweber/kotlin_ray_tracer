@@ -20,7 +20,7 @@ import java.time.Instant
 class CubedRoom(val filename: String, val hsize: Int, val vsize: Int) {
   init {
     val t0 = Instant.now()
-    saveCanvas(render(initWorld()))
+    saveCanvas(render(initWorld(), Point(0f, 0f, -4f), Point(0f, 0f, 0f)))
     println("Finished in ${Duration.between(t0, Instant.now())}")
   }
 
@@ -34,18 +34,19 @@ class CubedRoom(val filename: String, val hsize: Int, val vsize: Int) {
   }
 
   fun initWorld(): World {
-    val cube1 = Cube(
-      transform = Transformation.scale(2f, 1f, 2f) *
-        Transformation.rotateY(TAU / 8),
-      material = CheckeredPattern(reflective = 0.4f, diffuse = 1f, shininess = 100)
+    val floorAndCeiling = Cube(
+      transform = Transformation.translation(0f, 0f, -3f) *
+        Transformation.scale(2f, 1f, 4f),
+      material = CheckeredPattern(reflective = 0.4f, diffuse = 1f, shininess = 100, transform = Transformation.scale(0.2f, 0.4f, 0.1f))
     )
-    val cube2 = Cube(
-      transform = Transformation.scale(1f, 2f, 1f),
+    val walls = Cube(
+      transform = Transformation.translation(0f, 0f, -4f) *
+        Transformation.scale(1f, 2f, 4f),
       material = Material(color = Color(0.3f, 0.3f, 0.6f))
     )
-    val light = Light(Point(Math.sqrt(2.0).toFloat() - 0.08f, 0.92f, Math.sqrt(2.0).toFloat() - 0.08f))
+    val light = Light(Point(0.5f, 0.7f, -4f))
 
-    return World(arrayListOf(cube1, cube2), arrayListOf(light))
+    return World(arrayListOf(walls, floorAndCeiling), arrayListOf(light))
   }
 
   fun render(
