@@ -22,7 +22,7 @@ import java.time.Instant
 class CubedRoom(val filename: String, val hsize: Int, val vsize: Int) {
   init {
     val t0 = Instant.now()
-    saveCanvas(render(initWorld(), Point(0f, 0f, -4f), Point(0f, 0f, 0f)))
+    saveCanvas(render(initWorld(), Point(0f, 0f, -2.5f), Point(0f, 0f, 0f)))
     println("Finished in ${Duration.between(t0, Instant.now())}")
   }
 
@@ -53,16 +53,16 @@ class CubedRoom(val filename: String, val hsize: Int, val vsize: Int) {
       closed = true,
       minimum = -1f,
       maximum = 1f,
-      material = StripePattern(Color(0.3f, 0.7f, 0.3f), Color(0.3f, 0.5f, 0.3f), transform = Transformation.rotateZ(-TAU / 14), reflective = 0.3f)
+      material = StripePattern(Color(0.3f, 0.7f, 0.3f), Color(0.3f, 0.5f, 0.3f), transform = Transformation.rotateZ(-TAU / 14) * Transformation.scale(0.3f, 1f, 1f), reflective = 0.3f)
     )
     val column2 = Cylinder(
       transform = Transformation.translation(-0.7f, 0f, 0.7f) *
-        Transformation.rotateY(TAU / 4) *
+        Transformation.rotateY(-TAU / 8) *
         Transformation.scale(0.1f, 1f, 0.1f),
       closed = true,
       minimum = -1f,
       maximum = 1f,
-      material = StripePattern(Color(0.3f, 0.7f, 0.3f), Color(0.3f, 0.5f, 0.3f), transform = Transformation.rotateZ(-TAU / 14), reflective = 0.3f)
+      material = StripePattern(Color(0.3f, 0.7f, 0.3f), Color(0.3f, 0.5f, 0.3f), transform = Transformation.rotateZ(-TAU / 8) * Transformation.scale(0.3f, 1f, 1f), reflective = 0.3f)
     )
     val column3 = Cylinder(
       transform = Transformation.translation(-0.7f, 0f, -0.7f) *
@@ -72,9 +72,17 @@ class CubedRoom(val filename: String, val hsize: Int, val vsize: Int) {
       maximum = 1f,
       material = Material(transparency = 1f, reflective = 0.4f, refractiveIndex = Material.DIAMOND, specular = 1f, shininess = 500, diffuse = 0.1f, ambient = 0f)
     )
+    val column4 = Cylinder(
+      transform = Transformation.translation(0.7f, 0f, -0.7f) *
+        Transformation.scale(0.1f, 1f, 0.1f),
+      closed = true,
+      minimum = -1f,
+      maximum = 1f,
+      material = Material(transparency = 1f, reflective = 0.4f, refractiveIndex = Material.DIAMOND, specular = 1f, shininess = 500, diffuse = 0.1f, ambient = 0f)
+    )
     val light = Light(Point(0.5f, 0.7f, -4f))
 
-    return World(arrayListOf(floorAndCeiling, walls, column1, column2, column3), arrayListOf(light))
+    return World(arrayListOf(floorAndCeiling, walls, column1, column2, column3, column4), arrayListOf(light))
   }
 
   fun render(
