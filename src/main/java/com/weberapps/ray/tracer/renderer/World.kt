@@ -30,8 +30,9 @@ class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources
 
   fun colorAt(ray: Ray, refractionsLeft: Int = 5): Color {
     if (refractionsLeft <= 0) return background
-    val hit = intersect(ray).hit() ?: return background
-    val preparedHit = hit.prepareHit(ray)
+    val intersections = intersect(ray)
+    val hit = intersections.hit() ?: return background
+    val preparedHit = hit.prepareHit(ray, intersections)
 
     return shadeHit(preparedHit, refractionsLeft)
   }
