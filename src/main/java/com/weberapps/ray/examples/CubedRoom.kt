@@ -3,6 +3,7 @@ package com.weberapps.ray.examples
 import com.weberapps.ray.tracer.constants.TAU
 import com.weberapps.ray.tracer.material.CheckeredPattern
 import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.material.StripePattern
 import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.math.Light
 import com.weberapps.ray.tracer.math.Point
@@ -13,6 +14,7 @@ import com.weberapps.ray.tracer.renderer.Canvas
 import com.weberapps.ray.tracer.renderer.PPMGenerator
 import com.weberapps.ray.tracer.renderer.World
 import com.weberapps.ray.tracer.shape.Cube
+import com.weberapps.ray.tracer.shape.Cylinder
 import java.nio.file.Paths
 import java.time.Duration
 import java.time.Instant
@@ -36,17 +38,43 @@ class CubedRoom(val filename: String, val hsize: Int, val vsize: Int) {
   fun initWorld(): World {
     val floorAndCeiling = Cube(
       transform = Transformation.translation(0f, 0f, -3f) *
-        Transformation.scale(2f, 1f, 4f),
-      material = CheckeredPattern(reflective = 0.4f, diffuse = 1f, shininess = 100, transform = Transformation.scale(0.2f, 0.4f, 0.1f))
+        Transformation.scale(2f, 1f, 5f),
+      material = CheckeredPattern(reflective = 0.4f, diffuse = 1f, transform = Transformation.scale(0.25f, 0.5f, 0.1f))
     )
     val walls = Cube(
-      transform = Transformation.translation(0f, 0f, -4f) *
+      transform = Transformation.translation(0f, 0f, -3f) *
         Transformation.scale(1f, 2f, 4f),
-      material = Material(color = Color(0.3f, 0.3f, 0.6f))
+      material = Material(color = Color(0.3f, 0.3f, 0.6f), shininess = 1000, diffuse = 0.5f, ambient = 0.3f)
+    )
+    val column1 = Cylinder(
+      transform = Transformation.translation(0.7f, 0f, 0.7f) *
+        Transformation.rotateY(TAU / 8) *
+        Transformation.scale(0.1f, 1f, 0.1f),
+      closed = true,
+      minimum = -1f,
+      maximum = 1f,
+      material = StripePattern(Color(0.3f, 0.7f, 0.3f), Color(0.3f, 0.5f, 0.3f), transform = Transformation.rotateZ(-TAU / 14), reflective = 0.3f)
+    )
+    val column2 = Cylinder(
+      transform = Transformation.translation(-0.7f, 0f, 0.7f) *
+        Transformation.rotateY(TAU / 4) *
+        Transformation.scale(0.1f, 1f, 0.1f),
+      closed = true,
+      minimum = -1f,
+      maximum = 1f,
+      material = StripePattern(Color(0.3f, 0.7f, 0.3f), Color(0.3f, 0.5f, 0.3f), transform = Transformation.rotateZ(-TAU / 14), reflective = 0.3f)
+    )
+    val column3 = Cylinder(
+      transform = Transformation.translation(-0.7f, 0f, -0.7f) *
+        Transformation.scale(0.1f, 1f, 0.1f),
+      closed = true,
+      minimum = -1f,
+      maximum = 1f,
+      material = Material(transparency = 1f, reflective = 0.4f, refractiveIndex = Material.DIAMOND, specular = 1f, shininess = 500, diffuse = 0.1f, ambient = 0f)
     )
     val light = Light(Point(0.5f, 0.7f, -4f))
 
-    return World(arrayListOf(walls, floorAndCeiling), arrayListOf(light))
+    return World(arrayListOf(floorAndCeiling, walls, column1, column2, column3), arrayListOf(light))
   }
 
   fun render(

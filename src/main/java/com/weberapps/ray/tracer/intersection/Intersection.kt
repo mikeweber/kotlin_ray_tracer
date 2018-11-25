@@ -2,6 +2,7 @@ package com.weberapps.ray.tracer.intersection
 
 import com.weberapps.ray.tracer.math.Light
 import com.weberapps.ray.tracer.constants.EPSILON
+import com.weberapps.ray.tracer.material.Material
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Vector
@@ -94,7 +95,7 @@ class Intersection(
     return (r0 + (1.0 - r0) * Math.pow((1 - cos), 5.0)).toFloat()
   }
 
-  private fun determineRefractiveIndices(intersections: Intersections, defaultRefractiveIndex: Float = 1f): Pair<Float, Float> {
+  private fun determineRefractiveIndices(intersections: Intersections, defaultRefractiveIndex: Float = Material.AIR): Pair<Float, Float> {
     val containers = ArrayList<Shape>()
     var newN1 = n1
     var newN2 = n2

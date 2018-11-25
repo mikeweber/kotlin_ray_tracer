@@ -185,7 +185,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
 
     val glassTransform1 = Transformation.translation(1f, 1f, -2f) *
       Transformation.scale(0.5f, 0.5f, 0.5f)
-    val glass = Material(refractiveIndex = Material.GLASS)
+    val glass = Material(refractiveIndex = Material.GLASS, reflective = 0.8f, transparency = 1f, diffuse = 0.05f, specular = 0.1f)
     val glassSphere1 = Sphere(transform = glassTransform1, material = glass)
 
     val mirrorTransform = Transformation.translation(-1.0f, 0.8f, 4.7f) *
@@ -193,7 +193,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
     val mirrorSphere = Sphere(transform = mirrorTransform, material = mirror)
 
     return World(
-      arrayListOf(middleSphere, floor, rightSphere, leftSphere, farWall),
+      arrayListOf(middleSphere, floor, leftSphere, glassSphere1, rightWall, leftWall),
       arrayListOf(
         Light(Point(-10f, 10f, -10f))
         // Light(Point( 10f, 10f, -10f), Color(0.05f, 0.05f, 0.05f))
