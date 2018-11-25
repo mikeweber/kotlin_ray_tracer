@@ -1,6 +1,6 @@
-import com.weberapps.rayTracer.Canvas
-import com.weberapps.rayTracer.Color
-import com.weberapps.rayTracer.PPMGenerator
+import com.weberapps.ray.tracer.renderer.Canvas
+import com.weberapps.ray.tracer.math.Color
+import com.weberapps.ray.tracer.renderer.PPMGenerator
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.assertEquals

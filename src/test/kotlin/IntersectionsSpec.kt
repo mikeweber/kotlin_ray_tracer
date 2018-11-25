@@ -1,4 +1,6 @@
-import com.weberapps.rayTracer.*
+import com.weberapps.ray.tracer.intersection.Intersection
+import com.weberapps.ray.tracer.intersection.Intersections
+import com.weberapps.ray.tracer.shape.Sphere
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.assertEquals

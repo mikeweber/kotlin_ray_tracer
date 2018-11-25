@@ -1,4 +1,11 @@
-import com.weberapps.rayTracer.*
+import com.weberapps.ray.tracer.constants.TAU
+import com.weberapps.ray.tracer.math.Matrix
+import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Transformation
+import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.renderer.Camera
+import com.weberapps.ray.tracer.math.Color
+import com.weberapps.ray.tracer.renderer.World
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.*

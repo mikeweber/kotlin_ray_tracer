@@ -1,4 +1,7 @@
-import com.weberapps.rayTracer.*
+import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Ray
+import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.shape.Plane
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.assertEquals

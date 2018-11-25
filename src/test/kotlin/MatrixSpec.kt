@@ -1,12 +1,13 @@
-import com.weberapps.rayTracer.Matrix
-import com.weberapps.rayTracer.Tuple
+import com.weberapps.ray.tracer.math.Matrix
+import com.weberapps.ray.tracer.math.Tuple
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.*
 
 object MatrixSpec: Spek({
   it("can initialize with a list of rows and columns") {
-    val m = Matrix(4, 4,
+    val m = Matrix(
+      4, 4,
       arrayOf(
         floatArrayOf(1.0f, 2.0f, 3.0f, 4.0f),
         floatArrayOf(5.5f, 6.5f, 7.5f, 8.5f),
@@ -41,7 +42,8 @@ object MatrixSpec: Spek({
   }
 
   it("can multiply matrices") {
-    val a = Matrix(4, 4,
+    val a = Matrix(
+      4, 4,
       arrayOf(
         floatArrayOf(1f, 2f, 3f, 4f),
         floatArrayOf(2f, 3f, 4f, 5f),
@@ -49,17 +51,19 @@ object MatrixSpec: Spek({
         floatArrayOf(4f, 5f, 6f, 7f)
       )
     )
-    val b = Matrix(4, 4,
+    val b = Matrix(
+      4, 4,
       arrayOf(
-        floatArrayOf(0f, 1f,  2f,  4f),
-        floatArrayOf(1f, 2f,  4f,  8f),
-        floatArrayOf(2f, 4f,  8f, 16f),
+        floatArrayOf(0f, 1f, 2f, 4f),
+        floatArrayOf(1f, 2f, 4f, 8f),
+        floatArrayOf(2f, 4f, 8f, 16f),
         floatArrayOf(4f, 8f, 16f, 32f)
       )
     )
-    val expected = Matrix(4, 4,
+    val expected = Matrix(
+      4, 4,
       arrayOf(
-        floatArrayOf(24f, 49f,  98f, 196f),
+        floatArrayOf(24f, 49f, 98f, 196f),
         floatArrayOf(31f, 64f, 128f, 256f),
         floatArrayOf(38f, 79f, 158f, 316f),
         floatArrayOf(45f, 94f, 188f, 376f)
@@ -70,7 +74,8 @@ object MatrixSpec: Spek({
   }
 
   it("can multiply a matrix and a tuple") {
-    val matrix = Matrix(4, 4,
+    val matrix = Matrix(
+      4, 4,
       arrayOf(
         floatArrayOf(1f, 2f, 3f, 4f),
         floatArrayOf(2f, 4f, 4f, 2f),
@@ -85,7 +90,8 @@ object MatrixSpec: Spek({
   }
 
   it("can multiply by the identity matrix") {
-    val m = Matrix(4, 4,
+    val m = Matrix(
+      4, 4,
       arrayOf(
         floatArrayOf(0f, 1f, 2f, 4f),
         floatArrayOf(1f, 2f, 4f, 8f),
@@ -104,7 +110,8 @@ object MatrixSpec: Spek({
   }
 
   it("can transpose a matrix") {
-    val m = Matrix(4, 4,
+    val m = Matrix(
+      4, 4,
       arrayOf(
         floatArrayOf(0f, 9f, 3f, 0f),
         floatArrayOf(9f, 8f, 0f, 8f),
@@ -112,7 +119,8 @@ object MatrixSpec: Spek({
         floatArrayOf(0f, 0f, 5f, 8f)
       )
     )
-    val expected = Matrix(4, 4,
+    val expected = Matrix(
+      4, 4,
       arrayOf(
         floatArrayOf(0f, 9f, 1f, 0f),
         floatArrayOf(9f, 8f, 8f, 0f),
@@ -125,12 +133,14 @@ object MatrixSpec: Spek({
 
   context("determinant") {
     it("is zero when the matrix is too small") {
-      val m1 = Matrix(1, 4,
+      val m1 = Matrix(
+        1, 4,
         arrayOf(
           floatArrayOf(1f, 5f, 4f, 3f)
         )
       )
-      val m2 = Matrix(4, 1,
+      val m2 = Matrix(
+        4, 1,
         arrayOf(
           floatArrayOf(1f),
           floatArrayOf(3f),
@@ -145,9 +155,10 @@ object MatrixSpec: Spek({
 
     it("calculates the determinant") {
 
-      val m = Matrix(2, 2,
+      val m = Matrix(
+        2, 2,
         arrayOf(
-          floatArrayOf( 1f, 5f),
+          floatArrayOf(1f, 5f),
           floatArrayOf(-3f, 2f)
         )
       )
@@ -155,11 +166,12 @@ object MatrixSpec: Spek({
     }
 
     it("can calculate the determinant of a 3x3 matrix") {
-      val m = Matrix(3, 3,
+      val m = Matrix(
+        3, 3,
         arrayOf(
-          floatArrayOf( 1f, 2f,  6f),
+          floatArrayOf(1f, 2f, 6f),
           floatArrayOf(-5f, 8f, -4f),
-          floatArrayOf( 2f, 6f,  4f)
+          floatArrayOf(2f, 6f, 4f)
         )
       )
       assertEquals(  56f, m.cofactor(0, 0))
@@ -169,12 +181,13 @@ object MatrixSpec: Spek({
     }
 
     it("can calculate the determinant of a 4x4 matrix") {
-      val m = Matrix(4, 4,
+      val m = Matrix(
+        4, 4,
         arrayOf(
-          floatArrayOf(-2f, -8f,  3f,  5f),
-          floatArrayOf(-3f,  1f,  7f,  3f),
-          floatArrayOf( 1f,  2f, -9f,  6f),
-          floatArrayOf(-6f,  7f,  7f, -9f)
+          floatArrayOf(-2f, -8f, 3f, 5f),
+          floatArrayOf(-3f, 1f, 7f, 3f),
+          floatArrayOf(1f, 2f, -9f, 6f),
+          floatArrayOf(-6f, 7f, 7f, -9f)
         )
       )
       assertEquals(  690f, m.cofactor(0, 0))
@@ -186,17 +199,19 @@ object MatrixSpec: Spek({
   }
 
   context("submatrix") {
-    val m = Matrix(3, 3,
+    val m = Matrix(
+      3, 3,
       arrayOf(
-        floatArrayOf( 1f, 5f,  0f),
-        floatArrayOf(-3f, 2f,  7f),
-        floatArrayOf( 0f, 6f, -3f)
+        floatArrayOf(1f, 5f, 0f),
+        floatArrayOf(-3f, 2f, 7f),
+        floatArrayOf(0f, 6f, -3f)
       )
     )
-    val expected = Matrix(2, 2,
+    val expected = Matrix(
+      2, 2,
       arrayOf(
         floatArrayOf(-3f, 2f),
-        floatArrayOf( 0f, 6f)
+        floatArrayOf(0f, 6f)
       )
     )
 
@@ -205,16 +220,18 @@ object MatrixSpec: Spek({
   }
 
   context("minor") {
-    val m = Matrix(3, 3,
+    val m = Matrix(
+      3, 3,
       arrayOf(
-        floatArrayOf(3f,  5f,  0f),
+        floatArrayOf(3f, 5f, 0f),
         floatArrayOf(2f, -1f, -7f),
-        floatArrayOf(6f, -1f,  5f)
+        floatArrayOf(6f, -1f, 5f)
       )
     )
-    val submatrix = Matrix(2, 2,
+    val submatrix = Matrix(
+      2, 2,
       arrayOf(
-        floatArrayOf( 5f, 0f),
+        floatArrayOf(5f, 0f),
         floatArrayOf(-1f, 5f)
       )
     )
@@ -223,12 +240,13 @@ object MatrixSpec: Spek({
   }
 
   context("cofactor") {
-    val m = Matrix(3, 3,
-        arrayOf(
-            floatArrayOf(3f,  5f,  0f),
-            floatArrayOf(2f, -1f, -7f),
-            floatArrayOf(6f, -1f,  5f)
-        )
+    val m = Matrix(
+      3, 3,
+      arrayOf(
+        floatArrayOf(3f, 5f, 0f),
+        floatArrayOf(2f, -1f, -7f),
+        floatArrayOf(6f, -1f, 5f)
+      )
     )
     assertEquals(-12f, m.minor(0, 0))
     assertEquals(-12f, m.cofactor(0, 0))
@@ -238,12 +256,13 @@ object MatrixSpec: Spek({
 
   context("inversion") {
     it("knows when a matrix is invertable") {
-      val m = Matrix(4, 4,
+      val m = Matrix(
+        4, 4,
         arrayOf(
-          floatArrayOf(6f,  4f, 4f,  4f),
-          floatArrayOf(5f,  5f, 7f,  6f),
+          floatArrayOf(6f, 4f, 4f, 4f),
+          floatArrayOf(5f, 5f, 7f, 6f),
           floatArrayOf(4f, -9f, 3f, -7f),
-          floatArrayOf(9f,  1f, 7f, -6f)
+          floatArrayOf(9f, 1f, 7f, -6f)
         )
       )
       assertEquals(-2120f, m.determinant())
@@ -251,12 +270,13 @@ object MatrixSpec: Spek({
     }
 
     it("knows when a matrix is not invertable") {
-      val m = Matrix(4, 4,
+      val m = Matrix(
+        4, 4,
         arrayOf(
-          floatArrayOf(-4f,  2f, -2f, -3f),
-          floatArrayOf( 9f,  6f,  2f,  6f),
-          floatArrayOf( 0f, -5f,  1f, -5f),
-          floatArrayOf( 0f,  0f,  0f,  0f)
+          floatArrayOf(-4f, 2f, -2f, -3f),
+          floatArrayOf(9f, 6f, 2f, 6f),
+          floatArrayOf(0f, -5f, 1f, -5f),
+          floatArrayOf(0f, 0f, 0f, 0f)
         )
       )
       assertEquals(0f, m.determinant())
@@ -264,30 +284,33 @@ object MatrixSpec: Spek({
     }
 
     it("can invert a matrix") {
-      val a = Matrix(4, 4,
+      val a = Matrix(
+        4, 4,
         arrayOf(
-          floatArrayOf(-5f,  2f,  6f, -8f),
-          floatArrayOf( 1f, -5f,  1f,  8f),
-          floatArrayOf( 7f,  7f, -6f, -7f),
-          floatArrayOf( 1f, -3f,  7f,  4f)
+          floatArrayOf(-5f, 2f, 6f, -8f),
+          floatArrayOf(1f, -5f, 1f, 8f),
+          floatArrayOf(7f, 7f, -6f, -7f),
+          floatArrayOf(1f, -3f, 7f, 4f)
         )
       )
       val b = a.inverse()
-      val expected = Matrix(4, 4,
+      val expected = Matrix(
+        4, 4,
         arrayOf(
-          floatArrayOf( 0.21805f,  0.45113f,  0.24060f, -0.04511f),
-          floatArrayOf(-0.80827f, -1.45677f, -0.44361f,  0.52068f),
-          floatArrayOf(-0.07895f, -0.22368f, -0.05263f,  0.19737f),
-          floatArrayOf(-0.52256f, -0.81391f, -0.30075f,  0.30639f)
+          floatArrayOf(0.21805f, 0.45113f, 0.24060f, -0.04511f),
+          floatArrayOf(-0.80827f, -1.45677f, -0.44361f, 0.52068f),
+          floatArrayOf(-0.07895f, -0.22368f, -0.05263f, 0.19737f),
+          floatArrayOf(-0.52256f, -0.81391f, -0.30075f, 0.30639f)
         )
       )
       val cofactors = a.cofactors();
-      val expectedCofactors = Matrix(4, 4,
+      val expectedCofactors = Matrix(
+        4, 4,
         arrayOf(
-          floatArrayOf(116f, -430f,  -42f, -278f),
+          floatArrayOf(116f, -430f, -42f, -278f),
           floatArrayOf(240f, -775f, -119f, -433f),
-          floatArrayOf(128f, -236f,  -28f, -160f),
-          floatArrayOf(-24f,  277f,  105f,  163f)
+          floatArrayOf(128f, -236f, -28f, -160f),
+          floatArrayOf(-24f, 277f, 105f, 163f)
         )
       )
       assertEquals(expectedCofactors, cofactors)
@@ -300,20 +323,22 @@ object MatrixSpec: Spek({
     }
 
     it("can multiply by the inverse") {
-      val a = Matrix(4, 4,
+      val a = Matrix(
+        4, 4,
         arrayOf(
-          floatArrayOf( 3f, -9f,  7f,  3f),
-          floatArrayOf( 3f, -8f,  2f, -9f),
-          floatArrayOf(-4f,  4f,  4f,  1f),
-          floatArrayOf(-6f,  5f, -1f,  1f)
+          floatArrayOf(3f, -9f, 7f, 3f),
+          floatArrayOf(3f, -8f, 2f, -9f),
+          floatArrayOf(-4f, 4f, 4f, 1f),
+          floatArrayOf(-6f, 5f, -1f, 1f)
         )
       )
-      val b = Matrix(4, 4,
+      val b = Matrix(
+        4, 4,
         arrayOf(
-          floatArrayOf(8f,  2f,  2f,  2f),
-          floatArrayOf(3f, -1f,  7f,  0f),
-          floatArrayOf(7f,  0f,  5f,  4f),
-          floatArrayOf(6f, -2f,  0f,  5f)
+          floatArrayOf(8f, 2f, 2f, 2f),
+          floatArrayOf(3f, -1f, 7f, 0f),
+          floatArrayOf(7f, 0f, 5f, 4f),
+          floatArrayOf(6f, -2f, 0f, 5f)
         )
       )
       val c = a * b
@@ -321,12 +346,13 @@ object MatrixSpec: Spek({
     }
 
     it("can multiply by the identify matrix") {
-      val a = Matrix(4, 4,
+      val a = Matrix(
+        4, 4,
         arrayOf(
-          floatArrayOf( 3f, -9f,  7f,  3f),
-          floatArrayOf( 3f, -8f,  2f, -9f),
-          floatArrayOf(-4f,  4f,  4f,  1f),
-          floatArrayOf(-6f,  5f, -1f,  1f)
+          floatArrayOf(3f, -9f, 7f, 3f),
+          floatArrayOf(3f, -8f, 2f, -9f),
+          floatArrayOf(-4f, 4f, 4f, 1f),
+          floatArrayOf(-6f, 5f, -1f, 1f)
         )
       )
       val c = a * Matrix.eye(4)

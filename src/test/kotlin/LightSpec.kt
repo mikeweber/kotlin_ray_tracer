@@ -1,6 +1,6 @@
-import com.weberapps.rayTracer.Color
-import com.weberapps.rayTracer.Point
-import com.weberapps.rayTracer.Light
+import com.weberapps.ray.tracer.math.Color
+import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Light
 import junit.framework.TestCase.assertEquals
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*

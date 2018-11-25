@@ -1,4 +1,17 @@
-import com.weberapps.rayTracer.*
+import com.weberapps.ray.tracer.*
+import com.weberapps.ray.tracer.constants.TAU
+import com.weberapps.ray.tracer.intersection.Intersection
+import com.weberapps.ray.tracer.intersection.Intersections
+import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Ray
+import com.weberapps.ray.tracer.math.Transformation
+import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.math.Color
+import com.weberapps.ray.tracer.math.Light
+import com.weberapps.ray.tracer.renderer.World
+import com.weberapps.ray.tracer.shape.Plane
+import com.weberapps.ray.tracer.shape.Sphere
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.*
@@ -16,7 +29,13 @@ object WorldSpec: Spek({
     val world = World.default()
 
     it("should have two objects and a single light source") {
-      val s1 = Sphere(material = Material(color = Color(0.8f, 1f, 0.6f), diffuse = 0.7f, specular = 0.2f))
+      val s1 = Sphere(
+        material = Material(
+          color = Color(0.8f, 1f, 0.6f),
+          diffuse = 0.7f,
+          specular = 0.2f
+        )
+      )
       val s2 = Sphere(transform = Transformation.scale(0.5f, 0.5f, 0.5f))
       val light = Light(Point(-10f, 10f, -10f), Color.WHITE)
 
@@ -84,7 +103,8 @@ object WorldSpec: Spek({
       val s1 = Sphere()
       val s2Transform = Transformation.translation(0f, 0f, 10f)
       val s2 = Sphere(transform = s2Transform)
-      val world = World(sceneObjects = arrayListOf(s1, s2), lightSources = arrayListOf(light))
+      val world =
+        World(sceneObjects = arrayListOf(s1, s2), lightSources = arrayListOf(light))
       val ray = Ray(Point(0f, 0f, 5f), Vector(0f, 0f, 1f))
       val hit = Intersection(4f, s2)
       val comps = hit.prepareHit(ray)
@@ -107,17 +127,25 @@ object WorldSpec: Spek({
     }
 
     it("should return the shadeHit from the reflection's viewpoint") {
-      val glass = Material(color = Color.BLACK, reflective = 1f, ambient = 0f, specular = 0f, diffuse = 0f, shininess = 0)
+      val glass = Material(
+        color = Color.BLACK,
+        reflective = 1f,
+        ambient = 0f,
+        specular = 0f,
+        diffuse = 0f,
+        shininess = 0
+      )
       val wallTransform = Transformation.rotateX(TAU / 4)
       val wall = Plane(material = glass, transform = wallTransform)
       val sphereTransform = Transformation.translation(2f, 0f, -3f)
-      val sphereColor = Material(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
+      val sphereColor =
+        Material(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
       val sphere = Sphere(transform = sphereTransform, material = sphereColor)
       val light = Light(Point(2f, 0f, -1f))
       val world = World(arrayListOf(wall, sphere), arrayListOf(light))
 
-      val directRay = Ray(Point( 2f, 0f, -4f), Vector(0f, 0f, 1f))
-      val missRay   = Ray(Point( 0f, 0f, -2f), Vector(0f, 0f, 1f))
+      val directRay = Ray(Point(2f, 0f, -4f), Vector(0f, 0f, 1f))
+      val missRay   = Ray(Point(0f, 0f, -2f), Vector(0f, 0f, 1f))
       val hitRay    = Ray(Point(-2f, 0f, -2f), Vector(1f, 0f, 1f).normalize())
 
       val directHit = world.intersect(directRay).hit() ?: fail("Should be pointed directly at sphere")
@@ -132,16 +160,18 @@ object WorldSpec: Spek({
 
     it("should return the shadeHit from the reflection's viewpoint when the plane is angled") {
       val glass = Material(reflective = 1f, ambient = 0f)
-      val wallTransform = Transformation.rotateY(-TAU / 8) * Transformation.rotateX(TAU / 4)
+      val wallTransform = Transformation.rotateY(-TAU / 8) * Transformation.rotateX(
+        TAU / 4)
       val wall = Plane(material = glass, transform = wallTransform)
       val sphereTransform = Transformation.translation(3f, 0f, 0f)
-      val sphereColor = Material(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
+      val sphereColor =
+        Material(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
       val sphere = Sphere(transform = sphereTransform, material = sphereColor)
       val light = Light(Point(2f, 0f, 0f))
       val world = World(arrayListOf(wall, sphere), arrayListOf(light))
 
       val directRay = Ray(Point(1f, 0f, 0f), Vector(1f, 0f, 0f))
-      val missRay   = Ray(Point(1f, 0f, 0f), Vector( -1f, 0f, 0f))
+      val missRay   = Ray(Point(1f, 0f, 0f), Vector(-1f, 0f, 0f))
       val hitRay  = Ray(Point(0f, 0f, -2f), Vector(0f, 0f, 1f))
 
       val directHit = world.intersect(directRay).hit() ?: fail("Should be pointed directly at sphere")
@@ -157,14 +187,24 @@ object WorldSpec: Spek({
       val world = World.default()
       val f = (Math.sqrt(2.0) / 2.0).toFloat()
       val r = Ray(Point(0f, 0f, -3f), Vector(0f, -f, f))
-      val halfReflectiveTransparent = Material(reflective = 0.5f, transparency = 0.5f, refractiveIndex = 1.5f)
-      val floor = Plane(transform = Transformation.translation(0f, -1f, 0f), material = halfReflectiveTransparent)
-      val ball = Sphere(Transformation.translation(0f, -3.5f, -0.5f), Material(color = Color.RED, ambient = 0.5f))
+      val halfReflectiveTransparent =
+        Material(reflective = 0.5f, transparency = 0.5f, refractiveIndex = 1.5f)
+      val floor = Plane(
+        transform = Transformation.translation(0f, -1f, 0f),
+        material = halfReflectiveTransparent
+      )
+      val ball = Sphere(
+        Transformation.translation(0f, -3.5f, -0.5f),
+        Material(color = Color.RED, ambient = 0.5f)
+      )
 
       world.sceneObjects.add(floor)
       world.sceneObjects.add(ball)
 
-      val xs = Intersections(1, arrayListOf(Intersection(Math.sqrt(2.0).toFloat(), floor)))
+      val xs = Intersections(
+        1,
+        arrayListOf(Intersection(Math.sqrt(2.0).toFloat(), floor))
+      )
       val comps = xs[0].prepareHit(r, xs)
       val color = world.shadeHit(comps, 5)
       assertEquals(Color(0.93391f, 0.69643f, 0.69243f), color)
@@ -176,7 +216,13 @@ object WorldSpec: Spek({
       val world = World.default()
       val shape = world.sceneObjects.first()
       val r = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
-      val xs = Intersections(2, arrayListOf(Intersection(4f, shape), Intersection(6f, shape)))
+      val xs = Intersections(
+        2,
+        arrayListOf(
+          Intersection(4f, shape),
+          Intersection(6f, shape)
+        )
+      )
       val comps = xs[0].prepareHit(r, xs)
       val c = shape.material.refractedColor(comps)
       assertEquals(Color.BLACK, c)
@@ -187,7 +233,13 @@ object WorldSpec: Spek({
       val shape = world.sceneObjects.first()
       shape.material = Material(transparency = 1f, refractiveIndex = 1.5f)
       val r = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
-      val xs = Intersections(2, arrayListOf(Intersection(4f, shape), Intersection(6f, shape)))
+      val xs = Intersections(
+        2,
+        arrayListOf(
+          Intersection(4f, shape),
+          Intersection(6f, shape)
+        )
+      )
       val comps = xs[0].prepareHit(r, xs)
       val c = shape.material.refractedColor(comps, world, 0)
       assertEquals(Color.BLACK, c)
@@ -199,7 +251,13 @@ object WorldSpec: Spek({
       shape.material = Material(transparency = 1f, refractiveIndex = 1.5f)
       val f = (Math.sqrt(2.0) / 2.0).toFloat()
       val r = Ray(Point(0f, 0f, f), Vector(0f, 1f, 0f))
-      val xs = Intersections(2, arrayListOf(Intersection(-f, shape), Intersection(f, shape)))
+      val xs = Intersections(
+        2,
+        arrayListOf(
+          Intersection(-f, shape),
+          Intersection(f, shape)
+        )
+      )
 
       val comps = xs[1].prepareHit(r, xs)
       val c = shape.material.refractedColor(comps, world)
@@ -213,7 +271,15 @@ object WorldSpec: Spek({
       a.material = TestMaterial(ambient = 1f)
       b.material = Material(transparency = 1f, refractiveIndex = 1.5f)
       val r = Ray(Point(0f, 0f, 0.1f), Vector(0f, 1f, 0f))
-      val xs = Intersections(4, arrayListOf(Intersection(-0.9899f, a), Intersection(-0.4899f, b), Intersection(0.4899f, b), Intersection(0.9899f, a)))
+      val xs = Intersections(
+        4,
+        arrayListOf(
+          Intersection(-0.9899f, a),
+          Intersection(-0.4899f, b),
+          Intersection(0.4899f, b),
+          Intersection(0.9899f, a)
+        )
+      )
       val comps = xs[2].prepareHit(r, xs)
       val c = comps.shape.material.refractedColor(comps, world)
       assertEquals(Color(0f, 0.99878f, 0.04724f), c)
@@ -233,7 +299,10 @@ object WorldSpec: Spek({
       world.sceneObjects.add(ball)
       val f = (Math.sqrt(2.0) / 2.0).toFloat()
       val r = Ray(Point(0f, 0f, -3f), Vector(0f, -f, f))
-      val xs = Intersections(1, arrayListOf(Intersection(Math.sqrt(2.0).toFloat(), floor)))
+      val xs = Intersections(
+        1,
+        arrayListOf(Intersection(Math.sqrt(2.0).toFloat(), floor))
+      )
       val comps = xs[0].prepareHit(r, xs)
       val color = world.shadeHit(comps)
 

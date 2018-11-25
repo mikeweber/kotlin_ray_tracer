@@ -1,4 +1,11 @@
-import com.weberapps.rayTracer.*
+import com.weberapps.ray.tracer.intersection.Intersection
+import com.weberapps.ray.tracer.material.StripePattern
+import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Transformation
+import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.math.Color
+import com.weberapps.ray.tracer.math.Light
+import com.weberapps.ray.tracer.shape.Sphere
 import junit.framework.TestCase.assertEquals
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
@@ -44,8 +51,14 @@ object StripePatternSpec: Spek({
       val eyeVector = Vector(0f, 0f, -1f)
       val normalVector = Vector(0f, 0f, -1f)
       val light = Light(Point(0f, 0f, -10f))
-      val hit1 = Intersection(1f, Sphere(), inside = false, point = Point(0.9f, 0f, 0f), eyeVector = eyeVector, normalVector = normalVector)
-      val hit2 = Intersection(1f, Sphere(), inside = false, point = Point(1.1f, 0f, 0f), eyeVector = eyeVector, normalVector = normalVector)
+      val hit1 = Intersection(
+        1f,
+        Sphere(), inside = false, point = Point(0.9f, 0f, 0f), eyeVector = eyeVector, normalVector = normalVector
+      )
+      val hit2 = Intersection(
+        1f,
+        Sphere(), inside = false, point = Point(1.1f, 0f, 0f), eyeVector = eyeVector, normalVector = normalVector
+      )
       val c1 = m.lighting(hit1, light)
       val c2 = m.lighting(hit2, light)
 

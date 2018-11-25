@@ -66,7 +66,7 @@ idea {
 }
 jar {
     manifest {
-        attributes 'Main-Class': 'com.weberapps.rayTracer.AppKt'
+        attributes 'Main-Class': 'com.weberapps.ray.tracer.examples.AppKt'
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }

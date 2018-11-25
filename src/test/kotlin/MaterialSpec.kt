@@ -1,4 +1,10 @@
-import com.weberapps.rayTracer.*
+import com.weberapps.ray.tracer.intersection.Intersection
+import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.math.Color
+import com.weberapps.ray.tracer.math.Light
+import com.weberapps.ray.tracer.shape.Sphere
 import junit.framework.TestCase.assertEquals
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
@@ -24,7 +30,13 @@ object MaterialSpec: Spek({
       val eye = Vector(0f, 0f, -1f)
       val normal = Vector(0f, 0f, -1f)
       val light = Light(Point(0f, 0f, -10f), Color.WHITE)
-      val hit = Intersection(t = 1f, shape = Sphere(), point = p, eyeVector = eye, normalVector = normal)
+      val hit = Intersection(
+        t = 1f,
+        shape = Sphere(),
+        point = p,
+        eyeVector = eye,
+        normalVector = normal
+      )
       val result = m.lighting(hit, light)
       assertEquals(Color(1.9f, 1.9f, 1.9f), result)
     }
@@ -34,7 +46,13 @@ object MaterialSpec: Spek({
       val eye = Vector(0f, f, f)
       val normal = Vector(0f, 0f, -1f)
       val light = Light(Point(0f, 0f, -10f), Color.WHITE)
-      val hit = Intersection(t = 1f, shape = Sphere(), point = p, eyeVector = eye, normalVector = normal)
+      val hit = Intersection(
+        t = 1f,
+        shape = Sphere(),
+        point = p,
+        eyeVector = eye,
+        normalVector = normal
+      )
       val result = m.lighting(hit, light)
       assertEquals(Color.WHITE, result)
     }
@@ -43,7 +61,13 @@ object MaterialSpec: Spek({
       val eye = Vector(0f, 0f, -1f)
       val normal = Vector(0f, 0f, -1f)
       val light = Light(Point(0f, 10f, -10f), Color.WHITE)
-      val hit = Intersection(t = 1f, shape = Sphere(), point = p, eyeVector = eye, normalVector = normal)
+      val hit = Intersection(
+        t = 1f,
+        shape = Sphere(),
+        point = p,
+        eyeVector = eye,
+        normalVector = normal
+      )
       val result = m.lighting(hit, light)
       assertEquals(Color(0.7364f, 0.7364f, 0.7364f), result)
     }
@@ -53,7 +77,13 @@ object MaterialSpec: Spek({
       val eye = Vector(0f, -f, -f)
       val normal = Vector(0f, 0f, -1f)
       val light = Light(Point(0f, 10f, -10f), Color.WHITE)
-      val hit = Intersection(t = 1f, shape = Sphere(), point = p, eyeVector = eye, normalVector = normal)
+      val hit = Intersection(
+        t = 1f,
+        shape = Sphere(),
+        point = p,
+        eyeVector = eye,
+        normalVector = normal
+      )
       val result = m.lighting(hit, light)
       val expected = Color(1.63638f, 1.63638f, 1.63638f)
       assertEquals(expected, result)
@@ -63,7 +93,13 @@ object MaterialSpec: Spek({
       val eye = Vector(0f, 0f, -1f)
       val normal = Vector(0f, 0f, -1f)
       val light = Light(Point(0f, 0f, 10f), Color.WHITE)
-      val hit = Intersection(t = 1f, shape = Sphere(), point = p, eyeVector = eye, normalVector = normal)
+      val hit = Intersection(
+        t = 1f,
+        shape = Sphere(),
+        point = p,
+        eyeVector = eye,
+        normalVector = normal
+      )
       val result = m.lighting(hit, light)
       assertEquals(Color(0.1f, 0.1f, 0.1f), result)
     }
@@ -72,7 +108,13 @@ object MaterialSpec: Spek({
       val eye = Vector(0f, 0f, -1f)
       val normal = Vector(0f, 0f, -1f)
       val light = Light(Point(0f, 0f, -10f))
-      val hit = Intersection(t = 1f, shape = Sphere(), point = p, eyeVector = eye, normalVector = normal)
+      val hit = Intersection(
+        t = 1f,
+        shape = Sphere(),
+        point = p,
+        eyeVector = eye,
+        normalVector = normal
+      )
       val result = m.lighting(hit, light, inShadow = true)
       assertEquals(Color(0.1f, 0.1f, 0.1f), result)
     }

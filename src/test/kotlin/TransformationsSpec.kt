@@ -1,4 +1,8 @@
-import com.weberapps.rayTracer.*
+import com.weberapps.ray.tracer.constants.TAU
+import com.weberapps.ray.tracer.math.Matrix
+import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Transformation
+import com.weberapps.ray.tracer.math.Vector
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -20,7 +24,12 @@ object TransformationsSpec: Spek({
     val eighth = Transformation.rotateX(TAU / 8)
     val quarter = Transformation.rotateX(TAU / 4)
 
-    assertEquals(Point(0f, (Math.sqrt(2.0) / 2f).toFloat(), (Math.sqrt(2.0) / 2f).toFloat()), eighth * p)
+    assertEquals(
+      Point(
+        0f,
+        (Math.sqrt(2.0) / 2f).toFloat(),
+        (Math.sqrt(2.0) / 2f).toFloat()
+      ), eighth * p)
     assertEquals(Point(0f, 0f, 1f), quarter * p)
   }
 
@@ -29,7 +38,12 @@ object TransformationsSpec: Spek({
     val eighth = Transformation.rotateY(TAU / 8)
     val quarter = Transformation.rotateY(TAU / 4)
 
-    assertEquals(Point((Math.sqrt(2.0) / 2f).toFloat(), 0f, (Math.sqrt(2.0) / 2f).toFloat()), eighth * p)
+    assertEquals(
+      Point(
+        (Math.sqrt(2.0) / 2f).toFloat(),
+        0f,
+        (Math.sqrt(2.0) / 2f).toFloat()
+      ), eighth * p)
     assertEquals(Point(1f, 0f, 0f), quarter * p)
   }
 
@@ -38,7 +52,12 @@ object TransformationsSpec: Spek({
     val eighth = Transformation.rotateZ(TAU / 8)
     val quarter = Transformation.rotateZ(TAU / 4)
 
-    assertEquals(Point(-(Math.sqrt(2.0) / 2f).toFloat(), (Math.sqrt(2.0) / 2f).toFloat(), 0f), eighth.times(p))
+    assertEquals(
+      Point(
+        -(Math.sqrt(2.0) / 2f).toFloat(),
+        (Math.sqrt(2.0) / 2f).toFloat(),
+        0f
+      ), eighth.times(p))
     assertEquals(Point(-1f, 0f, 0f), quarter.times(p))
   }
 
@@ -60,7 +79,7 @@ object TransformationsSpec: Spek({
     val sin = Math.sin(-TAU / 8.0).toFloat()
     assertEquals(Point(11f, 4f, 5f), t1 * t2 * t4 * t4 * p)
     assertEquals(Point(-11f, -4f, 5f), compoundedTransform2 * t4 * p)
-    assertEquals(Point(-11f * cos - sin * -4f, -11f * sin + -4 * cos , 5f), r2 * compoundedTransform2 * t4 * p)
+    assertEquals(Point(-11f * cos - sin * -4f, -11f * sin + -4 * cos, 5f), r2 * compoundedTransform2 * t4 * p)
   }
 
   context("view transformation") {
@@ -93,12 +112,14 @@ object TransformationsSpec: Spek({
       val to = Point(4f, -2f, 8f)
       val up = Vector(1f, 1f, 0f)
       val t = Transformation.viewTransform(from, to, up)
-      val expected = Matrix(4, 4, arrayOf(
-        floatArrayOf(-0.50709f, 0.50709f,  0.67612f, -2.36643f),
-        floatArrayOf( 0.76772f, 0.60609f,  0.12122f, -2.82843f),
-        floatArrayOf(-0.35857f, 0.59761f, -0.71714f,  0.00000f),
-        floatArrayOf( 0.00000f, 0.00000f,  0.00000f,  1.00000f)
-      ))
+      val expected = Matrix(
+        4, 4, arrayOf(
+          floatArrayOf(-0.50709f, 0.50709f, 0.67612f, -2.36643f),
+          floatArrayOf(0.76772f, 0.60609f, 0.12122f, -2.82843f),
+          floatArrayOf(-0.35857f, 0.59761f, -0.71714f, 0.00000f),
+          floatArrayOf(0.00000f, 0.00000f, 0.00000f, 1.00000f)
+        )
+      )
 
       assertEquals(expected, t)
     }
