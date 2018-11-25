@@ -74,27 +74,55 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
       up = Vector(0f, 1f, 0f).normalize()
     )
     val camera = Camera(hsize, vsize, TAU / 6, transform = viewTransform)
+    val lensVec = Vector(focus - from).normalize()
+    val lensCenter = from + (lensVec * 0.5f)
 
+    val lens = Sphere(
+      transform = Transformation.translation(lensCenter.x, lensCenter.y, lensCenter.z) *
+        Transformation.scale(1f, 1f, 0.2f),
+      material = Material(refractiveIndex = Material.GLASS, transparency = 1f, reflective = 0.2f, ambient = 0f, diffuse = 0f, specular = 0f)
+    )
+    world.sceneObjects.add(lens)
     return camera.render(world)
   }
 
   fun initWorld(): World {
     val checkered = CheckeredPattern(reflective = 0.1f)
     val mirror = Material(reflective = 0.6f)
-    val floor = Plane(material = checkered)
+    val pondSurface = Plane(material = Material(color = Color.WHITE, reflective = 0.9f, transparency = 1f, refractiveIndex = Material.WATER, shininess = 300))
+    val floor = Plane(material = CheckeredPattern(reflective = 0f), transform = Transformation.translation(0f, -2f, 0f))
 
+    val farWall = Plane(
+      material = Material(Color(0.1f, 0.1f, 0.9f), specular = 0f),
+      transform = Transformation.translation(0f, 0f, 70f) *
+        Transformation.rotateX(TAU / 4)
+    )
     val leftWallTransform = Transformation.translation(0f, 0f, 5f) *
       Transformation.rotateY(-TAU / 8) *
       Transformation.rotateX(TAU / 4)
-    val leftWall = Plane(transform = leftWallTransform, material = mirror)
+    val leftWall = Plane(transform = leftWallTransform, material = checkered)
 
     val rightWallTransform = Transformation.translation(0f, 0f, 5f) *
       Transformation.rotateY(TAU / 8) *
       Transformation.rotateX(TAU / 4)
-    val blueRedCheckered = CheckeredPattern(color = Color(0.3f, 0.3f, 0.3f), tock = Color(0.5f, 0.5f, 0.5f), reflective = 0f)
+    val blueRedCheckered = CheckeredPattern(color = Color(0.7f, 0.3f, 0.3f), tock = Color(0.3f, 0.3f, 0.7f), reflective = 0f)
     val rightWall = Plane(transform = rightWallTransform, material = blueRedCheckered)
 
-    val middleTransform = Transformation.translation(-0.5f, 1f, 0.5f)
+    val backLeftWall = Plane(
+      transform = Transformation.translation(0f, 0f, -30f) *
+        Transformation.rotateY(TAU / 8) *
+        Transformation.rotateX(TAU / 4),
+      material = checkered
+    )
+
+    val backRightWall = Plane(
+      transform = Transformation.translation(0f, 0f, -30f) *
+        Transformation.rotateY(-TAU / 8) *
+        Transformation.rotateX(TAU / 4),
+      material = checkered
+    )
+
+    val middleTransform = Transformation.translation(-0.5f, 1f, 2.5f)
     val middleMaterialTransform =
       Transformation.translation(0.05f, 0f, 0f) *
         Transformation.rotateY(-TAU / 8) *
@@ -109,17 +137,20 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
     )
     val middleSphere = Sphere(transform = middleTransform, material = middleMaterial)
 
-    val rightTransform = Transformation.translation(1.5f, 0.5f, -0.5f) *
+    val rightTransform = Transformation.translation(2f, 0.5f, 1.5f) *
       Transformation.scale(0.5f, 0.5f, 0.5f)
     val rightMaterial = Material(
-      color = Color(0.5f, 1f, 0.1f),
-      diffuse = 0.7f,
-      specular = 0.7f,
-      reflective = 0.2f
+      color = Color.WHITE,
+      ambient = 0f,
+      diffuse = 0f,
+      specular = 0f,
+      reflective = 0.2f,
+      refractiveIndex = Material.GLASS,
+      transparency = 1f
     )
     val rightSphere = Sphere(transform = rightTransform, material = rightMaterial)
 
-    val leftTransform = Transformation.translation(-1.75f, 0.5f, -0.5f) *
+    val leftTransform = Transformation.translation(-1.75f, 0.5f, 1.5f) *
       Transformation.scale(0.5f, 0.5f, 0.5f)
     val leftMaterial = Material(
       color = Color(1f, 0.7f, 0f),
@@ -131,7 +162,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
 
     val glassTransform1 = Transformation.translation(1f, 1f, -2f) *
         Transformation.scale(0.5f, 0.5f, 0.5f)
-    val glass = Material(refractiveIndex = 1.3f)
+    val glass = Material(refractiveIndex = Material.GLASS)
     val glassSphere1 = Sphere(transform = glassTransform1, material = glass)
 
     val mirrorTransform = Transformation.translation(-1.0f, 0.8f, 4.7f) *
@@ -139,7 +170,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
     val mirrorSphere = Sphere(transform = mirrorTransform, material = mirror)
 
     return World(
-      arrayListOf(middleSphere, floor, rightSphere, leftSphere, mirrorSphere, glassSphere1, rightWall, leftWall),
+      arrayListOf(middleSphere, floor, rightSphere, leftSphere, farWall),
       arrayListOf(
         Light(Point(-10f, 10f, -10f))
         // Light(Point( 10f, 10f, -10f), Color(0.05f, 0.05f, 0.05f))
