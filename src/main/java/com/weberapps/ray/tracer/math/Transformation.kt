@@ -14,6 +14,10 @@ class Transformation {
       return translation
     }
 
+    fun scale(factor: Float): Matrix {
+      return scale(factor, factor, factor)
+    }
+
     fun scale(x: Float, y: Float, z: Float): Matrix {
       val scale = Matrix.eye(4)
       scale.setElement(0, 0, x)

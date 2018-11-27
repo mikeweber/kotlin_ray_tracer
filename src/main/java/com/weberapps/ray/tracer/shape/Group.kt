@@ -7,7 +7,7 @@ import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Vector
 
-class Group(
+open class Group(
   override var transform: Matrix = Matrix.eye(4),
   val shapes: ArrayList<Shape> = arrayListOf(),
   override var material: Material = Material(),
@@ -18,7 +18,7 @@ class Group(
   }
 
   override fun localNormal(localPoint: Point): Vector {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    TODO("Groups don't have local normals")
   }
 
   fun add(shape: Shape): Group {
