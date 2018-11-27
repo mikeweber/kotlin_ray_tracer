@@ -4,31 +4,31 @@ import com.weberapps.ray.tracer.constants.EPSILON
 import com.weberapps.ray.tracer.intersection.Intersection
 import com.weberapps.ray.tracer.intersection.Intersections
 import com.weberapps.ray.tracer.material.Material
-import com.weberapps.ray.tracer.math.*
-import java.lang.Float.NEGATIVE_INFINITY
-import java.lang.Float.POSITIVE_INFINITY
+import com.weberapps.ray.tracer.math.Matrix
+import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Ray
+import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.math.almostZero
+import com.weberapps.ray.tracer.math.floatRoot
 
-open class Cylinder(
-  override var transform: Matrix = Matrix.eye(4),
-  override var material: Material = Material(),
-  var minimum: Float = NEGATIVE_INFINITY,
-  var maximum: Float = POSITIVE_INFINITY,
-  var closed: Boolean = false,
-  override var parent: Shape? = null
-) : Shape {
+class Cone(transform: Matrix = Matrix.eye(4), material: Material = Material(), minimum: Float = -1f, maximum: Float = 1f, closed: Boolean = false, parent: Shape? = null) :
+  Cylinder(transform, material, minimum, maximum, closed, parent) {
   override fun localIntersect(localRay: Ray): Intersections {
     return intersectCaps(localRay).add(intersectWalls(localRay))
   }
 
   private fun intersectWalls(localRay: Ray): Intersections {
-    val a = localRay.direction.x * localRay.direction.x + localRay.direction.z * localRay.direction.z
+    val a = localRay.direction.x * localRay.direction.x - localRay.direction.y * localRay.direction.y + localRay.direction.z * localRay.direction.z
+    val b = 2 * localRay.origin.x * localRay.direction.x - 2 * localRay.origin.y * localRay.direction.y + 2 * localRay.origin.z * localRay.direction.z
+    val c = localRay.origin.x * localRay.origin.x - localRay.origin.y * localRay.origin.y + localRay.origin.z * localRay.origin.z
 
-    // Ray is parallel to Y axis; no intersections with the side walls
-    if (almostZero(a)) return Intersections()
-
-    val b = 2 * localRay.origin.x * localRay.direction.x + 2 * localRay.origin.z * localRay.direction.z
-    val c = localRay.origin.x * localRay.origin.x + localRay.origin.z * localRay.origin.z - 1
-
+    if (almostZero(a)) {
+      return if (almostZero(b)) {
+        Intersections()
+      } else {
+        Intersections(Intersection(-c / (2 * b), this))
+      }
+    }
     val disc = b * b - 4 * a * c
 
     // Ray misses; no intersections
@@ -59,16 +59,16 @@ open class Cylinder(
 
   private fun addCapIntersections(ray: Ray, y: Float, xs: Intersections = Intersections()): Intersections {
     val t = (y - ray.origin.y) / ray.direction.y
-    if (!checkCap(ray, t)) return xs
+    if (!checkCap(ray, y, t)) return xs
 
     return xs.add(t, this)
   }
 
-  private fun checkCap(ray: Ray, t: Float): Boolean {
+  private fun checkCap(ray: Ray, y: Float, t: Float): Boolean {
     val x = ray.origin.x + t * ray.direction.x
     val z = ray.origin.z + t * ray.direction.z
 
-    return (x * x + z * z) <= 1f
+    return (x * x + z * z) <= y * y
   }
 
   private fun swap(pair: Pair<Float, Float>): Pair<Float, Float> {
@@ -79,11 +79,14 @@ open class Cylinder(
     val dist = localPoint.x * localPoint.x + localPoint.z * localPoint.z
 
     return if (dist < 1f && localPoint.y >= maximum - EPSILON) {
-      Vector(0f, 1f, 0f)
+      Vector(0f,  1f, 0f)
     } else if (dist < 1f && localPoint.y <= minimum + EPSILON) {
       Vector(0f, -1f, 0f)
     } else {
-      Vector(localPoint.x, 0f, localPoint.z)
+      var y = floatRoot(localPoint.x * localPoint.x + localPoint.z * localPoint.z)
+      if (localPoint.y > 0) y = -y
+
+      Vector(localPoint.x, y, localPoint.z)
     }
   }
 }
