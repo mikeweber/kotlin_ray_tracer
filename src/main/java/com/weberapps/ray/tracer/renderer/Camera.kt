@@ -5,10 +5,7 @@ import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Matrix
 
-class Camera(val hsize: Int, val vsize: Int, fieldOfView: Double = (TAU / 4), var transform: Matrix = Matrix.Companion.eye(
-  4
-)
-) {
+class Camera(val hsize: Int, val vsize: Int, fieldOfView: Double = (TAU / 4), var transform: Matrix = Matrix.eye(4)) {
   var halfWidth = Math.tan(fieldOfView / 2.0)
   var halfHeight = Math.tan(fieldOfView / 2.0)
   var pixelSize: Float = 0f
