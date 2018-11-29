@@ -7,8 +7,8 @@ import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.shape.Shape
 
 class GradientMaterial(
-  val color: Color                    = Color.WHITE,
-  val endColor: Color                 = Color.BLACK,
+  private val start: Material         = SolidColor(Color.WHITE),
+  private val end: Material           = SolidColor(Color.BLACK),
   override val transform: Matrix      = Matrix.eye(4),
   override val ambient: Float         = 0.1f,
   override val diffuse: Float         = 0.9f,
@@ -19,12 +19,13 @@ class GradientMaterial(
   override val refractiveIndex: Float = VACUUM
 ): Material {
   override fun effectiveColor(shape: Shape, worldSpacePoint: Point, light: Light): Color {
-    return gradientColorAtObject(patternSpacePoint(shape, worldSpacePoint)) * light.intensity
+    return patternAt(patternSpacePoint(shape, worldSpacePoint)) * light.intensity
   }
 
-  fun gradientColorAtObject(point: Point): Color {
-    val distance = endColor - color
-    val fraction = point.x - Math.floor(point.x.toDouble()).toFloat()
+  override fun patternAt(patternSpacePoint: Point): Color {
+    val color = start.patternAt(patternSpacePoint)
+    val distance = end.patternAt(patternSpacePoint) - color
+    val fraction = patternSpacePoint.x - Math.floor(patternSpacePoint.x.toDouble()).toFloat()
 
     return color + distance * fraction
   }
@@ -33,7 +34,7 @@ class GradientMaterial(
     if (other !is GradientMaterial) return false
 
     return super.equals(other)
-      && color == other.color
-      && endColor == other.endColor
+      && start == other.start
+      && end == other.end
   }
 }

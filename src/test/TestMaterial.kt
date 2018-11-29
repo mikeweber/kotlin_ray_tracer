@@ -19,6 +19,10 @@ class TestMaterial(
   override val refractiveIndex: Float = VACUUM
 ) : Material {
   override fun effectiveColor(shape: Shape, worldSpacePoint: Point, light: Light): Color {
-    return Color(worldSpacePoint.x, worldSpacePoint.y, worldSpacePoint.z)
+    return patternAt(worldSpacePoint)
+  }
+
+  override fun patternAt(patternSpacePoint: Point): Color {
+    return Color(patternSpacePoint.x, patternSpacePoint.y, patternSpacePoint.z)
   }
 }

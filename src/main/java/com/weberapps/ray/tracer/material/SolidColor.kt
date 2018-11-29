@@ -3,7 +3,7 @@ package com.weberapps.ray.tracer.material
 import com.weberapps.ray.tracer.math.*
 import com.weberapps.ray.tracer.shape.Shape
 
-open class SolidColor(
+class SolidColor(
   val color: Color                    = Color.WHITE,
   override val transform: Matrix      = Matrix.eye(4),
   override val ambient: Float         = 0.1f,
@@ -16,6 +16,10 @@ open class SolidColor(
 ): Material {
   override fun effectiveColor(shape: Shape, worldSpacePoint: Point, light: Light): Color {
     return color * light.intensity
+  }
+
+  override fun patternAt(patternSpacePoint: Point): Color {
+    return color
   }
 
   override fun equals(other: Any?): Boolean {

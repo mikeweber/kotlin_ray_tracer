@@ -22,8 +22,8 @@ class StripePattern(
     return patternAt(patternSpacePoint(shape, worldSpacePoint)) * light.intensity
   }
 
-  fun patternAt(point: Point): Color {
-    return if ((Math.floor(point.x.toDouble()).toInt() % 2) == 0) zig else zag
+  override fun patternAt(patternSpacePoint: Point): Color {
+    return if ((Math.floor(patternSpacePoint.x.toDouble()).toInt() % 2) == 0) zig else zag
   }
 
   override fun equals(other: Any?): Boolean {

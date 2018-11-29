@@ -37,6 +37,7 @@ interface Material {
   }
 
   fun effectiveColor(shape: Shape, worldSpacePoint: Point, light: Light = Light(Point(0f, 0f, 0f), Color.BLACK)): Color
+  fun patternAt(patternSpacePoint: Point): Color
 
   fun patternSpacePoint(shape: Shape, worldSpacePoint: Point): Point {
     val objectSpacePoint = shape.worldToObject(worldSpacePoint)

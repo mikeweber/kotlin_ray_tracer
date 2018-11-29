@@ -7,8 +7,8 @@ import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.shape.Shape
 
 class CheckeredPattern(
-  val tick: Color                     = Color.WHITE,
-  val tock: Color                     = Color.BLACK,
+  val tick: Material                  = SolidColor(Color.WHITE),
+  val tock: Material                  = SolidColor(Color.BLACK),
   override val transform: Matrix      = Matrix.eye(4),
   override val ambient: Float         = 0.1f,
   override val diffuse: Float         = 0.9f,
@@ -22,11 +22,13 @@ class CheckeredPattern(
     return patternAt(patternSpacePoint(shape, worldSpacePoint)) * light.intensity
   }
 
-  private fun patternAt(point: Point): Color {
-    val x = Math.floor(point.x.toDouble()).toInt()
-    val y = Math.floor(point.y.toDouble()).toInt()
-    val z = Math.floor(point.z.toDouble()).toInt()
-    return if (((x + y + z) % 2) == 0) tick else tock
+  override fun patternAt(patternSpacePoint: Point): Color {
+    val x = Math.floor(patternSpacePoint.x.toDouble()).toInt()
+    val y = Math.floor(patternSpacePoint.y.toDouble()).toInt()
+    val z = Math.floor(patternSpacePoint.z.toDouble()).toInt()
+
+    val material = if (((x + y + z) % 2) == 0) tick else tock
+    return material.patternAt(patternSpacePoint)
   }
 
   override fun equals(other: Any?): Boolean {

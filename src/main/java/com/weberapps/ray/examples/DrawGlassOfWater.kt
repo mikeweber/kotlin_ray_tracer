@@ -5,6 +5,7 @@ import com.weberapps.ray.examples.shapes.Pencil
 import com.weberapps.ray.tracer.constants.TAU
 import com.weberapps.ray.tracer.material.CheckeredPattern
 import com.weberapps.ray.tracer.material.GradientMaterial
+import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.math.Light
 import com.weberapps.ray.tracer.math.Point
@@ -51,10 +52,10 @@ class DrawGlassOfWater(val hsize: Int, val vsize: Int, val filename: String) {
   }
 
   fun initWorld(): World {
-    val floor = Plane(Transformation.translation(0f, 0f, 5f), CheckeredPattern(Color(0.8f, 0.8f, 0.8f), Color(0.3f, 0.3f, 0.3f)))
+    val floor = Plane(Transformation.translation(0f, 0f, 5f), CheckeredPattern(SolidColor(Color(0.8f, 0.8f, 0.8f)), SolidColor(Color(0.3f, 0.3f, 0.3f))))
     val backdrop = Plane(
       Transformation.translation(0f, 0f, 2f) * Transformation.rotateX(TAU / 4),
-      GradientMaterial(Color(0.2f, 0.2f, 0.6f), Color(0.7f, 0.7f, 1.0f), Transformation.rotateZ(TAU / 4), specular = 0f)
+      GradientMaterial(SolidColor(Color(0.2f, 0.2f, 0.6f)), SolidColor(Color(0.7f, 0.7f, 1.0f)), Transformation.rotateZ(TAU / 4), specular = 0f)
     )
     val glassOfWater = GlassOfWater()
     val pencil = Pencil(Transformation.translation(-0.6f, 0.1f, 0f) * Transformation.rotateZ(-25 * TAU / 360))
