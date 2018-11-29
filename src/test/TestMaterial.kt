@@ -1,6 +1,6 @@
 package com.weberapps.ray.tracer
 
-import com.weberapps.ray.tracer.material.IMaterial
+import com.weberapps.ray.tracer.material.Material
 import com.weberapps.ray.tracer.material.VACUUM
 import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.math.Light
@@ -17,7 +17,7 @@ class TestMaterial(
   override val reflective: Float      = 0f,
   override val transparency: Float    = 0f,
   override val refractiveIndex: Float = VACUUM
-) : IMaterial {
+) : Material {
   override fun effectiveColor(shape: Shape, worldSpacePoint: Point, light: Light): Color {
     return Color(worldSpacePoint.x, worldSpacePoint.y, worldSpacePoint.z)
   }

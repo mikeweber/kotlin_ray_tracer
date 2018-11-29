@@ -1,7 +1,7 @@
 package com.weberapps.ray.examples.shapes
 
 import com.weberapps.ray.tracer.material.GLASS
-import com.weberapps.ray.tracer.material.IMaterial
+import com.weberapps.ray.tracer.material.Material
 import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.material.WATER
 import com.weberapps.ray.tracer.math.Matrix
@@ -10,7 +10,7 @@ import com.weberapps.ray.tracer.shape.Cone
 import com.weberapps.ray.tracer.shape.Group
 import com.weberapps.ray.tracer.shape.Shape
 
-class GlassOfWater(transform: Matrix = Matrix.eye(4), shapes: ArrayList<Shape> = arrayListOf(), material: IMaterial = SolidColor(), parent: Shape? = null) :
+class GlassOfWater(transform: Matrix = Matrix.eye(4), shapes: ArrayList<Shape> = arrayListOf(), material: Material = SolidColor(), parent: Shape? = null) :
   Group(transform, shapes, material, parent) {
   init {
     val glass = Cone(

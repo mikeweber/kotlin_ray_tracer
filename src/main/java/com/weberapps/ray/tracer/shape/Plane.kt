@@ -3,7 +3,7 @@ package com.weberapps.ray.tracer.shape
 import com.weberapps.ray.tracer.constants.EPSILON
 import com.weberapps.ray.tracer.intersection.Intersection
 import com.weberapps.ray.tracer.intersection.Intersections
-import com.weberapps.ray.tracer.material.IMaterial
+import com.weberapps.ray.tracer.material.Material
 import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
@@ -13,7 +13,7 @@ import kotlin.math.abs
 
 class Plane(
   override var transform: Matrix = Matrix.eye(4),
-  override var material: IMaterial = SolidColor(),
+  override var material: Material = SolidColor(),
   override var parent: Shape? = null
 ) :
   Shape {

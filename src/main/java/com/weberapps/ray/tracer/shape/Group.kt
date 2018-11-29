@@ -1,7 +1,7 @@
 package com.weberapps.ray.tracer.shape
 
 import com.weberapps.ray.tracer.intersection.Intersections
-import com.weberapps.ray.tracer.material.IMaterial
+import com.weberapps.ray.tracer.material.Material
 import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
@@ -11,7 +11,7 @@ import com.weberapps.ray.tracer.math.Vector
 open class Group(
   override var transform: Matrix = Matrix.eye(4),
   val shapes: ArrayList<Shape> = arrayListOf(),
-  override var material: IMaterial = SolidColor(),
+  override var material: Material = SolidColor(),
   override var parent: Shape? = null
 ) :Shape {
   override fun localIntersect(localRay: Ray): Intersections {

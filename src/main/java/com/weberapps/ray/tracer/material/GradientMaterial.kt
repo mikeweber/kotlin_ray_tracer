@@ -17,7 +17,7 @@ class GradientMaterial(
   override val reflective: Float      = 0f,
   override val transparency: Float    = 0f,
   override val refractiveIndex: Float = VACUUM
-): IMaterial {
+): Material {
   override fun effectiveColor(shape: Shape, worldSpacePoint: Point, light: Light): Color {
     return gradientColorAtObject(patternSpacePoint(shape, worldSpacePoint)) * light.intensity
   }

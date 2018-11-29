@@ -11,7 +11,7 @@ import com.weberapps.ray.tracer.renderer.World
 import com.weberapps.ray.tracer.shape.Shape
 import kotlin.math.pow
 
-interface IMaterial {
+interface Material {
   val transform: Matrix
   val reflective: Float
   val transparency: Float
@@ -93,7 +93,7 @@ interface IMaterial {
     return result * transparency
   }
 
-  fun equals(other: IMaterial): Boolean {
+  fun equals(other: Material): Boolean {
     return transform == other.transform
       && ambient == other.ambient
       && diffuse == other.diffuse

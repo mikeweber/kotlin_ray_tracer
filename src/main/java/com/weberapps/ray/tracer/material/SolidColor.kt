@@ -13,7 +13,7 @@ open class SolidColor(
   override val reflective: Float      = 0f,
   override val transparency: Float    = 0f,
   override val refractiveIndex: Float = VACUUM
-): IMaterial {
+): Material {
   override fun effectiveColor(shape: Shape, worldSpacePoint: Point, light: Light): Color {
     return color * light.intensity
   }
