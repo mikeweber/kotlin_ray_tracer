@@ -20,28 +20,28 @@ object StripePatternSpec: Spek({
     }
   }
 
-  context("stripeAt") {
+  context("patternAt") {
     val pattern = StripePattern()
 
     it("should be constant in the Y direction") {
-      assertEquals(Color.WHITE, pattern.stripeAt(Point(0f, 0f, 0f)))
-      assertEquals(Color.WHITE, pattern.stripeAt(Point(0f, 1f, 0f)))
-      assertEquals(Color.WHITE, pattern.stripeAt(Point(0f, 2f, 0f)))
+      assertEquals(Color.WHITE, pattern.patternAt(Point(0f, 0f, 0f)))
+      assertEquals(Color.WHITE, pattern.patternAt(Point(0f, 1f, 0f)))
+      assertEquals(Color.WHITE, pattern.patternAt(Point(0f, 2f, 0f)))
     }
 
     it("should be constant in the Z direction") {
-      assertEquals(Color.WHITE, pattern.stripeAt(Point(0f, 0f, 0f)))
-      assertEquals(Color.WHITE, pattern.stripeAt(Point(0f, 0f, 1f)))
-      assertEquals(Color.WHITE, pattern.stripeAt(Point(0f, 0f, 2f)))
+      assertEquals(Color.WHITE, pattern.patternAt(Point(0f, 0f, 0f)))
+      assertEquals(Color.WHITE, pattern.patternAt(Point(0f, 0f, 1f)))
+      assertEquals(Color.WHITE, pattern.patternAt(Point(0f, 0f, 2f)))
     }
 
     it("should be alternate in the X direction") {
-      assertEquals(Color.WHITE, pattern.stripeAt(Point(0f, 0f, 0f)))
-      assertEquals(Color.WHITE, pattern.stripeAt(Point(0.9f, 0f, 0f)))
-      assertEquals(Color.BLACK, pattern.stripeAt(Point(1f, 0f, 0f)))
-      assertEquals(Color.BLACK, pattern.stripeAt(Point(-0.1f, 0f, 0f)))
-      assertEquals(Color.BLACK, pattern.stripeAt(Point(-1f, 0f, 0f)))
-      assertEquals(Color.WHITE, pattern.stripeAt(Point(-1.1f, 0f, 0f)))
+      assertEquals(Color.WHITE, pattern.patternAt(Point(0f, 0f, 0f)))
+      assertEquals(Color.WHITE, pattern.patternAt(Point(0.9f, 0f, 0f)))
+      assertEquals(Color.BLACK, pattern.patternAt(Point(1f, 0f, 0f)))
+      assertEquals(Color.BLACK, pattern.patternAt(Point(-0.1f, 0f, 0f)))
+      assertEquals(Color.BLACK, pattern.patternAt(Point(-1f, 0f, 0f)))
+      assertEquals(Color.WHITE, pattern.patternAt(Point(-1.1f, 0f, 0f)))
     }
   }
 
@@ -73,7 +73,7 @@ object StripePatternSpec: Spek({
       val stripes = StripePattern()
       val obj = Sphere(transform = scale, material = stripes)
 
-      assertEquals(Color.WHITE, stripes.stripeAtObject(obj, Point(1.5f, 0f, 0f)))
+      assertEquals(Color.WHITE, stripes.effectiveColor(obj, Point(1.5f, 0f, 0f), Light(Point(0f, 0f, 0f))))
     }
   }
 
@@ -83,7 +83,7 @@ object StripePatternSpec: Spek({
       val stripes = StripePattern(transform = scale)
       val obj = Sphere(material = stripes)
 
-      assertEquals(Color.WHITE, stripes.stripeAtObject(obj, Point(1.5f, 0f, 0f)))
+      assertEquals(Color.WHITE, stripes.effectiveColor(obj, Point(1.5f, 0f, 0f), Light(Point(0f, 0f, 0f))))
     }
   }
 
@@ -94,7 +94,7 @@ object StripePatternSpec: Spek({
       val stripes = StripePattern(transform = translation)
       val obj = Sphere(transform = scale, material = stripes)
 
-      assertEquals(Color.WHITE, stripes.stripeAtObject(obj, Point(2.5f, 0f, 0f)))
+      assertEquals(Color.WHITE, stripes.effectiveColor(obj, Point(2.5f, 0f, 0f), Light(Point(0f, 0f, 0f))))
     }
   }
 })

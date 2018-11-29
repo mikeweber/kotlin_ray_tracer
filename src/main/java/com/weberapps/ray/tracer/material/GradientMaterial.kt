@@ -6,9 +6,9 @@ import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.shape.Shape
 
-class StripePattern(
-  val zig: Color                      = Color.WHITE,
-  val zag: Color                      = Color.BLACK,
+class GradientMaterial(
+  val color: Color                    = Color.WHITE,
+  val endColor: Color                 = Color.BLACK,
   override val transform: Matrix      = Matrix.eye(4),
   override val ambient: Float         = 0.1f,
   override val diffuse: Float         = 0.9f,
@@ -19,18 +19,21 @@ class StripePattern(
   override val refractiveIndex: Float = VACUUM
 ): IMaterial {
   override fun effectiveColor(shape: Shape, worldSpacePoint: Point, light: Light): Color {
-    return patternAt(patternSpacePoint(shape, worldSpacePoint)) * light.intensity
+    return gradientColorAtObject(patternSpacePoint(shape, worldSpacePoint)) * light.intensity
   }
 
-  fun patternAt(point: Point): Color {
-    return if ((Math.floor(point.x.toDouble()).toInt() % 2) == 0) zig else zag
+  fun gradientColorAtObject(point: Point): Color {
+    val distance = endColor - color
+    val fraction = point.x - Math.floor(point.x.toDouble()).toFloat()
+
+    return color + distance * fraction
   }
 
   override fun equals(other: Any?): Boolean {
-    if (other !is StripePattern) return false
+    if (other !is GradientMaterial) return false
 
     return super.equals(other)
-      && zig == other.zig
-      && zag == other.zag
+      && color == other.color
+      && endColor == other.endColor
   }
 }

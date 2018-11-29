@@ -12,9 +12,9 @@ import java.lang.Float.NEGATIVE_INFINITY
 import java.lang.Float.POSITIVE_INFINITY
 
 object CylinderSpec: Spek ({
-  val cyl = Cylinder()
-
   context("when intersecting rays") {
+    val cyl = Cylinder()
+
     it("should be able to miss") {
       val examples = arrayListOf(
         Ray(Point( 1f,  0f,  0f), Vector(0f, 1f, 0f).normalize()),
@@ -48,6 +48,7 @@ object CylinderSpec: Spek ({
 
   context("when calculating normal") {
     it("should return the point perpendicular to the y axis") {
+      val cyl = Cylinder()
       val examples = arrayListOf(
         Pair(Point( 1f,  0f,  0f), Vector( 1f, 0f,  0f)),
         Pair(Point( 0f,  5f, -1f), Vector( 0f, 0f, -1f)),
@@ -79,6 +80,7 @@ object CylinderSpec: Spek ({
 
   context("truncating cylinders") {
     it("should have no minimum or maximum by default") {
+      val cyl = Cylinder()
       assertEquals(POSITIVE_INFINITY, cyl.maximum)
       assertEquals(NEGATIVE_INFINITY, cyl.minimum)
     }

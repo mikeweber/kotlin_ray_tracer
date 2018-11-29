@@ -1,15 +1,13 @@
 package com.weberapps.ray.tracer.material
 
 import com.weberapps.ray.tracer.math.Color
-import com.weberapps.ray.tracer.intersection.Intersection
 import com.weberapps.ray.tracer.math.Light
 import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.shape.Shape
-import com.weberapps.ray.tracer.renderer.World
 
 class CheckeredPattern(
-  override val color: Color           = Color.WHITE,
+  val tick: Color                     = Color.WHITE,
   val tock: Color                     = Color.BLACK,
   override val transform: Matrix      = Matrix.eye(4),
   override val ambient: Float         = 0.1f,
@@ -19,22 +17,12 @@ class CheckeredPattern(
   override val reflective: Float      = 0.1f,
   override val transparency: Float    = 0f,
   override val refractiveIndex: Float = VACUUM
-): Material(color, transform, ambient, diffuse, specular, shininess, reflective) {
-  val tick get() = color
-
-  override fun surfaceColor(hit: Intersection, light: Light, world: World?, inShadow: Boolean, refractionsLeft: Int, surfaceOffset: Float): Color {
-    val effectiveColor= squareColorAtObject(hit.shape, hit.point) * light.intensity
-    return calculateColor(effectiveColor, light, hit.point, hit.eyeVector, hit.normalVector, inShadow)
+): IMaterial {
+  override fun effectiveColor(shape: Shape, worldSpacePoint: Point, light: Light): Color {
+    return patternAt(patternSpacePoint(shape, worldSpacePoint)) * light.intensity
   }
 
-  private fun squareColorAtObject(shape: Shape, worldSpacePoint: Point): Color {
-    val objectSpacePoint = shape.worldToObject(worldSpacePoint)
-    val patternSpacePoint = Point(transform.inverse() * objectSpacePoint)
-
-    return squareColorAt(patternSpacePoint)
-  }
-
-  private fun squareColorAt(point: Point): Color {
+  private fun patternAt(point: Point): Color {
     val x = Math.floor(point.x.toDouble()).toInt()
     val y = Math.floor(point.y.toDouble()).toInt()
     val z = Math.floor(point.z.toDouble()).toInt()
@@ -44,12 +32,8 @@ class CheckeredPattern(
   override fun equals(other: Any?): Boolean {
     if (other !is CheckeredPattern) return false
 
-    return tick == other.tick
+    return super.equals(other)
+      && tick == other.tick
       && tock == other.tock
-      && transform == other.transform
-      && attributeEquals(ambient, other.ambient)
-      && attributeEquals(diffuse, other.diffuse)
-      && attributeEquals(specular, other.specular)
-      && shininess == other.shininess
   }
 }

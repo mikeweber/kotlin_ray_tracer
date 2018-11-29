@@ -12,6 +12,8 @@ import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.shape.Sphere
 import com.weberapps.ray.tracer.material.StripePattern
 import com.weberapps.ray.tracer.constants.TAU
+import com.weberapps.ray.tracer.material.GLASS
+import com.weberapps.ray.tracer.material.WATER
 import com.weberapps.ray.tracer.math.Transformation
 import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.renderer.World
@@ -103,7 +105,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
     val lens = Sphere(
       transform = Transformation.translation(lensCenter.x, lensCenter.y, lensCenter.z) *
         Transformation.scale(1f, 1f, 0.2f),
-      material = Material(refractiveIndex = Material.GLASS, transparency = 1f, reflective = 0.2f, ambient = 0f, diffuse = 0f, specular = 0f)
+      material = Material(refractiveIndex = GLASS, transparency = 1f, reflective = 0.2f, ambient = 0f, diffuse = 0f, specular = 0f)
     )
     world.sceneObjects.add(lens)
     return camera.render(world)
@@ -112,7 +114,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
   fun initWorld(): World {
     val checkered = CheckeredPattern(reflective = 0.1f)
     val mirror = Material(reflective = 0.6f)
-    val pondSurface = Plane(material = Material(color = Color.WHITE, reflective = 0.9f, transparency = 1f, refractiveIndex = Material.WATER, shininess = 300))
+    val pondSurface = Plane(material = Material(color = Color.WHITE, reflective = 0.9f, transparency = 1f, refractiveIndex = WATER, shininess = 300))
     val floor = Plane(material = CheckeredPattern(reflective = 0f), transform = Transformation.translation(0f, -2f, 0f))
 
     val farWall = Plane(
@@ -128,7 +130,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
     val rightWallTransform = Transformation.translation(0f, 0f, 5f) *
       Transformation.rotateY(TAU / 8) *
       Transformation.rotateX(TAU / 4)
-    val blueRedCheckered = CheckeredPattern(color = Color(0.7f, 0.3f, 0.3f), tock = Color(0.3f, 0.3f, 0.7f), reflective = 0f)
+    val blueRedCheckered = CheckeredPattern(tick = Color(0.7f, 0.3f, 0.3f), tock = Color(0.3f, 0.3f, 0.7f), reflective = 0f)
     val rightWall = Plane(transform = rightWallTransform, material = blueRedCheckered)
 
     val backLeftWall = Plane(
@@ -168,7 +170,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
       diffuse = 0f,
       specular = 0f,
       reflective = 0.2f,
-      refractiveIndex = Material.GLASS,
+      refractiveIndex = GLASS,
       transparency = 1f
     )
     val rightSphere = Sphere(transform = rightTransform, material = rightMaterial)
@@ -185,7 +187,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
 
     val glassTransform1 = Transformation.translation(1f, 1f, -2f) *
       Transformation.scale(0.5f, 0.5f, 0.5f)
-    val glass = Material(refractiveIndex = Material.GLASS, reflective = 0.8f, transparency = 1f, diffuse = 0.05f, specular = 0.1f)
+    val glass = Material(refractiveIndex = GLASS, reflective = 0.8f, transparency = 1f, diffuse = 0.05f, specular = 0.1f)
     val glassSphere1 = Sphere(transform = glassTransform1, material = glass)
 
     val mirrorTransform = Transformation.translation(-1.0f, 0.8f, 4.7f) *

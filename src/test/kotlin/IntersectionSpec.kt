@@ -153,7 +153,7 @@ object IntersectionSpec : Spek({
 
       val comps = xs[0].prepareHit(r, xs)
       val reflectance = comps.schlick()
-      assertEquals(0.4901f, reflectance, 0.00001f)
+      assertEquals(0.4901f, reflectance, 0.0001f)
     }
   }
 })

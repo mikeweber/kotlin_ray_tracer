@@ -195,7 +195,7 @@ object WorldSpec: Spek({
       )
       val ball = Sphere(
         Transformation.translation(0f, -3.5f, -0.5f),
-        Material(color = Color.RED, ambient = 0.5f)
+        Material(color = Color.RED, ambient = 0.5f, diffuse = 0f)
       )
 
       world.sceneObjects.add(floor)
@@ -207,7 +207,7 @@ object WorldSpec: Spek({
       )
       val comps = xs[0].prepareHit(r, xs)
       val color = world.shadeHit(comps, 5)
-      assertEquals(Color(0.93391f, 0.69643f, 0.69243f), color)
+      assertEquals(Color(0.93391f, 0.69641f, 0.69243f), color)
     }
   }
 
@@ -293,7 +293,7 @@ object WorldSpec: Spek({
       )
       val ball = Sphere(
         transform = Transformation.translation(0f, -3.5f, -0.5f),
-        material = Material(color = Color.RED, ambient = 0.5f)
+        material = Material(color = Color.RED, ambient = 0.5f, diffuse = 0f)
       )
       world.sceneObjects.add(floor)
       world.sceneObjects.add(ball)

@@ -1,15 +1,15 @@
 package com.weberapps.ray.tracer.shape
 
 import com.weberapps.ray.tracer.intersection.Intersections
+import com.weberapps.ray.tracer.material.IMaterial
 import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Vector
-import com.weberapps.ray.tracer.material.Material
 
 interface Shape {
   var transform: Matrix
-  var material: Material
+  var material: IMaterial
   var parent: Shape?
 
   fun intersect(ray: Ray): Intersections {

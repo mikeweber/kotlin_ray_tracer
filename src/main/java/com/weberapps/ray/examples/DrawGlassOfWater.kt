@@ -36,8 +36,8 @@ class DrawGlassOfWater(val hsize: Int, val vsize: Int, val filename: String) {
 
   fun render(
     world: World,
-    from: Point = Point(3f, 4f, -5f),
-    focus: Point = Point(0f, 1f, 0f)
+    from:  Point = Point(3f, 4f, -5f),
+    focus: Point = Point(0f, 1f,  0f)
   ): Canvas {
     val viewTransform = Transformation.viewTransform(
       from = from,

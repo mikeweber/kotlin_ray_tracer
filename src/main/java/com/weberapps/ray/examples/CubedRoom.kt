@@ -2,6 +2,7 @@ package com.weberapps.ray.examples
 
 import com.weberapps.ray.tracer.constants.TAU
 import com.weberapps.ray.tracer.material.CheckeredPattern
+import com.weberapps.ray.tracer.material.DIAMOND
 import com.weberapps.ray.tracer.material.Material
 import com.weberapps.ray.tracer.material.StripePattern
 import com.weberapps.ray.tracer.math.Color
@@ -70,7 +71,7 @@ class CubedRoom(val filename: String, val hsize: Int, val vsize: Int) {
       closed = true,
       minimum = -1f,
       maximum = 1f,
-      material = Material(transparency = 1f, reflective = 0.4f, refractiveIndex = Material.DIAMOND, specular = 1f, shininess = 500, diffuse = 0.1f, ambient = 0f)
+      material = Material(transparency = 1f, reflective = 0.4f, refractiveIndex = DIAMOND, specular = 1f, shininess = 500, diffuse = 0.1f, ambient = 0f)
     )
     val column4 = Cylinder(
       transform = Transformation.translation(0.7f, 0f, -0.7f) *
@@ -78,7 +79,7 @@ class CubedRoom(val filename: String, val hsize: Int, val vsize: Int) {
       closed = true,
       minimum = -1f,
       maximum = 1f,
-      material = Material(transparency = 1f, reflective = 0.4f, refractiveIndex = Material.DIAMOND, specular = 1f, shininess = 500, diffuse = 0.1f, ambient = 0f)
+      material = Material(transparency = 1f, reflective = 0.4f, refractiveIndex = DIAMOND, specular = 1f, shininess = 500, diffuse = 0.1f, ambient = 0f)
     )
     val light = Light(Point(0.5f, 0.7f, -4f))
 

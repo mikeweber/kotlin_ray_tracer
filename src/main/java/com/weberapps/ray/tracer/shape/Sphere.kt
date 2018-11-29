@@ -2,6 +2,7 @@ package com.weberapps.ray.tracer.shape
 
 import com.weberapps.ray.tracer.intersection.Intersection
 import com.weberapps.ray.tracer.intersection.Intersections
+import com.weberapps.ray.tracer.material.IMaterial
 import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
@@ -10,7 +11,7 @@ import com.weberapps.ray.tracer.material.Material
 
 class Sphere(
   override var transform: Matrix = Matrix.eye(4),
-  override var material: Material = Material(),
+  override var material: IMaterial = Material(),
   override var parent: Shape? = null
 ) :
   Shape {

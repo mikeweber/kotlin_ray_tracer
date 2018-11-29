@@ -192,12 +192,12 @@ object SphereSpec : Spek({
         )
       )
       val expectedValues = arrayListOf(
-        floatArrayOf(1.0f, 1.5f),
+        floatArrayOf(1.00029f, 1.5f),
         floatArrayOf(1.5f, 2.0f),
         floatArrayOf(2.0f, 2.5f),
         floatArrayOf(2.5f, 2.5f),
         floatArrayOf(2.5f, 1.5f),
-        floatArrayOf(1.5f, 1.0f)
+        floatArrayOf(1.5f, 1.00029f)
       )
       for ((index, hit) in xs.iterator().withIndex()) {
         val comps = hit.prepareHit(ray, xs)

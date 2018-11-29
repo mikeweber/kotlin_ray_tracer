@@ -45,6 +45,10 @@ class Color : Tuple {
     return Color(red + other.red, green + other.green, blue + other.blue)
   }
 
+  operator fun minus(other: Color): Color {
+    return Color(red - other.red, green - other.green, blue - other.blue)
+  }
+
   override operator fun div(scalar: Float): Color {
     return Color(red / scalar, green / scalar, blue / scalar)
   }
