@@ -7,8 +7,8 @@ import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.shape.Shape
 
 class StripePattern(
-  val zig: Color                      = Color.WHITE,
-  val zag: Color                      = Color.BLACK,
+  val zig: Material                   = SolidColor(Color.WHITE),
+  val zag: Material                   = SolidColor(Color.BLACK),
   override val transform: Matrix      = Matrix.eye(4),
   override val ambient: Float         = 0.1f,
   override val diffuse: Float         = 0.9f,
@@ -23,7 +23,7 @@ class StripePattern(
   }
 
   override fun patternAt(patternSpacePoint: Point): Color {
-    return if ((Math.floor(patternSpacePoint.x.toDouble()).toInt() % 2) == 0) zig else zag
+    return (if ((Math.floor(patternSpacePoint.x.toDouble()).toInt() % 2) == 0) zig else zag).patternAt(patternSpacePoint)
   }
 
   override fun equals(other: Any?): Boolean {

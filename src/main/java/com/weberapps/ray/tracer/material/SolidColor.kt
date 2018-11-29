@@ -14,6 +14,8 @@ class SolidColor(
   override val transparency: Float    = 0f,
   override val refractiveIndex: Float = VACUUM
 ): Material {
+  constructor(r: Float, g: Float, b: Float): this(Color(r, g, b))
+
   override fun effectiveColor(shape: Shape, worldSpacePoint: Point, light: Light): Color {
     return color * light.intensity
   }

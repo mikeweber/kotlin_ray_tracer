@@ -54,7 +54,7 @@ class CubedRoom(val filename: String, val hsize: Int, val vsize: Int) {
       closed = true,
       minimum = -1f,
       maximum = 1f,
-      material = StripePattern(Color(0.3f, 0.7f, 0.3f), Color(0.3f, 0.5f, 0.3f), transform = Transformation.rotateZ(-TAU / 14) * Transformation.scale(0.3f, 1f, 1f), reflective = 0.3f)
+      material = StripePattern(SolidColor(0.3f, 0.7f, 0.3f), SolidColor(0.3f, 0.5f, 0.3f), transform = Transformation.rotateZ(-TAU / 14) * Transformation.scale(0.3f, 1f, 1f), reflective = 0.3f)
     )
     val column2 = Cylinder(
       transform = Transformation.translation(-0.7f, 0f, 0.7f) *
@@ -63,7 +63,7 @@ class CubedRoom(val filename: String, val hsize: Int, val vsize: Int) {
       closed = true,
       minimum = -1f,
       maximum = 1f,
-      material = StripePattern(Color(0.3f, 0.7f, 0.3f), Color(0.3f, 0.5f, 0.3f), transform = Transformation.rotateZ(-TAU / 8) * Transformation.scale(0.3f, 1f, 1f), reflective = 0.3f)
+      material = StripePattern(SolidColor(0.3f, 0.7f, 0.3f), SolidColor(0.3f, 0.5f, 0.3f), transform = Transformation.rotateZ(-TAU / 8) * Transformation.scale(0.3f, 1f, 1f), reflective = 0.3f)
     )
     val column3 = Cylinder(
       transform = Transformation.translation(-0.7f, 0f, -0.7f) *

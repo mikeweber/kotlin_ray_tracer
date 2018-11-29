@@ -130,7 +130,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
     val rightWallTransform = Transformation.translation(0f, 0f, 5f) *
       Transformation.rotateY(TAU / 8) *
       Transformation.rotateX(TAU / 4)
-    val blueRedCheckered = CheckeredPattern(tick = SolidColor(Color(0.7f, 0.3f, 0.3f)), tock = SolidColor(Color(0.3f, 0.3f, 0.7f)), reflective = 0f)
+    val blueRedCheckered = CheckeredPattern(tick = SolidColor(0.7f, 0.3f, 0.3f), tock = SolidColor(0.3f, 0.3f, 0.7f), reflective = 0f)
     val rightWall = Plane(transform = rightWallTransform, material = blueRedCheckered)
 
     val backLeftWall = Plane(
@@ -154,8 +154,8 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
         Transformation.rotateZ(-TAU / 16) *
         Transformation.scale(0.1f, 0.1f, 0.1f)
     val middleMaterial = StripePattern(
-      zig = Color(0.1f, 1f, 0.5f),
-      zag = Color(0.6f, 1f, 0.7f),
+      zig = SolidColor(0.1f, 1f, 0.5f),
+      zag = SolidColor(0.6f, 1f, 0.7f),
       transform = middleMaterialTransform,
       diffuse = 0.7f,
       specular = 0.3f

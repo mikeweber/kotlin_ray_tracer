@@ -17,7 +17,7 @@ class DrawGlassOfWater(override val hsize: Int, override val vsize: Int, overrid
   init { save() }
 
   override fun initWorld(): World {
-    val floor = Plane(Transformation.translation(0f, 0f, 5f), CheckeredPattern(SolidColor(Color(0.8f, 0.8f, 0.8f)), SolidColor(Color(0.3f, 0.3f, 0.3f))))
+    val floor = Plane(material = CheckeredPattern(SolidColor(0.8f, 0.8f, 0.8f), SolidColor(0.3f, 0.3f, 0.3f)))
     val backdrop = Plane(
       Transformation.translation(0f, 0f, 2f) * Transformation.rotateX(TAU / 4),
       GradientMaterial(SolidColor(Color(0.2f, 0.2f, 0.6f)), SolidColor(Color(0.7f, 0.7f, 1.0f)), Transformation.rotateZ(TAU / 4), specular = 0f)
