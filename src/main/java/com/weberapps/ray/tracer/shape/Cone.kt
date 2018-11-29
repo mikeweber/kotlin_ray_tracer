@@ -3,7 +3,7 @@ package com.weberapps.ray.tracer.shape
 import com.weberapps.ray.tracer.constants.EPSILON
 import com.weberapps.ray.tracer.intersection.Intersection
 import com.weberapps.ray.tracer.intersection.Intersections
-import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
@@ -11,7 +11,7 @@ import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.math.almostZero
 import com.weberapps.ray.tracer.math.floatRoot
 
-class Cone(transform: Matrix = Matrix.eye(4), material: Material = Material(), minimum: Float = -1f, maximum: Float = 1f, closed: Boolean = false, parent: Shape? = null) :
+class Cone(transform: Matrix = Matrix.eye(4), material: SolidColor = SolidColor(), minimum: Float = -1f, maximum: Float = 1f, closed: Boolean = false, parent: Shape? = null) :
   Cylinder(transform, material, minimum, maximum, closed, parent) {
   override fun localIntersect(localRay: Ray): Intersections {
     return intersectCaps(localRay).add(intersectWalls(localRay))

@@ -7,11 +7,11 @@ import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Vector
-import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.material.SolidColor
 
 class Sphere(
   override var transform: Matrix = Matrix.eye(4),
-  override var material: IMaterial = Material(),
+  override var material: IMaterial = SolidColor(),
   override var parent: Shape? = null
 ) :
   Shape {

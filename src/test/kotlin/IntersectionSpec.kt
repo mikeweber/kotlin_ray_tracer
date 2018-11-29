@@ -1,6 +1,6 @@
 import com.weberapps.ray.tracer.intersection.Intersection
 import com.weberapps.ray.tracer.intersection.Intersections
-import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Vector
@@ -109,7 +109,7 @@ object IntersectionSpec : Spek({
   }
 
   context("reflectance") {
-    val glass = Material(refractiveIndex = 1.52f)
+    val glass = SolidColor(refractiveIndex = 1.52f)
     val sphere = Sphere(material = glass)
 
     it("should return 1 when total internal reflection") {

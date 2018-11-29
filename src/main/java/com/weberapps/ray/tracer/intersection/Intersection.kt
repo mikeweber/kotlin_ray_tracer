@@ -3,7 +3,6 @@ package com.weberapps.ray.tracer.intersection
 import com.weberapps.ray.tracer.math.Light
 import com.weberapps.ray.tracer.constants.EPSILON
 import com.weberapps.ray.tracer.material.AIR
-import com.weberapps.ray.tracer.material.Material
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Vector

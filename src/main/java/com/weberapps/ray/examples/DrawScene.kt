@@ -4,7 +4,7 @@ import com.weberapps.ray.tracer.renderer.Camera
 import com.weberapps.ray.tracer.renderer.Canvas
 import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.math.Light
-import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.renderer.PPMGenerator
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.shape.Sphere
@@ -32,7 +32,7 @@ class DrawScene(filename: String = "scene_with_multiple_shadows.ppm", hsize: Int
 
   fun draw(hsize: Int, vsize: Int): Canvas {
     val squash = Transformation.scale(10f, 0.01f, 10f)
-    val matte = Material(Color(1f, 0.9f, 0.9f), specular = 0f)
+    val matte = SolidColor(Color(1f, 0.9f, 0.9f), specular = 0f)
     val floor = Sphere(transform = squash, material = matte)
 
     val leftWallTransform = Transformation.translation(0f, 0f, 5f) *
@@ -48,7 +48,7 @@ class DrawScene(filename: String = "scene_with_multiple_shadows.ppm", hsize: Int
     val rightWall = Sphere(transform = rightWallTransform, material = matte)
 
     val middleTransform = Transformation.translation(-0.5f, 1f, 0.5f)
-    val middleMaterial = Material(
+    val middleMaterial = SolidColor(
       color = Color(0.1f, 1f, 0.5f),
       diffuse = 0.7f,
       specular = 0.3f
@@ -57,7 +57,7 @@ class DrawScene(filename: String = "scene_with_multiple_shadows.ppm", hsize: Int
 
     val rightTransform = Transformation.translation(1.5f, 0.5f, -0.5f) *
       Transformation.scale(0.5f, 0.5f, 0.5f)
-    val rightMaterial = Material(
+    val rightMaterial = SolidColor(
       color = Color(0.5f, 1f, 0.1f),
       diffuse = 0.7f,
       specular = 0.7f
@@ -66,7 +66,7 @@ class DrawScene(filename: String = "scene_with_multiple_shadows.ppm", hsize: Int
 
     val leftTransform = Transformation.translation(-1.75f, 0.5f, -0.5f) *
       Transformation.scale(0.5f, 0.5f, 0.5f)
-    val leftMaterial = Material(
+    val leftMaterial = SolidColor(
       color = Color(1f, 0.7f, 0f),
       diffuse = 0.7f,
       specular = 0.3f

@@ -2,7 +2,7 @@ import com.weberapps.ray.tracer.*
 import com.weberapps.ray.tracer.constants.TAU
 import com.weberapps.ray.tracer.intersection.Intersection
 import com.weberapps.ray.tracer.intersection.Intersections
-import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Transformation
@@ -30,7 +30,7 @@ object WorldSpec: Spek({
 
     it("should have two objects and a single light source") {
       val s1 = Sphere(
-        material = Material(
+        material = SolidColor(
           color = Color(0.8f, 1f, 0.6f),
           diffuse = 0.7f,
           specular = 0.2f
@@ -118,7 +118,7 @@ object WorldSpec: Spek({
     it("should return a mix of reflected and material color") {
       val world = World.default()
       val moveDown = Transformation.translation(0f, -1f, 0f)
-      val shape = Plane(transform = moveDown, material = Material(reflective = 0.5f))
+      val shape = Plane(transform = moveDown, material = SolidColor(reflective = 0.5f))
       val f = (Math.sqrt(2.0) / 2.0).toFloat()
       val ray = Ray(Point(0f, 0f, -3f), Vector(0f, -f, f))
       val hit = Intersection(Math.sqrt(2.0).toFloat(), shape)
@@ -127,7 +127,7 @@ object WorldSpec: Spek({
     }
 
     it("should return the shadeHit from the reflection's viewpoint") {
-      val glass = Material(
+      val glass = SolidColor(
         color = Color.BLACK,
         reflective = 1f,
         ambient = 0f,
@@ -139,7 +139,7 @@ object WorldSpec: Spek({
       val wall = Plane(material = glass, transform = wallTransform)
       val sphereTransform = Transformation.translation(2f, 0f, -3f)
       val sphereColor =
-        Material(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
+        SolidColor(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
       val sphere = Sphere(transform = sphereTransform, material = sphereColor)
       val light = Light(Point(2f, 0f, -1f))
       val world = World(arrayListOf(wall, sphere), arrayListOf(light))
@@ -159,13 +159,13 @@ object WorldSpec: Spek({
     }
 
     it("should return the shadeHit from the reflection's viewpoint when the plane is angled") {
-      val glass = Material(reflective = 1f, ambient = 0f)
+      val glass = SolidColor(reflective = 1f, ambient = 0f)
       val wallTransform = Transformation.rotateY(-TAU / 8) * Transformation.rotateX(
         TAU / 4)
       val wall = Plane(material = glass, transform = wallTransform)
       val sphereTransform = Transformation.translation(3f, 0f, 0f)
       val sphereColor =
-        Material(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
+        SolidColor(ambient = 1f, specular = 0f, diffuse = 0f, shininess = 0)
       val sphere = Sphere(transform = sphereTransform, material = sphereColor)
       val light = Light(Point(2f, 0f, 0f))
       val world = World(arrayListOf(wall, sphere), arrayListOf(light))
@@ -188,14 +188,14 @@ object WorldSpec: Spek({
       val f = (Math.sqrt(2.0) / 2.0).toFloat()
       val r = Ray(Point(0f, 0f, -3f), Vector(0f, -f, f))
       val halfReflectiveTransparent =
-        Material(reflective = 0.5f, transparency = 0.5f, refractiveIndex = 1.5f)
+        SolidColor(reflective = 0.5f, transparency = 0.5f, refractiveIndex = 1.5f)
       val floor = Plane(
         transform = Transformation.translation(0f, -1f, 0f),
         material = halfReflectiveTransparent
       )
       val ball = Sphere(
         Transformation.translation(0f, -3.5f, -0.5f),
-        Material(color = Color.RED, ambient = 0.5f, diffuse = 0f)
+        SolidColor(color = Color.RED, ambient = 0.5f, diffuse = 0f)
       )
 
       world.sceneObjects.add(floor)
@@ -231,7 +231,7 @@ object WorldSpec: Spek({
     it("should return black when the max recursive depth is hit") {
       val world = World.default()
       val shape = world.sceneObjects.first()
-      shape.material = Material(transparency = 1f, refractiveIndex = 1.5f)
+      shape.material = SolidColor(transparency = 1f, refractiveIndex = 1.5f)
       val r = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
       val xs = Intersections(
         2,
@@ -248,7 +248,7 @@ object WorldSpec: Spek({
     it("should return black when under total internal reflection") {
       val world = World.default()
       val shape = world.sceneObjects.first()
-      shape.material = Material(transparency = 1f, refractiveIndex = 1.5f)
+      shape.material = SolidColor(transparency = 1f, refractiveIndex = 1.5f)
       val f = (Math.sqrt(2.0) / 2.0).toFloat()
       val r = Ray(Point(0f, 0f, f), Vector(0f, 1f, 0f))
       val xs = Intersections(
@@ -269,7 +269,7 @@ object WorldSpec: Spek({
       val a = world.sceneObjects.first()
       val b = world.sceneObjects.last()
       a.material = TestMaterial(ambient = 1f)
-      b.material = Material(transparency = 1f, refractiveIndex = 1.5f)
+      b.material = SolidColor(transparency = 1f, refractiveIndex = 1.5f)
       val r = Ray(Point(0f, 0f, 0.1f), Vector(0f, 1f, 0f))
       val xs = Intersections(
         4,
@@ -289,11 +289,11 @@ object WorldSpec: Spek({
       val world = World.default()
       val floor = Plane(
         transform = Transformation.translation(0f, -1f, 0f),
-        material = Material(transparency = 0.5f, refractiveIndex = 1.5f)
+        material = SolidColor(transparency = 0.5f, refractiveIndex = 1.5f)
       )
       val ball = Sphere(
         transform = Transformation.translation(0f, -3.5f, -0.5f),
-        material = Material(color = Color.RED, ambient = 0.5f, diffuse = 0f)
+        material = SolidColor(color = Color.RED, ambient = 0.5f, diffuse = 0f)
       )
       world.sceneObjects.add(floor)
       world.sceneObjects.add(ball)

@@ -1,6 +1,6 @@
 import com.weberapps.ray.tracer.intersection.Intersection
 import com.weberapps.ray.tracer.intersection.Intersections
-import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
@@ -155,12 +155,12 @@ object SphereSpec : Spek({
   context("material property") {
     it("has a default material") {
       val s = Sphere()
-      assertEquals(Material(), s.material)
+      assertEquals(SolidColor(), s.material)
     }
 
     it("can be assigned a material") {
       val s = Sphere()
-      val m = Material(ambient = 0.3f)
+      val m = SolidColor(ambient = 0.3f)
       s.material = m
       assertEquals(m, s.material)
     }
@@ -169,11 +169,11 @@ object SphereSpec : Spek({
   context("glass sphere") {
     it("correctly calculates n1 and n2 at various intersections") {
       val aTransform = Transformation.scale(2f, 2f, 2f)
-      val aMaterial = Material(refractiveIndex = 1.5f)
+      val aMaterial = SolidColor(refractiveIndex = 1.5f)
       val bTransform = Transformation.translation(0f, 0f, -0.25f)
-      val bMaterial = Material(refractiveIndex = 2f)
+      val bMaterial = SolidColor(refractiveIndex = 2f)
       val cTransform = Transformation.translation(0f, 0f, 0.25f)
-      val cMaterial = Material(refractiveIndex = 2.5f)
+      val cMaterial = SolidColor(refractiveIndex = 2.5f)
 
       val a = Sphere(aTransform, aMaterial)
       val b = Sphere(bTransform, bMaterial)

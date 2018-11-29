@@ -4,13 +4,13 @@ import com.weberapps.ray.tracer.constants.EPSILON
 import com.weberapps.ray.tracer.intersection.Intersection
 import com.weberapps.ray.tracer.intersection.Intersections
 import com.weberapps.ray.tracer.material.IMaterial
-import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Vector
 
-class Triangle(val p1: Point, val p2: Point, val p3: Point, override var transform: Matrix = Matrix.eye(4), override var material: IMaterial = Material(), override var parent: Shape? = null): Shape {
+class Triangle(val p1: Point, val p2: Point, val p3: Point, override var transform: Matrix = Matrix.eye(4), override var material: IMaterial = SolidColor(), override var parent: Shape? = null): Shape {
   var e1: Vector = p2 - p1
   var e2: Vector = p3 - p1
   var normal: Vector = e2.cross(e1).normalize()

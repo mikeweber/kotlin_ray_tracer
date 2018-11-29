@@ -3,7 +3,7 @@ package com.weberapps.ray.tracer.material
 import com.weberapps.ray.tracer.math.*
 import com.weberapps.ray.tracer.shape.Shape
 
-open class Material(
+open class SolidColor(
   val color: Color                    = Color.WHITE,
   override val transform: Matrix      = Matrix.eye(4),
   override val ambient: Float         = 0.1f,
@@ -19,7 +19,7 @@ open class Material(
   }
 
   override fun equals(other: Any?): Boolean {
-    if (other !is Material) return false
+    if (other !is SolidColor) return false
 
     return super.equals(other)
       && color == other.color

@@ -3,14 +3,14 @@ package com.weberapps.ray.tracer.shape
 import com.weberapps.ray.tracer.constants.EPSILON
 import com.weberapps.ray.tracer.intersection.Intersections
 import com.weberapps.ray.tracer.material.IMaterial
-import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.math.*
 import java.lang.Float.NEGATIVE_INFINITY
 import java.lang.Float.POSITIVE_INFINITY
 
 open class Cylinder(
   override var transform: Matrix = Matrix.eye(4),
-  override var material: IMaterial = Material(),
+  override var material: IMaterial = SolidColor(),
   var minimum: Float = NEGATIVE_INFINITY,
   var maximum: Float = POSITIVE_INFINITY,
   var closed: Boolean = false,

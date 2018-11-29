@@ -5,7 +5,7 @@ import com.weberapps.ray.tracer.renderer.Canvas
 import com.weberapps.ray.tracer.material.CheckeredPattern
 import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.math.Light
-import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.renderer.PPMGenerator
 import com.weberapps.ray.tracer.shape.Plane
 import com.weberapps.ray.tracer.math.Point
@@ -105,7 +105,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
     val lens = Sphere(
       transform = Transformation.translation(lensCenter.x, lensCenter.y, lensCenter.z) *
         Transformation.scale(1f, 1f, 0.2f),
-      material = Material(refractiveIndex = GLASS, transparency = 1f, reflective = 0.2f, ambient = 0f, diffuse = 0f, specular = 0f)
+      material = SolidColor(refractiveIndex = GLASS, transparency = 1f, reflective = 0.2f, ambient = 0f, diffuse = 0f, specular = 0f)
     )
     world.sceneObjects.add(lens)
     return camera.render(world)
@@ -113,12 +113,12 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
 
   fun initWorld(): World {
     val checkered = CheckeredPattern(reflective = 0.1f)
-    val mirror = Material(reflective = 0.6f)
-    val pondSurface = Plane(material = Material(color = Color.WHITE, reflective = 0.9f, transparency = 1f, refractiveIndex = WATER, shininess = 300))
+    val mirror = SolidColor(reflective = 0.6f)
+    val pondSurface = Plane(material = SolidColor(color = Color.WHITE, reflective = 0.9f, transparency = 1f, refractiveIndex = WATER, shininess = 300))
     val floor = Plane(material = CheckeredPattern(reflective = 0f), transform = Transformation.translation(0f, -2f, 0f))
 
     val farWall = Plane(
-      material = Material(Color(0.1f, 0.1f, 0.9f), specular = 0f),
+      material = SolidColor(Color(0.1f, 0.1f, 0.9f), specular = 0f),
       transform = Transformation.translation(0f, 0f, 70f) *
         Transformation.rotateX(TAU / 4)
     )
@@ -164,7 +164,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
 
     val rightTransform = Transformation.translation(2f, 0.5f, 1.5f) *
       Transformation.scale(0.5f, 0.5f, 0.5f)
-    val rightMaterial = Material(
+    val rightMaterial = SolidColor(
       color = Color.WHITE,
       ambient = 0f,
       diffuse = 0f,
@@ -177,7 +177,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
 
     val leftTransform = Transformation.translation(-1.75f, 0.5f, 1.5f) *
       Transformation.scale(0.5f, 0.5f, 0.5f)
-    val leftMaterial = Material(
+    val leftMaterial = SolidColor(
       color = Color(1f, 0.7f, 0f),
       diffuse = 0.7f,
       specular = 0.3f,
@@ -187,7 +187,7 @@ class DrawSceneWithPlanes(var filename: String, val hsize: Int = 160, val vsize:
 
     val glassTransform1 = Transformation.translation(1f, 1f, -2f) *
       Transformation.scale(0.5f, 0.5f, 0.5f)
-    val glass = Material(refractiveIndex = GLASS, reflective = 0.8f, transparency = 1f, diffuse = 0.05f, specular = 0.1f)
+    val glass = SolidColor(refractiveIndex = GLASS, reflective = 0.8f, transparency = 1f, diffuse = 0.05f, specular = 0.1f)
     val glassSphere1 = Sphere(transform = glassTransform1, material = glass)
 
     val mirrorTransform = Transformation.translation(-1.0f, 0.8f, 4.7f) *

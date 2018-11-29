@@ -1,6 +1,6 @@
 import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.math.Point
-import com.weberapps.ray.tracer.shape.RingMaterial
+import com.weberapps.ray.tracer.material.RingMaterial
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.it

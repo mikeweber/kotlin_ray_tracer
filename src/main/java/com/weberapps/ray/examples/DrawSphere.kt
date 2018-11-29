@@ -3,7 +3,7 @@ package com.weberapps.ray.examples
 import com.weberapps.ray.tracer.renderer.Canvas
 import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.math.Light
-import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.renderer.PPMGenerator
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
@@ -24,7 +24,7 @@ class DrawSphere(filename: String = "sphere.ppm") {
   private fun draw(): Canvas {
     val color = Color(0.1f, 0.2f, 1f)
     val sphere = Sphere()
-    val material = Material(color = color)
+    val material = SolidColor(color = color)
     sphere.material = material
     val light = Light(Point(-10f, 10f, 10f))
     val canvas = Canvas(500, 500)

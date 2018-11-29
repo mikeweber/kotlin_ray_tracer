@@ -1,11 +1,10 @@
-package com.weberapps.ray.tracer.shape
+package com.weberapps.ray.tracer.material
 
-import com.weberapps.ray.tracer.material.IMaterial
-import com.weberapps.ray.tracer.material.VACUUM
 import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.math.Light
 import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.shape.Shape
 
 class RingMaterial(
   val tick: Color                     = Color.WHITE,
@@ -20,7 +19,7 @@ class RingMaterial(
   override val refractiveIndex: Float = VACUUM
 ) : IMaterial {
   override fun effectiveColor(shape: Shape, worldSpacePoint: Point, light: Light): Color {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    return patternAt(patternSpacePoint(shape, worldSpacePoint)) * light.intensity
   }
 
   fun patternAt(objectSpacePoint: Point): Color {

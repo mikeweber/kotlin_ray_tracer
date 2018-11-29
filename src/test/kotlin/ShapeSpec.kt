@@ -1,12 +1,11 @@
 import com.weberapps.ray.tracer.*
-import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Transformation
 import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.math.Color
-import com.weberapps.ray.tracer.shape.Group
 import junit.framework.TestCase.assertEquals
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
@@ -24,7 +23,7 @@ object ShapeSpec: Spek({
     }
 
     it("should have a default material") {
-      assertEquals(Material(), shape.material)
+      assertEquals(SolidColor(), shape.material)
     }
 
     it("should be able to set the transform") {
@@ -34,7 +33,7 @@ object ShapeSpec: Spek({
     }
 
     it("should be able to set the material") {
-      val material = Material(Color.BLUE)
+      val material = SolidColor(Color.BLUE)
       shape.material = material
       assertEquals(material, shape.material)
     }

@@ -6,7 +6,7 @@ import com.weberapps.ray.tracer.math.Light
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Transformation
-import com.weberapps.ray.tracer.material.Material
+import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.shape.Shape
 import com.weberapps.ray.tracer.shape.Sphere
@@ -15,7 +15,7 @@ class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources
   companion object {
     fun default(): World {
       val s1 = Sphere(
-        material = Material(
+        material = SolidColor(
           color = Color(0.8f, 1f, 0.6f),
           diffuse = 0.7f,
           specular = 0.2f
