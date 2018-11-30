@@ -2,7 +2,7 @@ package com.weberapps.ray.examples
 
 import com.weberapps.ray.tracer.renderer.Canvas
 import com.weberapps.ray.tracer.math.Color
-import com.weberapps.ray.tracer.renderer.PPMGenerator
+import com.weberapps.ray.tracer.io.PPMGenerator
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.shape.Sphere

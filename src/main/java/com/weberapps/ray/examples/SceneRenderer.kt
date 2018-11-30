@@ -6,7 +6,7 @@ import com.weberapps.ray.tracer.math.Transformation
 import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.renderer.Camera
 import com.weberapps.ray.tracer.renderer.Canvas
-import com.weberapps.ray.tracer.renderer.PPMGenerator
+import com.weberapps.ray.tracer.io.PPMGenerator
 import com.weberapps.ray.tracer.renderer.World
 import java.nio.file.Paths
 import java.time.Duration

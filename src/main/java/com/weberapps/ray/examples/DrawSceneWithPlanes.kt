@@ -6,7 +6,7 @@ import com.weberapps.ray.tracer.material.CheckeredPattern
 import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.math.Light
 import com.weberapps.ray.tracer.material.SolidColor
-import com.weberapps.ray.tracer.renderer.PPMGenerator
+import com.weberapps.ray.tracer.io.PPMGenerator
 import com.weberapps.ray.tracer.shape.Plane
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.shape.Sphere

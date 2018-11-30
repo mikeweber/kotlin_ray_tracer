@@ -1,5 +1,6 @@
-package com.weberapps.ray.tracer.renderer
+package com.weberapps.ray.tracer.io
 
+import com.weberapps.ray.tracer.renderer.Canvas
 import java.io.*
 
 class PPMGenerator(private val canvas: Canvas) {

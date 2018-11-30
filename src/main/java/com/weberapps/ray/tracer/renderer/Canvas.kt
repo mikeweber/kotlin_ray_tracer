@@ -22,7 +22,7 @@ class Canvas(val width: Int, val height: Int, private val defaultColor: Color = 
     val newCanvas = Canvas(width, height)
     for (x in 0..(width - 1)) {
       for (y in 0..(height - 1)) {
-        newCanvas.setPixel(x, y, getPixel(x, y) / scalar.toFloat())
+        newCanvas.setPixel(x, y, getPixel(x, y) / scalar)
       }
     }
     return newCanvas
