@@ -1,20 +1,28 @@
 package com.weberapps.ray.tracer.io
 
 import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.shape.Group
+import com.weberapps.ray.tracer.shape.SmoothTriangle
 import com.weberapps.ray.tracer.shape.Triangle
-import sun.awt.image.IntegerInterleavedRaster
 import java.io.Reader
 import java.lang.Float.valueOf
-import javax.print.attribute.IntegerSyntax
 
 class OBJReader(contents: Reader) {
   val ignoredLines: ArrayList<String> = arrayListOf()
   val vertices: ArrayList<Point> = arrayListOf(Point(0f, 0f, 0f))
-  val group: Group = com.weberapps.ray.tracer.shape.Group()
+  val normals: ArrayList<Vector> = arrayListOf(Vector(0f, 0f, 0f))
+  var currentGroup: String? = null
+  val group: Group
+    get() { return groups.getOrDefault(currentGroup, Group()) }
+  val groups: HashMap<String?, Group> = HashMap()
 
   init {
     parseFile(contents)
+  }
+
+  fun defaultGroup(): Group {
+    return groups.getOrDefault(null, Group())
   }
 
   private fun parseFile(contents: Reader) {
@@ -23,59 +31,94 @@ class OBJReader(contents: Reader) {
 
   private fun parseLine(line: String) {
     if (line.isEmpty()) return
+    val parts = line.split(' ')
+    val head = parts[0]
+    val tail = parts.drop(1)
 
-    when(line[0]) {
-      'v' -> {
-        val point = parseVertex(line)
-        if (point == null) {
-          fail(line)
-        } else {
-          vertices.add(point)
-        }
-      }
-      'f' -> {
-        val face = parseFace(line)
-        if (face == null) {
-          fail(line)
-        } else {
-          for (f in face) {
-            group.add(f)
-          }
-        }
-      }
-      else -> fail(line)
+    when(head) {
+      "v"  -> addPoint(parseVertex(tail))        ?: return fail(line)
+      "f"  -> addFacesToGroup(parseFace(tail))   ?: return fail(line)
+      "g"  -> currentGroup = parseGroup(tail)    ?: return fail(line)
+      "vn" -> addNormal(parseVectorNormal(tail)) ?: return fail(line)
+      else -> return fail(line)
     }
   }
 
-  private fun fail(line: String) { ignoredLines.add(line) }
+  private fun parseVertex(line: List<String>): Point? {
+    if (line.size != 3) return null
 
-  private fun parseVertex(line: String): Point? {
-    val floats = line.split(" ").subList(1, 4).map { char -> valueOf(char) }
-    if (floats.size != 3) return null
-
+    val floats = line.map { char -> valueOf(char) }
     return Point(floats[0], floats[1], floats[2])
   }
 
-  private fun parseFace(line: String): ArrayList<Triangle>? {
-    val split = line.split(" ")
-    val indices = split.subList(1, split.size).map { char -> Integer.parseInt(char)} as ArrayList<Int>
-    if (indices.size < 3) return null
-    val facePoints = arrayListOf<Point>()
-    for (index in indices) {
-      facePoints.add(vertices[index])
-    }
+  private fun parseFace(line: List<String>): ArrayList<Triangle>? {
+    val vertexIndices = line.map { part -> Integer.parseInt(part.split('/')[0])} as ArrayList<Int>
+    val normalIndices = line.map { part -> if (part.split('/').size < 3) null else Integer.parseInt(part.split('/')[2]) }
+    if (vertexIndices.size < 3) return null
 
-    return fanTriangulation(facePoints)
+    val facePoints = arrayListOf<Point>()
+    for (index in vertexIndices) facePoints.add(vertices[index])
+
+    val faceNormals = arrayListOf<Vector>()
+    for (index in normalIndices) if (index != null) faceNormals.add(normals[index])
+
+    return fanTriangulation(facePoints, faceNormals)
   }
 
-  private fun fanTriangulation(facePoints: ArrayList<Point>): ArrayList<Triangle> {
+  private fun fanTriangulation(facePoints: ArrayList<Point>, faceNormals: ArrayList<Vector>): ArrayList<Triangle> {
     val triangles = arrayListOf<Triangle>()
 
     for (index in (1..(facePoints.size - 2))) {
-      val triangle = Triangle(facePoints[0], facePoints[index], facePoints[index + 1])
+      val triangle = if (faceNormals.size > index + 1) {
+        Triangle(facePoints[0], facePoints[index], facePoints[index + 1])
+      } else {
+        SmoothTriangle(facePoints[0], facePoints[index], facePoints[index + 1], faceNormals[0], faceNormals[index], faceNormals[index + 1])
+      }
       triangles.add(triangle)
     }
 
     return triangles
   }
+
+  private fun parseGroup(line: List<String>): String? {
+    return line[1]
+  }
+
+  private fun parseVectorNormal(line: List<String>): Vector? {
+    if (line.size != 3) return null
+
+    val floats = line.map { char -> valueOf(char) }
+    return Vector(floats[0], floats[1], floats[2])
+  }
+
+  private fun addPoint(point: Point?): Point? {
+    if (point == null) return null
+
+    vertices.add(point)
+    return point
+  }
+
+  private fun addNormal(vector: Vector?): Vector? {
+    if (vector == null) return null
+
+    normals.add(vector)
+    return vector
+  }
+
+  private fun addFacesToGroup(triangles: ArrayList<Triangle>?): ArrayList<Triangle>? {
+    if (triangles == null) return null
+
+    for (tri in triangles) {
+      addFaceToGroup(tri)
+    }
+    return triangles
+  }
+
+  private fun addFaceToGroup(tri: Triangle?): Triangle? {
+    if (tri != null) groups[currentGroup] = group.add(tri)
+
+    return tri
+  }
+
+  private fun fail(line: String) { ignoredLines.add(line) }
 }

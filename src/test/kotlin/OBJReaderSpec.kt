@@ -1,11 +1,15 @@
 import com.weberapps.ray.tracer.io.OBJReader
 import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.shape.Triangle
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.it
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import java.io.File
 import java.io.StringReader
+import java.nio.file.Paths
 
 object OBJReaderSpec: Spek({
   context("when parsing files") {
@@ -68,6 +72,38 @@ object OBJReaderSpec: Spek({
       assertEquals(parser.vertices[4], t2.p3)
     }
 
+    it("should parse faces with normals") {
+      val fileContents = """
+        v 0 1 0
+        v -1 0 0
+        v 1 0 0
+
+        vn -1 0 0
+        vn 1 0 0
+        vn 0 1 0
+
+        f 1//3 2//1 3//2
+        f 1/0/3 2/102/1 3/14/2
+      """.trimIndent()
+
+      val parser = OBJReader(StringReader(fileContents))
+      val g = parser.defaultGroup()
+
+      assertEquals(2, g.shapes.size)
+      val t1 = g.shapes[0] as Triangle
+      val t2 = g.shapes[1] as Triangle
+
+      assertEquals(parser.vertices[1], t1.p1)
+      assertEquals(parser.vertices[2], t1.p2)
+      assertEquals(parser.vertices[3], t1.p3)
+
+      assertEquals(parser.normals[3], t2.p1)
+      assertEquals(parser.normals[1], t2.p2)
+      assertEquals(parser.normals[2], t2.p3)
+
+      assertEquals(t1, t2)
+    }
+
     it("should be able to break down polygons into triangles") {
       val fileContents = """
         v -1 1 0
@@ -98,6 +134,39 @@ object OBJReaderSpec: Spek({
       assertEquals(parser.vertices[1], t3.p1)
       assertEquals(parser.vertices[4], t3.p2)
       assertEquals(parser.vertices[5], t3.p3)
+    }
+
+    it("should group triangles") {
+      val file = File(Paths.get("").toAbsolutePath().toString() + "/src/test/resources/triangles.obj")
+      val parser = OBJReader(file.reader())
+      val g1 = parser.groups["FirstGroup"]
+      val g2 = parser.groups["SecondGroup"]
+      assertNotNull(g1)
+      assertNotNull(g2)
+      val t1 = g1!!.shapes[0] as Triangle
+      val t2 = g2!!.shapes[0] as Triangle
+
+      assertEquals(parser.vertices[1], t1.p1)
+      assertEquals(parser.vertices[2], t1.p2)
+      assertEquals(parser.vertices[3], t1.p3)
+
+      assertEquals(parser.vertices[1], t2.p1)
+      assertEquals(parser.vertices[3], t2.p2)
+      assertEquals(parser.vertices[4], t2.p3)
+    }
+
+    it("should parse vertex normals") {
+      val fileContents = """
+        vn 0 0 1
+        vn 0.707 0 -0.707
+        vn 1 2 3
+      """.trimIndent()
+
+      val parser = OBJReader(StringReader(fileContents))
+
+      assertEquals(Vector(    0f, 0f,      1f), parser.normals[1])
+      assertEquals(Vector(0.707f, 0f, -0.707f), parser.normals[1])
+      assertEquals(Vector(    1f, 2f,      3f), parser.normals[1])
     }
   }
 })

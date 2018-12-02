@@ -1,5 +1,6 @@
 package com.weberapps.ray.tracer.shape
 
+import com.weberapps.ray.tracer.intersection.Intersection
 import com.weberapps.ray.tracer.intersection.Intersections
 import com.weberapps.ray.tracer.material.Material
 import com.weberapps.ray.tracer.math.Matrix
@@ -21,8 +22,14 @@ interface Shape {
   fun normal(point: Point): Vector {
     return normalToWorld(localNormal(worldToObject(point)))
   }
+  fun normal(point: Point, hit: Intersection): Vector {
+    return normal(point)
+  }
 
   fun localNormal(localPoint: Point): Vector
+  fun localNormal(localPoint: Point, hit: Intersection): Vector {
+    return localNormal(localPoint)
+  }
 
   fun worldToObject(point: Point): Point {
     val localPoint = parent?.worldToObject(point) ?: point

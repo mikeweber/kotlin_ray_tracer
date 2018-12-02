@@ -21,7 +21,9 @@ class Intersection(
   var reflectVector: Vector = Vector(0f, 0f, -1f),
   var n1: Float = 1f,
   var n2: Float = 1f,
-  var underPoint: Point = Point(0f, 0f, 0f)
+  var underPoint: Point = Point(0f, 0f, 0f),
+  val u: Float? = null,
+  val v: Float? = null
 ): Comparable<Intersection> {
   override fun equals(other: Any?): Boolean {
     if (other !is Intersection) return false
@@ -55,7 +57,7 @@ class Intersection(
     val hitPoint = ray.positionAt(t)
     val rayVector = ray.direction
     val eyeVector = -ray.direction
-    var normalVector = shape.normal(hitPoint)
+    var normalVector = shape.normal(hitPoint, this)
     val reflectVector = reflect(rayVector, normalVector)
     val inside = normalVector.dot(eyeVector) < 0f
     if (inside) normalVector = -normalVector
@@ -74,7 +76,9 @@ class Intersection(
       reflectVector,
       n1,
       n2,
-      underPoint
+      underPoint,
+      u = this.u,
+      v = this.v
     )
   }
 

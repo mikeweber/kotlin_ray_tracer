@@ -5,3 +5,5 @@ gradlew*
 out
 build
 *.ppm
+.attach_pid*
+teapot.obj

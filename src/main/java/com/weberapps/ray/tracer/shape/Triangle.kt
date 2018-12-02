@@ -10,7 +10,7 @@ import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Vector
 
-class Triangle(val p1: Point, val p2: Point, val p3: Point, override var transform: Matrix = Matrix.eye(4), override var material: Material = SolidColor(), override var parent: Shape? = null): Shape {
+open class Triangle(val p1: Point, val p2: Point, val p3: Point, override var transform: Matrix = Matrix.eye(4), override var material: Material = SolidColor(), override var parent: Shape? = null): Shape {
   var e1: Vector = p2 - p1
   var e2: Vector = p3 - p1
   var normal: Vector = e2.cross(e1).normalize()
@@ -31,10 +31,10 @@ class Triangle(val p1: Point, val p2: Point, val p3: Point, override var transfo
     val v = f * localRay.direction.dot(originCrossE1)
     if (v < 0 || 1 < (u + v)) return Intersections()
 
-    return Intersections(Intersection(f * e2.dot(originCrossE1), this))
+    return Intersections(Intersection(f * e2.dot(originCrossE1), this, u = u, v = v))
   }
 
   override fun localNormal(localPoint: Point): Vector {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    return normal
   }
 }

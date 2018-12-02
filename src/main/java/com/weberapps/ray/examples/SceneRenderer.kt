@@ -19,9 +19,15 @@ interface SceneRenderer {
 
   fun initWorld(): World
 
-  fun save() {
+  fun save(
+    world: World = initWorld(),
+    from: Point = Point(0f, 0f, -5f),
+    to: Point = Point(0f, 0f, 0f),
+    up: Vector = Vector(0f, 1f, 0f),
+    fieldOfView: Double = TAU / 6
+  ) {
     val t0 = Instant.now()
-    saveCanvas(render(initWorld()))
+    saveCanvas(render(world, from, to, up, fieldOfView))
     println("Finished in ${Duration.between(t0, Instant.now())}")
   }
 

@@ -28,6 +28,11 @@ class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources
     }
   }
 
+  fun add(shape: Shape): World {
+    sceneObjects.add(shape)
+    return this
+  }
+
   fun colorAt(ray: Ray, refractionsLeft: Int = 5): Color {
     if (refractionsLeft <= 0) return background
     val intersections = intersect(ray)
