@@ -14,21 +14,23 @@ import java.io.File
 import java.nio.file.Paths
 
 class DrawTeapot(override val hsize: Int, override val vsize: Int, override val filename: String) : SceneRenderer {
-  init { save(from = Point(0f, 6f, -10f), to = Point(0f, 2f, 0f)) }
+  init { save(from = Point(8f, 20f, -30f), to = Point(0f, 8f, 0f)) }
 
   override fun initWorld(): World {
     val parser =  OBJReader(File(Paths.get("").toAbsolutePath().toString() + "/teapot-low.obj").reader())
-    val world = World(lightSources = arrayListOf(Light(Point(5f, 3f, -5f))))
+    val world = World(lightSources = arrayListOf(Light(Point(10f, 24f, -30f))))
+    val offwhite = SolidColor(248f / 255f, 248f / 255f, 1f)
     for (g in parser.groups.values) {
-      g.material = SolidColor(139f / 255f, 64f / 255f, 0f)
+      for (s in g.shapes) s.material = offwhite
+
+      g.transform *= Transformation.rotateX(-TAU / 4)
       world.add(g)
     }
-    val floor = Plane(material = CheckeredPattern(SolidColor(0.8f, 0.8f, 0.8f), SolidColor(0.3f, 0.3f, 0.3f), transform = Transformation.scale(0.25f)))
+    val floor = Plane(material = CheckeredPattern(SolidColor(0.8f, 0.8f, 0.8f), SolidColor(0.3f, 0.3f, 0.3f)))
     val backdrop = Plane(
-      Transformation.translation(0f, 0f, 10f) * Transformation.rotateX(TAU / 4),
+      Transformation.translation(0f, 0f, 20f) * Transformation.rotateX(TAU / 4),
       GradientMaterial(SolidColor(0.2f, 0.2f, 0.6f), SolidColor(0.7f, 0.7f, 1.0f), Transformation.rotateZ(TAU / 4), specular = 0f)
     )
-    world.add(floor).add(backdrop)
-    return world
+    return world.add(floor).add(backdrop)
   }
 }
