@@ -37,4 +37,15 @@ open class Triangle(val p1: Point, val p2: Point, val p3: Point, override var tr
   override fun localNormal(localPoint: Point): Vector {
     return normal
   }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is Triangle) return false
+
+    return p1 == other.p1
+      && p2 == other.p2
+      && p3 == other.p3
+      && transform == other.transform
+      && material == other.material
+      && parent == other.parent
+  }
 }

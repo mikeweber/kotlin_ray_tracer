@@ -1,4 +1,5 @@
 import com.weberapps.ray.tracer.intersection.Intersection
+import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.material.StripePattern
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Transformation
@@ -15,8 +16,8 @@ object StripePatternSpec: Spek({
     val pattern = StripePattern()
 
     it("should be black and white be default") {
-      assertEquals(Color.WHITE, pattern.zig)
-      assertEquals(Color.BLACK, pattern.zag)
+      assertEquals(Color.WHITE, (pattern.zig as SolidColor).color)
+      assertEquals(Color.BLACK, (pattern.zag as SolidColor).color)
     }
   }
 

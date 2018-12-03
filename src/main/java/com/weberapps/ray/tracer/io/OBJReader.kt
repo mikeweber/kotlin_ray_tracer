@@ -31,7 +31,7 @@ class OBJReader(contents: Reader) {
 
   private fun parseLine(line: String) {
     if (line.isEmpty()) return
-    val parts = line.split(' ')
+    val parts = line.trim().split(Regex("\\s+"))
     val head = parts[0]
     val tail = parts.drop(1)
 
@@ -52,12 +52,19 @@ class OBJReader(contents: Reader) {
   }
 
   private fun parseFace(line: List<String>): ArrayList<Triangle>? {
-    val vertexIndices = line.map { part -> Integer.parseInt(part.split('/')[0])} as ArrayList<Int>
-    val normalIndices = line.map { part -> if (part.split('/').size < 3) null else Integer.parseInt(part.split('/')[2]) }
+    val vertexIndices = line.map { part ->
+      Integer.parseInt(if (part.split('/')[0] == "") part else part.split('/')[0])
+    }
+    val normalIndices = line.map { part ->
+      if (part.split('/').size < 3) null else Integer.parseInt(part.split('/')[2])
+    }
     if (vertexIndices.size < 3) return null
 
     val facePoints = arrayListOf<Point>()
-    for (index in vertexIndices) facePoints.add(vertices[index])
+    for (index in vertexIndices) {
+      if (vertices.size <= index) println("IndexOutOfBounds: $index -- $line")
+      facePoints.add(vertices[index])
+    }
 
     val faceNormals = arrayListOf<Vector>()
     for (index in normalIndices) if (index != null) faceNormals.add(normals[index])
@@ -70,9 +77,9 @@ class OBJReader(contents: Reader) {
 
     for (index in (1..(facePoints.size - 2))) {
       val triangle = if (faceNormals.size > index + 1) {
-        Triangle(facePoints[0], facePoints[index], facePoints[index + 1])
-      } else {
         SmoothTriangle(facePoints[0], facePoints[index], facePoints[index + 1], faceNormals[0], faceNormals[index], faceNormals[index + 1])
+      } else {
+        Triangle(facePoints[0], facePoints[index], facePoints[index + 1])
       }
       triangles.add(triangle)
     }
@@ -81,7 +88,7 @@ class OBJReader(contents: Reader) {
   }
 
   private fun parseGroup(line: List<String>): String? {
-    return line[1]
+    return line[0]
   }
 
   private fun parseVectorNormal(line: List<String>): Vector? {

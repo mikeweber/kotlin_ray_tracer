@@ -1,6 +1,7 @@
 import com.weberapps.ray.tracer.io.OBJReader
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.shape.SmoothTriangle
 import com.weberapps.ray.tracer.shape.Triangle
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
@@ -90,16 +91,16 @@ object OBJReaderSpec: Spek({
       val g = parser.defaultGroup()
 
       assertEquals(2, g.shapes.size)
-      val t1 = g.shapes[0] as Triangle
-      val t2 = g.shapes[1] as Triangle
+      val t1 = g.shapes[0] as SmoothTriangle
+      val t2 = g.shapes[1] as SmoothTriangle
 
       assertEquals(parser.vertices[1], t1.p1)
       assertEquals(parser.vertices[2], t1.p2)
       assertEquals(parser.vertices[3], t1.p3)
 
-      assertEquals(parser.normals[3], t2.p1)
-      assertEquals(parser.normals[1], t2.p2)
-      assertEquals(parser.normals[2], t2.p3)
+      assertEquals(parser.normals[3], t2.n1)
+      assertEquals(parser.normals[1], t2.n2)
+      assertEquals(parser.normals[2], t2.n3)
 
       assertEquals(t1, t2)
     }
@@ -165,8 +166,8 @@ object OBJReaderSpec: Spek({
       val parser = OBJReader(StringReader(fileContents))
 
       assertEquals(Vector(    0f, 0f,      1f), parser.normals[1])
-      assertEquals(Vector(0.707f, 0f, -0.707f), parser.normals[1])
-      assertEquals(Vector(    1f, 2f,      3f), parser.normals[1])
+      assertEquals(Vector(0.707f, 0f, -0.707f), parser.normals[2])
+      assertEquals(Vector(    1f, 2f,      3f), parser.normals[3])
     }
   }
 })

@@ -27,4 +27,13 @@ class SmoothTriangle(
 
     return n2 * hit.u + n3 * hit.v + n1 * (1 - hit.u - hit.v)
   }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is SmoothTriangle) return false
+
+    return super.equals(other)
+      && n1 == other.n1
+      && n2 == other.n2
+      && n3 == other.n3
+  }
 }
