@@ -15,8 +15,7 @@ class Cube(
   override var transform: Matrix = Matrix.eye(4),
   override var material: Material = SolidColor(),
   override var parent: Shape? = null
-) :
-  Shape {
+): MaterializedShape {
   override fun localIntersect(localRay: Ray): Intersections {
     val (xtmin, xtmax) = checkAxis(localRay.origin.x, localRay.direction.x)
     val (ytmin, ytmax) = checkAxis(localRay.origin.y, localRay.direction.y)

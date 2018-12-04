@@ -8,10 +8,14 @@ import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Transformation
 import com.weberapps.ray.tracer.shape.Cone
 import com.weberapps.ray.tracer.shape.Group
+import com.weberapps.ray.tracer.shape.IGroup
 import com.weberapps.ray.tracer.shape.Shape
 
-class GlassOfWater(transform: Matrix = Matrix.eye(4), shapes: ArrayList<Shape> = arrayListOf(), material: Material = SolidColor(), parent: Shape? = null) :
-  Group(transform, shapes, material, parent) {
+class GlassOfWater(
+  override var transform: Matrix = Matrix.eye(4),
+  override val shapes: ArrayList<Shape> = arrayListOf(),
+  override var parent: Shape? = null
+): Group(transform, shapes, parent) {
   init {
     val glass = Cone(
       transform = Transformation.translation(0f, -9f, 0f) * Transformation.scale(0.25f, 3f, 0.25f),

@@ -15,7 +15,7 @@ open class Cylinder(
   var maximum: Float = POSITIVE_INFINITY,
   var closed: Boolean = false,
   override var parent: Shape? = null
-) : Shape {
+) : MaterializedShape {
   override fun localIntersect(localRay: Ray): Intersections {
     return intersectCaps(localRay).add(intersectWalls(localRay))
   }

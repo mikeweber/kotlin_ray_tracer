@@ -10,7 +10,14 @@ import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Vector
 
-open class Triangle(val p1: Point, val p2: Point, val p3: Point, override var transform: Matrix = Matrix.eye(4), override var material: Material = SolidColor(), override var parent: Shape? = null): Shape {
+open class Triangle(
+  val p1: Point,
+  val p2: Point,
+  val p3: Point,
+  override var transform: Matrix = Matrix.eye(4),
+  override var material: Material = SolidColor(),
+  override var parent: Shape? = null
+): MaterializedShape {
   var e1: Vector = p2 - p1
   var e2: Vector = p3 - p1
   var normal: Vector = e2.cross(e1).normalize()

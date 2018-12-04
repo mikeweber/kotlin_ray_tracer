@@ -8,6 +8,7 @@ import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.renderer.World
+import com.weberapps.ray.tracer.shape.MaterializedShape
 import com.weberapps.ray.tracer.shape.Shape
 
 class Intersection(
@@ -37,7 +38,7 @@ class Intersection(
   }
 
   fun colorAt(light: Light, refractionsLeft: Int = 0, world: World? = null): Color? {
-    return shape.material.lighting(this, light, world, isShadowed(light, world), refractionsLeft)
+    return (shape as MaterializedShape).material.lighting(this, light, world, isShadowed(light, world), refractionsLeft)
   }
 
   fun isShadowed(light: Light, world: World?): Boolean {
@@ -110,7 +111,7 @@ class Intersection(
           if (containers.isEmpty()) {
             defaultRefractiveIndex
           } else {
-            containers.last().material.refractiveIndex
+            (containers.last() as MaterializedShape).material.refractiveIndex
           }
       }
 
@@ -125,7 +126,7 @@ class Intersection(
           if (containers.isEmpty()) {
             defaultRefractiveIndex
           } else {
-            containers.last().material.refractiveIndex
+            (containers.last() as MaterializedShape).material.refractiveIndex
           }
         break
       }

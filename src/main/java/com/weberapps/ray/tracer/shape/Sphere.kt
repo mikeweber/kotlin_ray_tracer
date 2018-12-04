@@ -13,10 +13,9 @@ class Sphere(
   override var transform: Matrix = Matrix.eye(4),
   override var material: Material = SolidColor(),
   override var parent: Shape? = null
-) :
-  Shape {
+): MaterializedShape {
   override fun equals(other: Any?): Boolean {
-    if (other !is Shape) return false
+    if (other !is MaterializedShape) return false
 
     return transform == other.transform && material == other.material
   }
@@ -47,6 +46,5 @@ class Sphere(
     return localPoint - localCenter()
   }
 
-  fun localCenter(): Point { return Point(0f, 0f, 0f)
-  }
+  private fun localCenter(): Point = Point(0f, 0f, 0f)
 }

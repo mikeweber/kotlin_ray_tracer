@@ -15,8 +15,7 @@ class Plane(
   override var transform: Matrix = Matrix.eye(4),
   override var material: Material = SolidColor(),
   override var parent: Shape? = null
-) :
-  Shape {
+): MaterializedShape {
   override fun localIntersect(localRay: Ray): Intersections {
     if (abs(localRay.direction.y) < EPSILON) return Intersections(0)
 

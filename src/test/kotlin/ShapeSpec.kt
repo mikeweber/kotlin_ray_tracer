@@ -9,7 +9,7 @@ import com.weberapps.ray.tracer.math.Color
 import junit.framework.TestCase.assertEquals
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
-import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.*
 
 object ShapeSpec: Spek({
   context("TestShape") {
@@ -69,6 +69,17 @@ object ShapeSpec: Spek({
       val f = (Math.sqrt(2.0) / 2).toFloat()
       val n = s.normal(Point(0f, f, -f))
       assertEquals(Vector(0f, 0.97014f, -0.24254f), n)
+    }
+  }
+
+  context("includes") {
+    it("should be true when the compared with self") {
+      val s1 = TestShape(Transformation.scale(2f))
+      val s2 = TestShape(Transformation.scale(2f))
+      val s3 = TestShape(Transformation.scale(1f))
+
+      assertTrue(s1.includes(s2))
+      assertFalse(s1.includes(s3))
     }
   }
 })

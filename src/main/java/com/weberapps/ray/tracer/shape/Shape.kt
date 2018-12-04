@@ -2,7 +2,6 @@ package com.weberapps.ray.tracer.shape
 
 import com.weberapps.ray.tracer.intersection.Intersection
 import com.weberapps.ray.tracer.intersection.Intersections
-import com.weberapps.ray.tracer.material.Material
 import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
@@ -10,7 +9,6 @@ import com.weberapps.ray.tracer.math.Vector
 
 interface Shape {
   var transform: Matrix
-  var material: Material
   var parent: Shape?
 
   fun intersect(ray: Ray): Intersections {
@@ -38,8 +36,16 @@ interface Shape {
   }
 
   fun normalToWorld(vector: Vector): Vector {
-    var normal = Vector(transform.inverse().transpose() * vector).normalize()
+    val normal = Vector(transform.inverse().transpose() * vector).normalize()
 
     return parent?.normalToWorld(normal) ?: normal
+  }
+
+  fun includes(shape: Shape): Boolean {
+    return equals(shape)
+  }
+
+  fun equals(other: Shape): Boolean {
+    return javaClass == other.javaClass && transform == other.transform && parent == other.parent
   }
 }

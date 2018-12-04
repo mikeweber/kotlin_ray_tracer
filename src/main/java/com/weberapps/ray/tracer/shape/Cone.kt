@@ -11,8 +11,14 @@ import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.math.almostZero
 import com.weberapps.ray.tracer.math.floatRoot
 
-class Cone(transform: Matrix = Matrix.eye(4), material: SolidColor = SolidColor(), minimum: Float = -1f, maximum: Float = 1f, closed: Boolean = false, parent: Shape? = null) :
-  Cylinder(transform, material, minimum, maximum, closed, parent) {
+class Cone(
+  transform: Matrix = Matrix.eye(4),
+  material: SolidColor = SolidColor(),
+  minimum: Float = -1f,
+  maximum: Float = 1f,
+  closed: Boolean = false,
+  parent: Shape? = null
+): Cylinder(transform, material, minimum, maximum, closed, parent) {
   override fun localIntersect(localRay: Ray): Intersections {
     return intersectCaps(localRay).add(intersectWalls(localRay))
   }

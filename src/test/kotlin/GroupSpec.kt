@@ -1,12 +1,13 @@
 import com.weberapps.ray.tracer.TestShape
 import com.weberapps.ray.tracer.constants.TAU
 import com.weberapps.ray.tracer.math.*
+import com.weberapps.ray.tracer.shape.Cube
 import com.weberapps.ray.tracer.shape.Group
 import com.weberapps.ray.tracer.shape.Sphere
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.it
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 
 object GroupSpec: Spek({
   context("creating a group") {
@@ -96,6 +97,35 @@ object GroupSpec: Spek({
 
       val n = sphere.normal(Point(1.7321f, 1.1547f, -5.5774f))
       assertEquals(Vector(0.2857f, 0.42854f, -0.85716f), n)
+    }
+  }
+
+  context("includes") {
+    it("should be true when the compared with self") {
+      val s1 = Sphere()
+      val s2 = Cube()
+
+      val g1 = Group(Transformation.scale(3f), arrayListOf(s1))
+      val g2 = Group(Transformation.scale(2f), arrayListOf(s2))
+      val g3 = Group(Transformation.scale(1f), arrayListOf())
+
+      assertTrue(g1.includes(s1))
+      assertFalse(g2.includes(s1))
+      assertFalse(g3.includes(s1))
+
+      assertFalse(g1.includes(s2))
+      assertTrue(g2.includes(s2))
+      assertFalse(g3.includes(s2))
+
+      assertTrue(g1.includes(g1))
+      assertFalse(g1.includes(g2))
+      assertFalse(g1.includes(g3))
+      assertFalse(g2.includes(g1))
+      assertTrue(g2.includes(g2))
+      assertFalse(g2.includes(g3))
+      assertFalse(g3.includes(g1))
+      assertFalse(g3.includes(g2))
+      assertTrue(g3.includes(g3))
     }
   }
 })

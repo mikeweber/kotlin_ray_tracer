@@ -10,6 +10,7 @@ import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.math.Light
 import com.weberapps.ray.tracer.renderer.World
+import com.weberapps.ray.tracer.shape.MaterializedShape
 import com.weberapps.ray.tracer.shape.Plane
 import com.weberapps.ray.tracer.shape.Sphere
 import org.jetbrains.spek.api.Spek
@@ -214,7 +215,7 @@ object WorldSpec: Spek({
   context("refracted color") {
     it("should return black when no opaque surface") {
       val world = World.default()
-      val shape = world.sceneObjects.first()
+      val shape = world.sceneObjects.first() as MaterializedShape
       val r = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
       val xs = Intersections(
         2,
@@ -230,7 +231,7 @@ object WorldSpec: Spek({
 
     it("should return black when the max recursive depth is hit") {
       val world = World.default()
-      val shape = world.sceneObjects.first()
+      val shape = world.sceneObjects.first() as MaterializedShape
       shape.material = SolidColor(transparency = 1f, refractiveIndex = 1.5f)
       val r = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
       val xs = Intersections(
@@ -247,7 +248,7 @@ object WorldSpec: Spek({
 
     it("should return black when under total internal reflection") {
       val world = World.default()
-      val shape = world.sceneObjects.first()
+      val shape = world.sceneObjects.first() as MaterializedShape
       shape.material = SolidColor(transparency = 1f, refractiveIndex = 1.5f)
       val f = (Math.sqrt(2.0) / 2.0).toFloat()
       val r = Ray(Point(0f, 0f, f), Vector(0f, 1f, 0f))
@@ -266,8 +267,8 @@ object WorldSpec: Spek({
 
     it("should spawn a second ray") {
       val world = World.default()
-      val a = world.sceneObjects.first()
-      val b = world.sceneObjects.last()
+      val a = world.sceneObjects.first() as MaterializedShape
+      val b = world.sceneObjects.last() as MaterializedShape
       a.material = TestMaterial(ambient = 1f)
       b.material = SolidColor(transparency = 1f, refractiveIndex = 1.5f)
       val r = Ray(Point(0f, 0f, 0.1f), Vector(0f, 1f, 0f))
@@ -281,7 +282,7 @@ object WorldSpec: Spek({
         )
       )
       val comps = xs[2].prepareHit(r, xs)
-      val c = comps.shape.material.refractedColor(comps, world)
+      val c = (comps.shape as MaterializedShape).material.refractedColor(comps, world)
       assertEquals(Color(0f, 0.99878f, 0.04724f), c)
     }
 

@@ -17,7 +17,7 @@ class SmoothTriangle(
   transform: Matrix = Matrix.eye(4),
   material: Material = SolidColor(),
   parent: Shape? = null
-) : Triangle(p1, p2, p3, transform, material, parent) {
+): Triangle(p1, p2, p3, transform, material, parent) {
   override fun normal(point: Point, hit: Intersection): Vector {
     return normalToWorld(localNormal(worldToObject(point), hit))
   }

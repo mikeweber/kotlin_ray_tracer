@@ -122,7 +122,7 @@ class OBJReader(contents: Reader) {
   }
 
   private fun addFaceToGroup(tri: Triangle?): Triangle? {
-    if (tri != null) groups[currentGroup] = group.add(tri)
+    if (tri != null) groups[currentGroup] = group.add(tri) as Group
 
     return tri
   }

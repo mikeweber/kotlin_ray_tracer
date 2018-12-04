@@ -7,13 +7,14 @@ import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.shape.MaterializedShape
 import com.weberapps.ray.tracer.shape.Shape
 
-class TestShape : Shape {
-  override var transform: Matrix = Matrix.eye(4)
-  override var material: Material = SolidColor()
+class TestShape(
+  override var transform: Matrix = Matrix.eye(4),
+  override var material: Material = SolidColor(),
   override var parent: Shape? = null
-
+): MaterializedShape {
   var savedRay: Ray =
     Ray(Point(0f, 0f, 0f), Vector(0f, 0f, 1f))
 

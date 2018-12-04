@@ -9,6 +9,7 @@ import com.weberapps.ray.tracer.math.Light
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Transformation
 import com.weberapps.ray.tracer.renderer.World
+import com.weberapps.ray.tracer.shape.MaterializedShape
 import com.weberapps.ray.tracer.shape.Plane
 import java.io.File
 import java.nio.file.Paths
@@ -21,7 +22,7 @@ class DrawTeapot(override val hsize: Int, override val vsize: Int, override val 
     val world = World(lightSources = arrayListOf(Light(Point(10f, 24f, -30f))))
     val offwhite = SolidColor(248f / 255f, 248f / 255f, 1f)
     for (g in parser.groups.values) {
-      for (s in g.shapes) s.material = offwhite
+      for (s in g.shapes) (s as MaterializedShape).material = offwhite
 
       g.transform *= Transformation.rotateX(-TAU / 4)
       world.add(g)
