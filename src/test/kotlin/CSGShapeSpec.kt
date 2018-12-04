@@ -1,5 +1,9 @@
 import com.weberapps.ray.tracer.intersection.Intersection
 import com.weberapps.ray.tracer.intersection.Intersections
+import com.weberapps.ray.tracer.math.Point
+import com.weberapps.ray.tracer.math.Ray
+import com.weberapps.ray.tracer.math.Transformation
+import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.shape.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
@@ -182,6 +186,57 @@ object CSGShapeSpec: Spek({
       assertEquals(2, result3.size)
       assertEquals(xs[0], result3[0])
       assertEquals(xs[1], result3[1])
+    }
+  }
+
+  describe("when intersecting a ray") {
+    it("misses the object") {
+      val c = CSGUnion(Sphere(), Cube())
+      val ray = Ray(Point(0f, 2f, -5f), Vector(0f, 0f, 1f))
+      val xs = c.localIntersect(ray)
+      assertTrue(xs.isEmpty())
+    }
+
+    it("hits the union object") {
+      val s1 = Sphere()
+      val s2 = Sphere(transform = Transformation.translation(0f, 0f, 0.5f))
+      val c = CSGUnion(s1, s2)
+      val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
+      val xs = c.localIntersect(ray)
+
+      assertEquals(2, xs.size)
+      assertEquals(4f, xs[0].t)
+      assertEquals(s1, xs[0].shape)
+      assertEquals(6.5f, xs[1].t)
+      assertEquals(s2, xs[1].shape)
+    }
+
+    it("hits the intersect object") {
+      val s1 = Sphere(transform = Transformation.translation(0f, 0f, -0.5f))
+      val s2 = Sphere(transform = Transformation.translation(0f, 0f,  0.5f))
+      val c = CSGIntersect(s1, s2)
+      val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
+      val xs = c.localIntersect(ray)
+
+      assertEquals(2, xs.size)
+      assertEquals(4.5f, xs[0].t)
+      assertEquals(s2, xs[0].shape)
+      assertEquals(5.5f, xs[1].t)
+      assertEquals(s1, xs[1].shape)
+    }
+
+    it("hits the difference object") {
+      val s1 = Sphere(transform = Transformation.translation(0f, 0f, -0.5f))
+      val s2 = Sphere(transform = Transformation.translation(0f, 0f,  0.5f))
+      val c = CSGDifference(s1, s2)
+      val ray = Ray(Point(0f, 0f, -5f), Vector(0f, 0f, 1f))
+      val xs = c.localIntersect(ray)
+
+      assertEquals(2, xs.size)
+      assertEquals(3.5f, xs[0].t)
+      assertEquals(s1, xs[0].shape)
+      assertEquals(4.5f, xs[1].t)
+      assertEquals(s2, xs[1].shape)
     }
   }
 })
