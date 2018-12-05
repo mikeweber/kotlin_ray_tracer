@@ -54,6 +54,6 @@ interface SceneRenderer {
     )
     val camera = Camera(hsize, vsize, fieldOfView, viewTransform)
 
-    return camera.render(world)
+    return camera.coroutineRender(world)
   }
 }

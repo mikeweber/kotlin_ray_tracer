@@ -16,7 +16,7 @@ class GlassOfWater(
   init {
     val outerGlass = Cone(
       Transformation.scale(0.25f, 3f, 0.25f) * Transformation.translation(0f, -3f, 0f),
-      material = SolidColor(diffuse = 0.1f, reflective = 0.7f, transparency = 1f, refractiveIndex = GLASS, shininess = 500),
+      material = SolidColor(diffuse = 0f, reflective = 0.7f, transparency = 1f, refractiveIndex = GLASS, shininess = 500),
       minimum = 2.9f,
       maximum = 4f,
       closed = true
@@ -24,7 +24,7 @@ class GlassOfWater(
 
     val innerGlass = Cone(
       Transformation.scale(0.25f, 3f, 0.25f) * Transformation.translation(0f, -2.7f, 0f),
-      material = SolidColor(diffuse = 0.1f, reflective = 0.7f, transparency = 1f, refractiveIndex = GLASS, shininess = 500),
+      material = SolidColor(diffuse = 0f, reflective = 0.7f, transparency = 1f, refractiveIndex = GLASS, shininess = 500),
       minimum = 2.8f,
       maximum = 4f
     )

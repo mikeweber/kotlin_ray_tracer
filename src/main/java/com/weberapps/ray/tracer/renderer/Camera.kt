@@ -1,9 +1,14 @@
 package com.weberapps.ray.tracer.renderer
 
 import com.weberapps.ray.tracer.constants.TAU
+import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Matrix
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class Camera(val hsize: Int, val vsize: Int, fieldOfView: Double = (TAU / 4), var transform: Matrix = Matrix.eye(4)) {
   var halfWidth = Math.tan(fieldOfView / 2.0)
@@ -22,14 +27,36 @@ class Camera(val hsize: Int, val vsize: Int, fieldOfView: Double = (TAU / 4), va
 
   fun render(world: World): Canvas {
     val canvas = Canvas(hsize, vsize)
+
     for (y in 0..(vsize - 1)) {
       for (x in 0..(hsize - 1)) {
-        val ray = rayForPixel(x, y)
-        val color = world.colorAt(ray)
-        canvas.setPixel(x, y, color)
+        canvas.setPixel(x, y, colorForPixel(x, y, world))
       }
     }
+
     return canvas
+  }
+
+  fun coroutineRender(world: World): Canvas {
+    val canvas = Canvas(hsize, vsize)
+
+    for (y in 0..(vsize - 1)) {
+      for (x in 0..(hsize - 1)) {
+        val color = GlobalScope.async {
+          colorForPixel(x, y, world)
+
+        }
+        canvas.setDeferredPixel(x, y, color)
+      }
+    }
+    runBlocking { canvas.resolvePixels() }
+
+    return canvas
+  }
+
+  fun colorForPixel(px: Int, py: Int, world: World): Color {
+    val ray = rayForPixel(px, py)
+    return world.colorAt(ray)
   }
 
   fun rayForPixel(px: Int, py: Int): Ray {

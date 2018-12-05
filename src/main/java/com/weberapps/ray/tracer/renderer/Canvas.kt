@@ -1,6 +1,7 @@
 package com.weberapps.ray.tracer.renderer
 
 import com.weberapps.ray.tracer.math.Color
+import kotlinx.coroutines.Deferred
 
 class Canvas(val width: Int, val height: Int, private val defaultColor: Color = Color(
   0.0f,
@@ -9,6 +10,7 @@ class Canvas(val width: Int, val height: Int, private val defaultColor: Color = 
 )
 ) {
   private var pixels = Array(width * height) { defaultColor }
+  private var deferredPixels = Array<Deferred<Color>?>(width * height) { null }
 
   operator fun plusAssign(other: Canvas) {
     if (width != other.width || height != other.height) return
@@ -30,6 +32,14 @@ class Canvas(val width: Int, val height: Int, private val defaultColor: Color = 
 
   fun getPixel(x: Int, y: Int): Color {
     return pixels[x + y * width]
+  }
+
+  suspend fun resolvePixels() {
+    for ((i, p) in deferredPixels.withIndex()) pixels[i] = p?.await() ?: defaultColor
+  }
+
+  fun setDeferredPixel(x: Int, y: Int, deferred: Deferred<Color>) {
+    deferredPixels[x + y * width] = deferred
   }
 
   fun setPixel(x: Int, y: Int, pixel: Color) {
