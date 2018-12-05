@@ -1,10 +1,15 @@
 package com.weberapps.ray.tracer.shape
 
 import com.weberapps.ray.tracer.intersection.Intersections
+import com.weberapps.ray.tracer.math.Ray
 
 interface CSGOperation: IGroup {
   var left: Shape
   var right: Shape
+
+  override fun localIntersect(localRay: Ray): Intersections {
+    return filterIntersections(left.intersect(localRay).add(right.intersect(localRay)))
+  }
 
   fun filterIntersections(xs: Intersections): Intersections {
     var inLeft = false

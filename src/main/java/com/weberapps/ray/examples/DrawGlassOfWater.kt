@@ -14,16 +14,19 @@ import com.weberapps.ray.tracer.renderer.World
 import com.weberapps.ray.tracer.shape.Plane
 
 class DrawGlassOfWater(override val hsize: Int, override val vsize: Int, override val filename: String): SceneRenderer {
-  init { save() }
+  init { save(from = Point(2f, 4f, -5f), to = Point(0f, 2f, 0f)) }
 
   override fun initWorld(): World {
-    val floor = Plane(material = CheckeredPattern(SolidColor(0.8f, 0.8f, 0.8f), SolidColor(0.3f, 0.3f, 0.3f)))
+    val floor = Plane(
+      Transformation.translation(-2f, 0f, 0f),
+      CheckeredPattern(SolidColor(0.8f, 0.8f, 0.8f), SolidColor(0.3f, 0.3f, 0.3f))
+    )
     val backdrop = Plane(
-      Transformation.translation(0f, 0f, 2f) * Transformation.rotateX(TAU / 4),
+      Transformation.translation(0f, 0f, 4f) * Transformation.rotateX(TAU / 4),
       GradientMaterial(SolidColor(Color(0.2f, 0.2f, 0.6f)), SolidColor(Color(0.7f, 0.7f, 1.0f)), Transformation.rotateZ(TAU / 4), specular = 0f)
     )
     val glassOfWater = GlassOfWater()
-    val pencil = Pencil(Transformation.translation(-0.6f, 0.4f, 0f) * Transformation.rotateZ(-25 * TAU / 360))
-    return World(arrayListOf(glassOfWater, pencil, floor, backdrop), arrayListOf(Light(Point(3f, 3f, -5f), Color(0.8f, 0.8f, 0.8f))))
+    val pencil = Pencil(Transformation.translation(-0.6f, 0.3f, 0f) * Transformation.rotateZ(-27 * TAU / 360))
+    return World(arrayListOf(glassOfWater, pencil, floor, backdrop), arrayListOf(Light(Point(3f, 6f, -5f), Color(0.8f, 0.8f, 0.8f))))
   }
 }
