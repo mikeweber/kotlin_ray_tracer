@@ -1,30 +1,19 @@
 package com.weberapps.ray.tracer.math
 
-class Point : Tuple {
-  constructor(x: Float, y: Float, z: Float) : super(x, y, z, 1.0f)
-  constructor(tuple: Tuple) : this(tuple.x, tuple.y, tuple.z)
+class Point(override val x: Float, override val y: Float, override val z: Float, override val w: Float = 1f) : ITuple {
+  constructor(tuple: ITuple) : this(tuple.x, tuple.y, tuple.z)
 
-  override operator fun times(scalar: Float): Point {
-    return Point(x * scalar, y * scalar, z * scalar)
-  }
+  operator fun times(scalar: Float) = Point(x * scalar, y * scalar, z * scalar)
+  operator fun div(scalar: Float)   = Point(x / scalar, y / scalar, z / scalar)
+  operator fun plus(other: Vector)  = Point(x + other.x, y + other.y, z + other.z)
+  operator fun unaryMinus()         = Point(-x, -y, -z)
+  operator fun minus(other: Vector) = Point(x - other.x, y - other.y, z - other.z)
+  operator fun minus(other: Point)  = Vector(x - other.x, y - other.y, z - other.z)
+  override fun toString()           = "Point($x, $y, $z)"
 
-  override operator fun div(scalar: Float): Point {
-    return Point(x / scalar, y / scalar, z / scalar)
-  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is ITuple) return false
 
-  operator fun plus(other: Vector): Point {
-    return Point(x + other.x, y + other.y, z + other.z)
-  }
-
-  override operator fun unaryMinus(): Point {
-    return Point(-x, -y, -z)
-  }
-
-  operator fun minus(other: Vector): Point {
-    return Point(x - other.x, y - other.y, z - other.z)
-  }
-
-  operator fun minus(other: Point): Vector {
-    return Vector(x - other.x, y - other.y, z - other.z)
+    return hasSameElements(other)
   }
 }

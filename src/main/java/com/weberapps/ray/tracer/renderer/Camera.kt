@@ -7,7 +7,6 @@ import com.weberapps.ray.tracer.math.Ray
 import com.weberapps.ray.tracer.math.Matrix
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class Camera(val hsize: Int, val vsize: Int, fieldOfView: Double = (TAU / 4), var transform: Matrix = Matrix.eye(4)) {

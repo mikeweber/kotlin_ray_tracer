@@ -35,8 +35,8 @@ interface CSGOperation: IGroup {
 
   fun intersectionAllowed(leftHit: Boolean, inLeft: Boolean, inRight: Boolean): Boolean
 
-  override fun includes(other: Shape): Boolean {
-    return equals(other) || left.includes(other) || right.includes(other)
+  override fun includes(shape: Shape): Boolean {
+    return equals(shape) || left.includes(shape) || right.includes(shape)
   }
 
   fun equals(other: CSGOperation): Boolean {

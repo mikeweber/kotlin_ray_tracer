@@ -76,10 +76,10 @@ object TupleSpec: Spek ({
   }
 
   it("should be able to determine the tuple magnitude") {
-    assertEquals(1f, Vector(1.0f, 0.0f, 0.0f).magnitude())
-    assertEquals(1f, Vector(0.0f, 1.0f, 0.0f).magnitude())
-    assertEquals(1f, Vector(0.0f, 0.0f, 1.0f).magnitude())
-    assertEquals(Math.sqrt(77.0).toFloat(), Vector(4.0f, 5.0f, 6.0f).magnitude(), 0.0001f)
+    assertEquals(1f, Vector(1.0f, 0.0f, 0.0f).magnitude)
+    assertEquals(1f, Vector(0.0f, 1.0f, 0.0f).magnitude)
+    assertEquals(1f, Vector(0.0f, 0.0f, 1.0f).magnitude)
+    assertEquals(Math.sqrt(77.0).toFloat(), Vector(4.0f, 5.0f, 6.0f).magnitude, 0.0001f)
   }
 
   it("should be able to normalize a tuple") {

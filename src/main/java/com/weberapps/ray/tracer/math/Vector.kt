@@ -1,31 +1,21 @@
 package com.weberapps.ray.tracer.math
 
-class Vector : Tuple {
-  constructor(x: Float, y: Float, z: Float) : super(x, y, z, 0f)
-  constructor(tuple: Tuple) : this(tuple.x, tuple.y, tuple.z)
+class Vector(override val x: Float = 0f, override val y: Float = 0f, override val z: Float = 0f, override val w: Float = 0f) : ITuple {
+  constructor(tuple: ITuple) : this(tuple.x, tuple.y, tuple.z)
 
-  operator fun plus(other: Vector): Vector {
-    return Vector(x + other.x, y + other.y, z + other.z)
-  }
+  operator fun plus(other: Vector)   = Vector(x + other.x, y + other.y, z + other.z)
+  operator fun plus(other: Point)    = Point(x + other.x, y + other.y, z + other.z)
+  operator fun minus(other: Vector)  = Vector(x - other.x, y - other.y, z - other.z)
+  operator fun times(scalar: Float)  = Vector(x * scalar, y * scalar, z * scalar)
+  operator fun div(scalar: Float)    = Vector(x / scalar, y / scalar, z / scalar)
+  operator fun unaryMinus()          = Vector(-x, -y, -z)
+  fun reflect(surfaceNormal: Vector) = Vector(this - surfaceNormal * 2f * this.dot(surfaceNormal))
+  override fun toString()            = "Vector($x, $y, $z)"
 
-  operator fun plus(other: Point): Point {
-    return Point(x + other.x, y + other.y, z + other.z)
-  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is Vector) return false
 
-  operator fun minus(other: Vector): Vector {
-    return Vector(x - other.x, y - other.y, z - other.z)
-  }
-
-  override operator fun times(scalar: Float): Vector {
-    return Vector(x * scalar, y * scalar, z * scalar)
-  }
-
-  override operator fun div(scalar: Float): Vector {
-    return Vector(x / scalar, y / scalar, z / scalar)
-  }
-
-  override operator fun unaryMinus(): Vector {
-    return Vector(-x, -y, -z)
+    return hasSameElements(other)
   }
 
   fun cross(other: Vector): Vector {
@@ -37,7 +27,7 @@ class Vector : Tuple {
   }
 
   override fun normalize(): Vector {
-    val mag = magnitude()
+    val mag = magnitude
     return Vector(
       x / mag,
       y / mag,

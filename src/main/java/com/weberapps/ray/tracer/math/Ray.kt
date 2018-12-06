@@ -1,7 +1,7 @@
 package com.weberapps.ray.tracer.math
 
 class Ray(val origin: Point, val direction: Vector) {
-  constructor(originTuple: Tuple, directionTuple: Tuple) : this(
+  constructor(originTuple: ITuple, directionTuple: ITuple) : this(
     Point(originTuple),
     Vector(directionTuple)
   )

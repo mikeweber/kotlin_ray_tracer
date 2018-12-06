@@ -45,13 +45,12 @@ class Intersection(
     if (world == null) return false
 
     val v = light.position - point
-    val dist = v.magnitude()
     val dir = v.normalize()
 
     val ray = Ray(point, dir)
     val hit = world.intersect(ray).hit(includeTransparentMaterial = false) ?: return false
 
-    return hit.t < dist
+    return hit.t < v.magnitude
   }
 
   fun prepareHit(ray: Ray, intersections: Intersections = Intersections(), surfaceOffset: Float = 0.0001f): Intersection {

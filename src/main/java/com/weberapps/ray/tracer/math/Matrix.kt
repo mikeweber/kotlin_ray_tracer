@@ -50,7 +50,7 @@ class Matrix (val rows: Int, val cols: Int) {
     return result
   }
 
-  operator fun times(tuple: Tuple): Tuple {
+  operator fun times(tuple: ITuple): Tuple {
     val result = FloatArray(4)
     for (row in 0..3) {
       for (col in 0..(cols - 1)) {
