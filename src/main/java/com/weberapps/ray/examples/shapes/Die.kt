@@ -5,12 +5,7 @@ import com.weberapps.ray.tracer.material.Material
 import com.weberapps.ray.tracer.material.SolidColor
 import com.weberapps.ray.tracer.math.Matrix
 import com.weberapps.ray.tracer.math.Transformation
-import com.weberapps.ray.tracer.math.floatRoot
 import com.weberapps.ray.tracer.shape.*
-import com.weberapps.ray.tracer.shape.Cube
-import com.weberapps.ray.tracer.shape.Cylinder
-import com.weberapps.ray.tracer.shape.Group
-import com.weberapps.ray.tracer.shape.Shape
 
 class Die(
   override var transform: Matrix = Matrix.eye(4),
@@ -25,8 +20,8 @@ class Die(
     val adjustedMin = min / radius
     val adjustedMax = max / radius
 
-    val corners = Group(
-      shapes = arrayListOf(
+    val corners = CSGUnion(
+      arrayListOf(
         Sphere(Transformation.translation(max, max, max) * Transformation.scale(radius), material),
         Sphere(Transformation.translation(max, max, min) * Transformation.scale(radius), material),
         Sphere(Transformation.translation(max, min, max) * Transformation.scale(radius), material),
@@ -37,15 +32,15 @@ class Die(
         Sphere(Transformation.translation(min, min, min) * Transformation.scale(radius), material)
       )
     )
-    val sides = Group(
-      shapes = arrayListOf(
-        Cube(Transformation.scale(max, 1f - radius, 1f), material),
+    val sides = CSGUnion(
+      Cube(Transformation.scale(max, 1f - radius, 1f), material),
+      CSGUnion(
         Cube(Transformation.scale(max, 1f, 1f - radius), material),
         Cube(Transformation.scale(1f, max, 1f - radius), material)
       )
     )
-    val edges = Group(
-      shapes = arrayListOf(
+    val edges = CSGUnion(
+      arrayListOf(
         // sides around Y axis
         Cylinder(material = material, transform = Transformation.translation(max,  0f, max) * Transformation.scale(radius), minimum = adjustedMin, maximum = adjustedMax),
         Cylinder(material = material, transform = Transformation.translation(max,  0f, min) * Transformation.scale(radius), minimum = adjustedMin, maximum = adjustedMax),
@@ -63,14 +58,76 @@ class Die(
         Cylinder(material = material, transform = Transformation.translation( 0f, min, min) * Transformation.scale(radius) * Transformation.rotateZ(TAU / 4), minimum = adjustedMin, maximum = adjustedMax)
       )
     )
-
-    val body = CSGUnion(
-      sides,
-      CSGUnion(
-        corners,
-        edges
-      )
+    val pips = CSGUnion(
+     arrayListOf(
+       side1Pips(),
+       side2Pips(),
+       side3Pips(),
+       side4Pips(),
+       side5Pips(),
+       side6Pips()
+     )
     )
-    add(body)
+
+    val outline = CSGUnion(corners, edges)
+    val body = CSGUnion(sides, outline)
+    val die = CSGDifference(body, pips)
+    add(outline)
+  }
+
+  private fun side1Pips(): Group {
+    return groupOfPips(4)
+  }
+
+  private fun side2Pips(): Group {
+    return groupOfPips(2, 6).apply { transform = Transformation.rotateX(TAU / 4) }
+  }
+
+  private fun side3Pips(): Group {
+    return groupOfPips(2, 4, 6).apply { transform = Transformation.rotateY(TAU / 4) }
+  }
+
+  private fun side4Pips(): Group {
+    return groupOfPips(1, 2, 6, 7).apply { transform = Transformation.rotateY(-TAU / 4) }
+  }
+
+  private fun side5Pips(): Group {
+    return groupOfPips(1, 2, 4, 6, 7).apply { transform = Transformation.rotateX(-TAU / 4) }
+  }
+
+  private fun side6Pips(): Group {
+    return groupOfPips(1, 2, 3, 5, 6, 7).apply { transform = Transformation.rotateY(TAU / 2) }
+  }
+
+  // pip layout
+  // 1   2
+  // 3 4 5
+  // 6   7
+  private fun groupOfPips(vararg pipIds: Int): Group {
+    val top = 0.6f
+    val mid = 0f
+    val bot = -top
+
+    val allPips = listOf(
+      pip(mid, mid),
+      pip(bot, top),
+      pip(top, top),
+      pip(bot, mid),
+      pip(mid, mid),
+      pip(top, mid),
+      pip(bot, bot),
+      pip(top, bot)
+    )
+
+    val group = Group()
+      for (id in pipIds) {
+        group.add(allPips[id])
+      }
+    return group
+  }
+
+  private fun pip(x: Float, y: Float): Shape {
+    val scale = 0.2f
+    return Sphere(Transformation.translation(x, y, -1f) * Transformation.scale(scale, scale, scale / 2f))
   }
 }
