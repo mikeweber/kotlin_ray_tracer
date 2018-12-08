@@ -1,6 +1,7 @@
 package com.weberapps.ray.tracer.math
 
-class CompositeColor(private vararg val colors: Color): IColor {
+class CompositeColor(private vararg val colors: IColor): IColor {
+
   override val x get() = color.x
   override val y get() = color.y
   override val z get() = color.z
@@ -9,10 +10,12 @@ class CompositeColor(private vararg val colors: Color): IColor {
     get() {
       if (colors.isEmpty()) return Color.BLACK
 
+      val length = colorsSize()
+
       return Color(
-        colors.map { it.x }.sum() / size,
-        colors.map { it.y }.sum() / size,
-        colors.map { it.z }.sum() / size
+        sumRed()   / length,
+        sumGreen() / length,
+        sumBlue()  / length
       )
     }
   val size: Int get() = colors.size
@@ -27,5 +30,21 @@ class CompositeColor(private vararg val colors: Color): IColor {
 
   override fun toString(): String {
     return "CompositeColor[$size](${colorDescription()})"
+  }
+
+  override fun colorsSize(): Int {
+    return colors.map { it.colorsSize() }.sum()
+  }
+
+  override fun sumRed(): Float {
+    return colors.map { it.sumRed() }.sum()
+  }
+
+  override fun sumGreen(): Float {
+    return colors.map { it.sumGreen() }.sum()
+  }
+
+  override fun sumBlue(): Float {
+    return colors.map { it.sumBlue() }.sum()
   }
 }

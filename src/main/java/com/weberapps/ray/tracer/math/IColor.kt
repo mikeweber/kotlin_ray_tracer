@@ -16,6 +16,20 @@ interface IColor: ITuple {
     }
   }
 
+  fun colorsSize(): Int = 1
+
+  fun sumRed(): Float {
+    return red
+  }
+
+  fun sumGreen(): Float {
+    return green
+  }
+
+  fun sumBlue(): Float {
+    return blue
+  }
+
   operator fun times(other: Color): Color {
     return Color(red * other.red, green * other.green, blue * other.blue)
   }

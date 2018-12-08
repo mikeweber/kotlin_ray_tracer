@@ -24,6 +24,6 @@ class DrawDice(override val hsize: Int, override val vsize: Int, override val fi
       Transformation.translation(0f, 0f, 4f) * Transformation.rotateX(TAU / 4),
       GradientMaterial(SolidColor(0.2f, 0.2f, 0.6f), SolidColor(0.7f, 0.7f, 1.0f), Transformation.rotateZ(TAU / 4), specular = 0f)
     )
-    return World(arrayListOf(Die(transform = Transformation.rotateY(TAU / 16), material = SolidColor(Color(0.4f, 0.7f, 0.4f), specular = 0.5f)), floor,  backdrop), arrayListOf(Light(Point(3f, 3f, -5f))))
+    return World(arrayListOf(Die(transform = Transformation.rotateY(TAU / 360), material = SolidColor(Color(0.4f, 0.7f, 0.4f), specular = 0.5f)), floor,  backdrop), arrayListOf(Light(Point(3f, 3f, -5f))))
   }
 }
