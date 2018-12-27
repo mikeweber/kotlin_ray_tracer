@@ -16,7 +16,8 @@ class TestMaterial(
   override val shininess: Int         = 200,
   override val reflective: Float      = 0f,
   override val transparency: Float    = 0f,
-  override val refractiveIndex: Float = VACUUM
+  override val refractiveIndex: Float = VACUUM,
+  override val roughness: Float       = 0f
 ) : Material {
   override fun effectiveColor(shape: Shape, worldSpacePoint: Point, light: Light): Color {
     return patternAt(worldSpacePoint)

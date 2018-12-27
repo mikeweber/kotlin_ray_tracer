@@ -43,7 +43,6 @@ class Camera(val hsize: Int, val vsize: Int, fieldOfView: Double = (TAU / 4), va
       for (x in 0..(hsize - 1)) {
         val color = GlobalScope.async {
           colorForPixel(x, y, world)
-
         }
         canvas.setDeferredPixel(x, y, color)
       }

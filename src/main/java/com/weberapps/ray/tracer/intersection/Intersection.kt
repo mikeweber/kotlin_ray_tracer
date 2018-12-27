@@ -59,6 +59,7 @@ class Intersection(
     val eyeVector = -ray.direction
     var normalVector = shape.normal(hitPoint, this)
     val reflectVector = reflect(rayVector, normalVector)
+    // val randomReflectVector = randomVector(reflectVector, (shape as MaterializedShape).material.roughness)
     val inside = normalVector.dot(eyeVector) < 0f
     if (inside) normalVector = -normalVector
     val point = Point(hitPoint + normalVector * surfaceOffset)

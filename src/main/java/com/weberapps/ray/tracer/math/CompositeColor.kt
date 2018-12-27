@@ -1,7 +1,15 @@
 package com.weberapps.ray.tracer.math
 
-class CompositeColor(private vararg val colors: IColor): IColor {
+import kotlinx.coroutines.Deferred
 
+class CompositeColor(vararg colors: IColor): IColor {
+  init {
+    for (color in colors) {
+      add(color)
+    }
+  }
+  private val colors = ArrayList<IColor>()
+  private val asyncColors = ArrayList<Deferred<IColor>>()
   override val x get() = color.x
   override val y get() = color.y
   override val z get() = color.z
@@ -19,6 +27,17 @@ class CompositeColor(private vararg val colors: IColor): IColor {
       )
     }
   val size: Int get() = colors.size
+
+  fun add(color: IColor): CompositeColor {
+    if(color is CompositeColor) {
+      for (c in color.colors) {
+        add(c)
+      }
+    } else {
+      colors.add(color)
+    }
+    return this
+  }
 
   override fun equals(other: Any?): Boolean {
     if (other !is IColor) return false
@@ -46,5 +65,17 @@ class CompositeColor(private vararg val colors: IColor): IColor {
 
   override fun sumBlue(): Float {
     return colors.map { it.sumBlue() }.sum()
+  }
+
+  fun addAsyncColor(dc: Deferred<IColor>): CompositeColor {
+    asyncColors.add(dc)
+    return this
+  }
+
+  suspend fun resolveColors() {
+    for (c in asyncColors) {
+      val finalColor = c.await()
+      colors.add(finalColor)
+    }
   }
 }

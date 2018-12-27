@@ -19,6 +19,7 @@ object SolidColorSpec: Spek({
       assertEquals(0.9f, m.specular)
       assertEquals(200, m.shininess)
       assertEquals(0f, m.reflective)
+      assertEquals(0f, m.roughness)
     }
   }
 

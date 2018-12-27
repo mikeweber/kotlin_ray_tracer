@@ -1,10 +1,10 @@
-import com.weberapps.ray.tracer.math.Color
-import com.weberapps.ray.tracer.math.Point
-import com.weberapps.ray.tracer.math.Tuple
-import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.constants.TAU
+import com.weberapps.ray.tracer.math.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import org.junit.jupiter.api.Assertions.assertEquals
+import java.lang.Math.cos
+import java.lang.Math.sin
 
 object TupleSpec: Spek ({
   it("should be able to init a Tuple") {
@@ -153,6 +153,31 @@ object TupleSpec: Spek ({
       val n = Vector(f, f, 0f)
       val r = v.reflect(n)
       assertEquals(Vector(1f, 0f, 0f), r)
+    }
+  }
+
+  context("random") {
+    it("should return a new vector rotated around the Z axis, then Y axis") {
+      val v = Vector(0f, 1f, 0f)
+      assertEquals(Vector(-1f, 0f, 0f), v.rotateFromUp(TAU / 4, 0.0))
+      assertEquals(Vector(0f, 0f, 1f), v.rotateFromUp(TAU / 4, TAU / 4))
+      assertEquals(Vector(1f, 0f, 0f), v.rotateFromUp(TAU / 4, TAU / 2))
+      assertEquals(Vector((sin(TAU / 8) * cos(TAU / 8)).toFloat(), cos(TAU / 8).toFloat(), (sin(TAU / 8) * cos(TAU / 8)).toFloat()), v.rotateFromUp(-TAU / 8, -TAU / 8))
+      assertEquals(Vector(0.5f, cos(TAU / 12).toFloat(), 0f), v.rotateFromUp(-TAU / 12, 0.0))
+      assertEquals(Vector(0f, cos(TAU / 12).toFloat(), 0.5f), v.rotateFromUp(-TAU / 12, -TAU / 4))
+      assertEquals(Vector(floatRoot(2f) / 2f, floatRoot(2f) / 2f, 0f), v.rotateFromUp(-TAU / 8, 0.0))
+    }
+
+    it("should rotate vector A the same magnitude and direction as the difference between UP and vector B") {
+      val startingVector = Vector(0f, 1f, 0f)
+      val targetVector   = Vector(0.5f, cos(TAU / 8).toFloat(), 0.5f).normalize()
+      val expectedVector = Vector(0.5f, cos(TAU / 8).toFloat(), 0.5f)
+      assertEquals(expectedVector, startingVector.rotateTo(targetVector))
+
+      val startingVector2 = Vector((sin(TAU / 8) * cos(TAU / 8)).toFloat(), cos(TAU / 8).toFloat(), (sin(TAU / 8) * cos(TAU / 8)).toFloat())
+      val targetVector2   = Vector(1f, 0f, 0f)
+      val expectedVector2 = Vector(cos(TAU / 8).toFloat(), -(sin(TAU / 8) * cos(TAU / 8)).toFloat(), (sin(TAU / 8) * cos(TAU / 8)).toFloat())
+      assertEquals(expectedVector2, startingVector2.rotateTo(targetVector2))
     }
   }
 })

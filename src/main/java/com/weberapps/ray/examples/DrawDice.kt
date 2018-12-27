@@ -19,11 +19,11 @@ class DrawDice(override val hsize: Int, override val vsize: Int, override val fi
   }
 
   override fun initWorld(): World {
-    val floor = Plane(material = CheckeredPattern(SolidColor(0.8f, 0.8f, 0.8f), SolidColor(0.3f, 0.3f, 0.3f)), transform = Transformation.translation(0f, -1f, 0f))
+    val floor = Plane(material = CheckeredPattern(SolidColor(0.8f, 0.8f, 0.8f), SolidColor(0.3f, 0.3f, 0.3f), reflective = 0f), transform = Transformation.translation(0f, -1f, 0f))
     val backdrop = Plane(
       Transformation.translation(0f, 0f, 4f) * Transformation.rotateX(TAU / 4),
-      GradientMaterial(SolidColor(0.2f, 0.2f, 0.6f), SolidColor(0.7f, 0.7f, 1.0f), Transformation.rotateZ(TAU / 4), specular = 0f)
+      GradientMaterial(SolidColor(0.2f, 0.2f, 0.6f), SolidColor(0.7f, 0.7f, 1.0f), Transformation.rotateZ(TAU / 4), specular = 0f, reflective = 0f)
     )
-    return World(arrayListOf(Die(transform = Transformation.rotateY(TAU / 360), material = SolidColor(Color(0.4f, 0.7f, 0.4f), specular = 0.5f)), floor,  backdrop), arrayListOf(Light(Point(3f, 3f, -5f))))
+    return World(arrayListOf(Die(transform = Transformation.rotateY(0.0 / 360), material = SolidColor(Color(0.4f, 0.7f, 0.4f), specular = 0.5f)), floor,  backdrop), arrayListOf(Light(Point(3f, 3f, -5f))))
   }
 }

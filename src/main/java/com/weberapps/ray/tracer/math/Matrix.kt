@@ -20,6 +20,14 @@ class Matrix (val rows: Int, val cols: Int) {
     }
   }
 
+  operator fun get(row: Int, col: Int): Float {
+    return getElement(row, col)
+  }
+
+  operator fun set(row: Int, col: Int, element: Float) {
+    setElement(row, col, element)
+  }
+
   fun getElement(row: Int, col: Int): Float {
     return rowsAndColumns[row][col]
   }
@@ -63,6 +71,26 @@ class Matrix (val rows: Int, val cols: Int) {
     }
 
     return Tuple(result[0], result[1], result[2], result[3])
+  }
+
+  operator fun plus(other: Matrix): Matrix {
+    val result = Matrix(rows, cols)
+    for (row in 0..(rows - 1)) {
+      for (col in 0..(cols - 1)) {
+        result[row, col] = other[row, col] + this[row, col]
+      }
+    }
+    return result
+  }
+
+  operator fun times(scalar: Float): Matrix {
+    val result = Matrix(rows, cols)
+    for (row in 0..(rows - 1)) {
+      for (col in 0..(cols - 1)) {
+        result[row, col] = this[row, col] * scalar
+      }
+    }
+    return result
   }
 
   operator fun div(scalar: Float): Matrix {

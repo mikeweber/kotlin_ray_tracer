@@ -1,14 +1,11 @@
 package com.weberapps.ray.tracer.material
 
 import com.weberapps.ray.tracer.intersection.Intersection
-import com.weberapps.ray.tracer.math.Color
-import com.weberapps.ray.tracer.math.Light
-import com.weberapps.ray.tracer.math.Matrix
-import com.weberapps.ray.tracer.math.Point
-import com.weberapps.ray.tracer.math.Ray
-import com.weberapps.ray.tracer.math.Vector
+import com.weberapps.ray.tracer.math.*
 import com.weberapps.ray.tracer.renderer.World
 import com.weberapps.ray.tracer.shape.Shape
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 import kotlin.math.pow
 
 interface Material {
@@ -20,6 +17,7 @@ interface Material {
   val specular: Float
   val shininess: Int
   val refractiveIndex: Float
+  val roughness: Float
 
   fun lighting(hit: Intersection, light: Light, world: World? = null, inShadow: Boolean = false, refractionsLeft: Int = 5, surfaceOffset: Float = 0.001f): Color {
     val surface   = surfaceColor(hit, light, world, inShadow, refractionsLeft, surfaceOffset)
@@ -67,7 +65,44 @@ interface Material {
     if (reflective == 0f || world == null) return Color.BLACK
 
     val reflectedRay = Ray(hit.point, hit.reflectVector)
-    return world.colorAt(reflectedRay, refractionsLeft - 1) * reflective
+    return if (roughness <= 0f) {
+      world.colorAt(reflectedRay, refractionsLeft - 1) * reflective
+    } else {
+      roughReflectedColor(hit, world, refractionsLeft)
+    }
+  }
+
+  private fun roughReflectedColor(hit: Intersection, world: World, refractionsLeft: Int): Color {
+    val vectors = arrayListOf<Vector>()
+    for (i in 0..31) {
+      vectors.add(hit.reflectVector.random(roughness))
+    }
+    val validVectors = vectors.filter { v -> hit.normalVector.dot(v) > 0f }
+    val composite = CompositeColor()
+    for (vector in validVectors) {
+      composite.add(world.colorAt(Ray(hit.point, vector), refractionsLeft - 1))
+    }
+    return composite * reflective
+  }
+
+  private fun parallelizedReflectedColor(hit: Intersection, world: World, refractionsLeft: Int): Color {
+    val vectors = arrayListOf<Vector>()
+    for (i in 0..15) {
+      vectors.add(hit.reflectVector.random(roughness))
+    }
+    val validVectors = vectors.filter { v -> hit.normalVector.dot(v) > 0f }
+    val composite = CompositeColor()
+    val context = newFixedThreadPoolContext(10, "rough reflections")
+    for (vector in validVectors) {
+      val ac = GlobalScope.async(context) {
+        world.colorAt(Ray(hit.point, vector), refractionsLeft - 1)
+      }
+      composite.addAsyncColor(ac)
+    }
+    runBlocking {
+      composite.resolveColors()
+    }
+    return composite * reflective
   }
 
   private fun effectiveDiffuse(inShadow: Boolean): Float {
