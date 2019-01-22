@@ -34,7 +34,7 @@ interface SceneRenderer {
   private fun saveCanvas(canvas: Canvas, saveAs: String = filename) {
     var absolutePath = saveAs
     if (!absolutePath.startsWith("/")) {
-      absolutePath = Paths.get("").toAbsolutePath().toString() + "/" + saveAs
+      absolutePath = Paths.get("").toAbsolutePath().toString() + "/images/" + saveAs
     }
     println("Saving render to $absolutePath")
     PPMGenerator(canvas).save(absolutePath)

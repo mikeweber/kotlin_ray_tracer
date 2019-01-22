@@ -11,7 +11,7 @@ import com.weberapps.ray.tracer.math.Color
 import com.weberapps.ray.tracer.shape.Shape
 import com.weberapps.ray.tracer.shape.Sphere
 
-class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources: ArrayList<Light> = arrayListOf(), private val background: Color = Color.BLACK) {
+open class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources: ArrayList<Light> = arrayListOf(), private val background: Color = Color.BLACK) {
   companion object {
     fun default(): World {
       val s1 = Sphere(
@@ -30,6 +30,11 @@ class World(val sceneObjects: ArrayList<Shape> = arrayListOf(), val lightSources
 
   fun add(shape: Shape): World {
     sceneObjects.add(shape)
+    return this
+  }
+
+  fun addLightSource(light: Light): World {
+    lightSources.add(light)
     return this
   }
 

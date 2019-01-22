@@ -7,3 +7,4 @@ build
 *.ppm
 .attach_pid*
 teapot*.obj
+images
