@@ -14,10 +14,10 @@ import com.weberapps.ray.tracer.renderer.World
 import com.weberapps.ray.tracer.shape.Plane
 import com.weberapps.ray.tracer.shape.Sphere
 
-class GlassOfWaterWithPencil(): World() {
+class GlassOfWaterWithPencil: World() {
   private val floor = Plane(
     Transformation.translation(-2f, 0f, 0f),
-    CheckeredPattern(SolidColor(0.8f, 0.8f, 0.8f), SolidColor(0.3f, 0.3f, 0.3f), roughness = 0.5f, reflective = 0.6f)
+    CheckeredPattern(SolidColor(0.8f, 0.8f, 0.8f), SolidColor(0.3f, 0.3f, 0.3f), reflective = 0.6f)
   )
   private val backdrop = Plane(
     Transformation.translation(0f, 0f, 4f) * Transformation.rotateX(TAU / 4),

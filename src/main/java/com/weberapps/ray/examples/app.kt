@@ -1,9 +1,10 @@
 package com.weberapps.ray.examples
 
-fun main(args: Array<String>) {
-  println("foo")
+import java.time.Instant
+
+fun main() {
   // DrawSceneWithPlanes(400, 400, "spheres_${Instant.now()}.ppm")
-  // DrawGlassOfWater(192, 120, "water_${Instant.now()}.ppm") //, hsize = 1600, vsize = 900)
+  DrawGlassOfWater(192, 120, "water_${Instant.now()}.ppm") //, hsize = 1600, vsize = 900)
   // DrawGlassOfWaterLive(192.0, 120.0) //, hsize = 1600, vsize = 900)
   // DrawShallowPool(192, 120, "pool.ppm")
   // DrawTeapot(1920, 1200, "smooth_teapot_large.ppm")
