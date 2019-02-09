@@ -1,7 +1,8 @@
 package com.weberapps.ray.examples
 
 import com.weberapps.ray.tracer.ui.LiveRenderer
-import tornadofx.App
+import javafx.application.Application
 
-class LiveApp: App(LiveRenderer::class)
-
+fun main(args: Array<String>) {
+  Application.launch(LiveRenderer::class.java)
+}

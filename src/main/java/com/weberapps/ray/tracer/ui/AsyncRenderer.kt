@@ -8,10 +8,8 @@ import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.renderer.Camera
 import com.weberapps.ray.tracer.renderer.World
 import javafx.scene.paint.Color
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import tornadofx.Controller
-import java.lang.Thread.sleep
+import kotlinx.coroutines.*
+import java.util.concurrent.Executors
 import kotlin.math.roundToInt
 
 class AsyncRenderer(
@@ -22,29 +20,31 @@ class AsyncRenderer(
   from: Point = Point(0f, 0f, -5f),
   to: Point = Point(0f, 0f, 0f),
   up: Vector = Vector(0f, 1f, 0f)
-) : Controller() {
-  init {
-    subscribe<BeginRenderingEvent> {
-      render()
+) {
+  private val viewTransform = Transformation.viewTransform(from, to, up)
+  private val camera = Camera(width, height, fieldOfView, viewTransform)
+  private val jobs = ArrayList<Job>()
+
+  fun render(renderer: LiveRenderer) {
+    val coords = prioritizedCoordinates()
+    Executors.newFixedThreadPool(10).asCoroutineDispatcher().use { context ->
+      for ((x, y) in coords) {
+        val job = GlobalScope.launch(context) {
+          val p = camera.colorForPixel(x, y, world)
+          val r = floatTo8Bit(p.red)
+          val g = floatTo8Bit(p.green)
+          val b = floatTo8Bit(p.blue)
+          val color = Color.rgb(r, g, b)
+
+          renderer.bufferPixel(x, y, color)
+        }
+        jobs.add(job)
+      }
     }
   }
 
-  private val viewTransform = Transformation.viewTransform(from, to, up)
-  private val camera = Camera(width, height, fieldOfView, viewTransform)
-
-  private fun render() {
-    val coords = prioritizedCoordinates()
-    for ((x, y) in coords) {
-      GlobalScope.launch {
-        val p = camera.colorForPixel(x, y, world)
-        val r = floatTo8Bit(p.red)
-        val g = floatTo8Bit(p.green)
-        val b = floatTo8Bit(p.blue)
-        val color = Color.rgb(r, g, b)
-
-        fire(RenderCompleteEvent(x, y, color))
-      }
-    }
+  fun stop() {
+    for (job in jobs) job.cancel()
   }
 
   private fun prioritizedCoordinates(): List<Coordinate> {
