@@ -1,5 +1,7 @@
 buildscript {
     ext.kotlin_version = '1.3.21'
+    ext.lwjglVersion = '3.2.1'
+    ext.lwjglNatives = 'natives-macos'
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -41,6 +43,34 @@ dependencies {
     testRuntimeOnly(
             'org.junit.jupiter:junit-jupiter-engine:5.2.0'
     )
+    // LWJGL
+    implementation "org.lwjgl:lwjgl:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-assimp:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-bgfx:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-glfw:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-jemalloc:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-libdivide:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-nanovg:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-nuklear:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-openal:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-opencl:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-opengl:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-par:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-stb:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-vulkan:$lwjglVersion"
+    runtimeOnly "org.lwjgl:lwjgl:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-assimp:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-bgfx:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-glfw:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-jemalloc:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-libdivide:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-nanovg:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-nuklear:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-openal:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-opengl:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-par:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-stb:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-vulkan:$lwjglVersion:$lwjglNatives"
 }
 
 compileKotlin {

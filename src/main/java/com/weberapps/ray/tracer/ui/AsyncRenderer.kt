@@ -7,7 +7,6 @@ import com.weberapps.ray.tracer.math.Transformation
 import com.weberapps.ray.tracer.math.Vector
 import com.weberapps.ray.tracer.renderer.Camera
 import com.weberapps.ray.tracer.renderer.World
-import javafx.scene.paint.Color
 import kotlinx.coroutines.*
 import java.util.concurrent.Executors
 import kotlin.math.roundToInt
@@ -25,7 +24,7 @@ class AsyncRenderer(
   private val camera = Camera(width, height, fieldOfView, viewTransform)
   private val jobs = ArrayList<Job>()
 
-  fun render(renderer: LiveRenderer) {
+  fun render(callback: (Int, Int, Int, Int, Int) -> (Unit)) {
     val coords = prioritizedCoordinates()
     Executors.newFixedThreadPool(10).asCoroutineDispatcher().use { context ->
       for ((x, y) in coords) {
@@ -34,9 +33,8 @@ class AsyncRenderer(
           val r = floatTo8Bit(p.red)
           val g = floatTo8Bit(p.green)
           val b = floatTo8Bit(p.blue)
-          val color = Color.rgb(r, g, b)
 
-          renderer.bufferPixel(x, y, color)
+          callback(x, y, r, g, b)
         }
         jobs.add(job)
       }
