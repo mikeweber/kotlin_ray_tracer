@@ -2,6 +2,7 @@ package com.weberapps.ray.tracer.intersection
 
 import com.weberapps.ray.tracer.math.Light
 import com.weberapps.ray.tracer.constants.EPSILON
+import com.weberapps.ray.tracer.constants.TAU
 import com.weberapps.ray.tracer.material.AIR
 import com.weberapps.ray.tracer.math.Point
 import com.weberapps.ray.tracer.math.Ray
@@ -18,7 +19,6 @@ class Intersection(
   var point: Point = Point(0f, 0f, 0f),
   var eyeVector: Vector = Vector(0f, 0f, 1f),
   var normalVector: Vector = Vector(0f, 0f, 1f),
-  var rayVector: Vector = Vector(0f, 0f, 1f),
   var reflectVector: Vector = Vector(0f, 0f, -1f),
   var n1: Float = 1f,
   var n2: Float = 1f,
@@ -55,11 +55,9 @@ class Intersection(
 
   fun prepareHit(ray: Ray, intersections: Intersections = Intersections(), surfaceOffset: Float = 0.0001f): Intersection {
     val hitPoint = ray.positionAt(t)
-    val rayVector = ray.direction
     val eyeVector = -ray.direction
     var normalVector = shape.normal(hitPoint, this)
-    val reflectVector = reflect(rayVector, normalVector)
-    // val randomReflectVector = randomVector(reflectVector, (shape as MaterializedShape).material.roughness)
+    val reflectVector = reflect(ray.direction, normalVector)
     val inside = normalVector.dot(eyeVector) < 0f
     if (inside) normalVector = -normalVector
     val point = Point(hitPoint + normalVector * surfaceOffset)
@@ -73,7 +71,6 @@ class Intersection(
       point,
       eyeVector,
       normalVector,
-      rayVector,
       reflectVector,
       n1,
       n2,

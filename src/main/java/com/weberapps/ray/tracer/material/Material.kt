@@ -18,6 +18,7 @@ interface Material {
   val shininess: Int
   val refractiveIndex: Float
   val roughness: Float
+  val spp: Int
 
   fun lighting(hit: Intersection, light: Light, world: World? = null, inShadow: Boolean = false, refractionsLeft: Int = 5, surfaceOffset: Float = 0.001f): Color {
     val surface   = surfaceColor(hit, light, world, inShadow, refractionsLeft, surfaceOffset)
@@ -64,17 +65,12 @@ interface Material {
   private fun reflectedColor(hit: Intersection, world: World? = null, refractionsLeft: Int = 5): Color {
     if (reflective == 0f || world == null) return Color.BLACK
 
-    val reflectedRay = Ray(hit.point, hit.reflectVector)
-    return if (roughness <= 0f) {
-      world.colorAt(reflectedRay, refractionsLeft - 1) * reflective
-    } else {
-      roughReflectedColor(hit, world, refractionsLeft)
-    }
+    return sampledReflectedColor(hit, world, refractionsLeft) * reflective
   }
 
-  private fun roughReflectedColor(hit: Intersection, world: World, refractionsLeft: Int): Color {
+  private fun sampledReflectedColor(hit: Intersection, world: World, refractionsLeft: Int): Color {
     val vectors = arrayListOf<Vector>()
-    for (i in 0..31) {
+    for (i in 0 until spp) {
       vectors.add(hit.reflectVector.random(roughness))
     }
     val validVectors = vectors.filter { v -> hit.normalVector.dot(v) > 0f }
@@ -82,7 +78,7 @@ interface Material {
     for (vector in validVectors) {
       composite.add(world.colorAt(Ray(hit.point, vector), refractionsLeft - 1))
     }
-    return composite * reflective
+    return composite.color
   }
 
   private fun parallelizedReflectedColor(hit: Intersection, world: World, refractionsLeft: Int): Color {

@@ -13,7 +13,8 @@ class SolidColor(
   override val reflective: Float      = 0f,
   override val transparency: Float    = 0f,
   override val refractiveIndex: Float = VACUUM,
-  override val roughness: Float       = 0f
+  override val roughness: Float       = 0f,
+  override val spp: Int               = 1
 ): Material {
   constructor(r: Float, g: Float, b: Float): this(Color(r, g, b))
 

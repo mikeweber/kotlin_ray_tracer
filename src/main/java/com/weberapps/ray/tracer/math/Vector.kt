@@ -38,7 +38,8 @@ class Vector(override val x: Float = 0f, override val y: Float = 0f, override va
   }
 
   fun random(roughness: Float): Vector {
-    val zRotation = TAU / 60 * randDistribution(8)
+    val dist = randDistribution(((1f - roughness) * 16).toInt())
+    val zRotation = TAU / 4 * dist
     val yRotation = TAU * Math.random()
     val randomVector = rotateFromUp(zRotation, yRotation)
 
@@ -72,11 +73,14 @@ class Vector(override val x: Float = 0f, override val y: Float = 0f, override va
     return Vector(Transformation.rotateY(yRotation) * Transformation.rotateZ(zRotation) * Vector(0f, 1f, 0f)).normalize()
   }
 
+  // Returns a random float between -1 and 1 that is focused around 0
   private fun randDistribution(times: Int): Float {
+    if (times == 0) return 0f
+
     var x = 0.0
-    for (i in 0..times) {
-      x += Math.random() * 2
+    for (i in 0 until times) {
+      x += Math.random()
     }
-    return (x / times - 0.5).toFloat()
+    return (x / times).toFloat() * 2f - 1f
   }
 }

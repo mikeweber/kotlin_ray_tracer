@@ -26,7 +26,7 @@ class HelloGPU {
   private var height = 300
   private val world = GlassOfWaterWithPencil()
   private val buffer = Array(width * height) { Triple(0, 0, 0) }
-  private val renderer = AsyncRenderer(width, height, world, from = Point(2f, 4f, -5f), to = Point(0f, 2f, 0f), fieldOfView = TAU / 8)
+  private val renderer = AsyncRenderer(width, height, world, from = Point(2f, 4f, -5f), to = Point(2f, 0f, -1f), fieldOfView = TAU / 16)
 
   fun run() {
     val window = createWindow()

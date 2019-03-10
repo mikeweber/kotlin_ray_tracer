@@ -18,7 +18,8 @@ class RingMaterial(
   override val reflective: Float      = 0.1f,
   override val transparency: Float    = 0f,
   override val refractiveIndex: Float = VACUUM,
-  override val roughness: Float       = 0f
+  override val roughness: Float       = 0f,
+  override val spp: Int               = 1
 ) : Material {
   override fun effectiveColor(shape: Shape, worldSpacePoint: Point, light: Light): Color {
     return patternAt(patternSpacePoint(shape, worldSpacePoint)) * light.intensity

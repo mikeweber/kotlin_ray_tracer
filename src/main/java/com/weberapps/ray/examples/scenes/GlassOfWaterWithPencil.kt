@@ -17,7 +17,7 @@ import com.weberapps.ray.tracer.shape.Sphere
 class GlassOfWaterWithPencil: World() {
   private val floor = Plane(
     Transformation.translation(-2f, 0f, 0f),
-    CheckeredPattern(SolidColor(0.8f, 0.8f, 0.8f), SolidColor(0.3f, 0.3f, 0.3f), reflective = 0.6f)
+    CheckeredPattern(SolidColor(0.8f, 0.8f, 0.8f), SolidColor(0.3f, 0.3f, 0.3f), reflective = 0.8f, roughness = 0.2f, spp = 128)
   )
   private val backdrop = Plane(
     Transformation.translation(0f, 0f, 4f) * Transformation.rotateX(TAU / 4),
@@ -25,14 +25,14 @@ class GlassOfWaterWithPencil: World() {
   )
   private val greenBall = Sphere(
     Transformation.translation(2f, 1f, 0f) * Transformation.scale(0.5f),
-    SolidColor(Color(0.2f, 0.7f, 0.3f), reflective = 0.6f)
+    SolidColor(Color(0.2f, 0.7f, 0.3f), reflective = 0.3f)
   )
   private val glassOfWater = GlassOfWater()
   private val pencil = Pencil(Transformation.translation(-0.6f, 0.3f, 0f) * Transformation.rotateZ(-27 * TAU / 360))
 
   init {
-    add(glassOfWater)
-    add(pencil)
+    //add(glassOfWater)
+    // add(pencil)
     add(floor)
     add(backdrop)
     add(greenBall)
